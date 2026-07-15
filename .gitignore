@@ -5,6 +5,10 @@ node_modules
 .pnp
 .pnp.js
 
+# Environment secrets
+.env*
+.dev.vars*
+
 # Local env files
 .env
 .env.local

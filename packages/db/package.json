@@ -17,8 +17,7 @@
   "type": "module",
   "dependencies": {
     "@prisma/adapter-neon": "^7.7.0",
-    "@prisma/client": "^7.7.0",
-    "@prisma/extension-accelerate": "^2.0.2"
+    "@prisma/client": "^7.7.0"
   },
   "devDependencies": {
     "@types/node": "^22.19.17",

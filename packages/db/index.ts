@@ -1,6 +1,8 @@
-import { PrismaClient } from '@prisma/client/edge'
-import { withAccelerate } from '@prisma/extension-accelerate'
+import { PrismaNeon } from '@prisma/adapter-neon'
+import { PrismaClient } from './generated/prisma-client/client'
 
 export const createPrisma = (databaseUrl: string) => {
-	return new PrismaClient({ accelerateUrl: databaseUrl }).$extends(withAccelerate())
+	const adapter = new PrismaNeon({ connectionString: databaseUrl })
+
+	return new PrismaClient({ adapter })
 }

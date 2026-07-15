@@ -15,7 +15,7 @@
  * model files in the `model` directory!
  */
 
-import * as runtime from "@prisma/client/runtime/client"
+import * as runtime from "@prisma/client/runtime/wasm-compiler-edge"
 import type * as Prisma from "../models.ts"
 import { type PrismaClient } from "./class.ts"
 
@@ -384,9 +384,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  User: 'User',
-  DailyLog: 'DailyLog',
-  SocialPost: 'SocialPost'
+  User: 'User'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,7 +400,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "dailyLog" | "socialPost"
+    modelProps: "user"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -480,154 +478,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    DailyLog: {
-      payload: Prisma.$DailyLogPayload<ExtArgs>
-      fields: Prisma.DailyLogFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.DailyLogFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyLogPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.DailyLogFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyLogPayload>
-        }
-        findFirst: {
-          args: Prisma.DailyLogFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyLogPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.DailyLogFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyLogPayload>
-        }
-        findMany: {
-          args: Prisma.DailyLogFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyLogPayload>[]
-        }
-        create: {
-          args: Prisma.DailyLogCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyLogPayload>
-        }
-        createMany: {
-          args: Prisma.DailyLogCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.DailyLogCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyLogPayload>[]
-        }
-        delete: {
-          args: Prisma.DailyLogDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyLogPayload>
-        }
-        update: {
-          args: Prisma.DailyLogUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyLogPayload>
-        }
-        deleteMany: {
-          args: Prisma.DailyLogDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.DailyLogUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.DailyLogUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyLogPayload>[]
-        }
-        upsert: {
-          args: Prisma.DailyLogUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyLogPayload>
-        }
-        aggregate: {
-          args: Prisma.DailyLogAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateDailyLog>
-        }
-        groupBy: {
-          args: Prisma.DailyLogGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DailyLogGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.DailyLogCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DailyLogCountAggregateOutputType> | number
-        }
-      }
-    }
-    SocialPost: {
-      payload: Prisma.$SocialPostPayload<ExtArgs>
-      fields: Prisma.SocialPostFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.SocialPostFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialPostPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.SocialPostFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialPostPayload>
-        }
-        findFirst: {
-          args: Prisma.SocialPostFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialPostPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.SocialPostFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialPostPayload>
-        }
-        findMany: {
-          args: Prisma.SocialPostFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialPostPayload>[]
-        }
-        create: {
-          args: Prisma.SocialPostCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialPostPayload>
-        }
-        createMany: {
-          args: Prisma.SocialPostCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.SocialPostCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialPostPayload>[]
-        }
-        delete: {
-          args: Prisma.SocialPostDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialPostPayload>
-        }
-        update: {
-          args: Prisma.SocialPostUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialPostPayload>
-        }
-        deleteMany: {
-          args: Prisma.SocialPostDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.SocialPostUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.SocialPostUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialPostPayload>[]
-        }
-        upsert: {
-          args: Prisma.SocialPostUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialPostPayload>
-        }
-        aggregate: {
-          args: Prisma.SocialPostAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateSocialPost>
-        }
-        groupBy: {
-          args: Prisma.SocialPostGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SocialPostGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.SocialPostCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SocialPostCountAggregateOutputType> | number
-        }
-      }
-    }
   }
 } & {
   other: {
@@ -673,36 +523,10 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password_hash: 'password_hash',
   name: 'name',
-  streak_no: 'streak_no',
   createdAt: 'createdAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
-
-
-export const DailyLogScalarFieldEnum = {
-  id: 'id',
-  user_id: 'user_id',
-  content: 'content',
-  proof_url: 'proof_url',
-  log_date: 'log_date',
-  created_At: 'created_At'
-} as const
-
-export type DailyLogScalarFieldEnum = (typeof DailyLogScalarFieldEnum)[keyof typeof DailyLogScalarFieldEnum]
-
-
-export const SocialPostScalarFieldEnum = {
-  id: 'id',
-  daily_log_id: 'daily_log_id',
-  platform: 'platform',
-  status: 'status',
-  content: 'content',
-  scheduled_for: 'scheduled_for',
-  created_At: 'created_At'
-} as const
-
-export type SocialPostScalarFieldEnum = (typeof SocialPostScalarFieldEnum)[keyof typeof SocialPostScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -750,20 +574,6 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -778,44 +588,16 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'Platform'
+ * Reference to a field of type 'Int'
  */
-export type EnumPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Platform'>
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
 /**
- * Reference to a field of type 'Platform[]'
+ * Reference to a field of type 'Int[]'
  */
-export type ListEnumPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Platform[]'>
-    
-
-
-/**
- * Reference to a field of type 'Status'
- */
-export type EnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status'>
-    
-
-
-/**
- * Reference to a field of type 'Status[]'
- */
-export type ListEnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status[]'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 /**
@@ -914,8 +696,6 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
-  dailyLog?: Prisma.DailyLogOmit
-  socialPost?: Prisma.SocialPostOmit
 }
 
 /* Types for Logging */

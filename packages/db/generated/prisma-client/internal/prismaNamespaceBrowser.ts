@@ -51,9 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User',
-  DailyLog: 'DailyLog',
-  SocialPost: 'SocialPost'
+  User: 'User'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -78,36 +76,10 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password_hash: 'password_hash',
   name: 'name',
-  streak_no: 'streak_no',
   createdAt: 'createdAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
-
-
-export const DailyLogScalarFieldEnum = {
-  id: 'id',
-  user_id: 'user_id',
-  content: 'content',
-  proof_url: 'proof_url',
-  log_date: 'log_date',
-  created_At: 'created_At'
-} as const
-
-export type DailyLogScalarFieldEnum = (typeof DailyLogScalarFieldEnum)[keyof typeof DailyLogScalarFieldEnum]
-
-
-export const SocialPostScalarFieldEnum = {
-  id: 'id',
-  daily_log_id: 'daily_log_id',
-  platform: 'platform',
-  status: 'status',
-  content: 'content',
-  scheduled_for: 'scheduled_for',
-  created_At: 'created_At'
-} as const
-
-export type SocialPostScalarFieldEnum = (typeof SocialPostScalarFieldEnum)[keyof typeof SocialPostScalarFieldEnum]
 
 
 export const SortOrder = {

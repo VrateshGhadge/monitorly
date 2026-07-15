@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client"
   output   = "./../generated/prisma-client"
+  runtime  = "workerd"
 }
 
 datasource db {
@@ -13,46 +14,5 @@ model User {
   email         String     @unique
   password_hash String
   name          String?
-  streak_no     Int        @default(0)
   createdAt     DateTime   @default(now())
-  dailylogs     DailyLog[]
-}
-
-model DailyLog {
-  id          String       @id @default(uuid())
-  user_id     String
-  content     String
-  proof_url   String?
-  log_date    DateTime     @db.Date
-  created_At  DateTime     @default(now())
-  user        User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  social_post SocialPost[]
-
-  @@index([user_id, log_date])
-}
-
-model SocialPost {
-  id            String    @id @default(uuid())
-  daily_log_id  String
-  platform      Platform
-  status        Status    @default(DRAFT)
-  content       String
-  scheduled_for DateTime?
-  created_At    DateTime
-  daily_log     DailyLog  @relation(fields: [daily_log_id], references: [id], onDelete: Cascade)
-
-  @@index([status, scheduled_for])
-}
-
-enum Platform {
-  X
-  LINKEDIN
-  PEERLIST
-}
-
-enum Status {
-  DRAFT
-  SCHEDULED
-  PUBLISHED
-  FAILED
 }

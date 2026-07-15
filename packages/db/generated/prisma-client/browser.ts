@@ -22,13 +22,3 @@ export * from './enums.ts';
  * 
  */
 export type User = Prisma.UserModel
-/**
- * Model DailyLog
- * 
- */
-export type DailyLog = Prisma.DailyLogModel
-/**
- * Model SocialPost
- * 
- */
-export type SocialPost = Prisma.SocialPostModel

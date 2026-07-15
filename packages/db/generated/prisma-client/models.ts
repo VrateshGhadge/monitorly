@@ -9,6 +9,4 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.ts'
-export type * from './models/DailyLog.ts'
-export type * from './models/SocialPost.ts'
 export type * from './commonInputTypes.ts'
