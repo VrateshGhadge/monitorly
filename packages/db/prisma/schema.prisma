@@ -10,9 +10,60 @@ datasource db {
 
 model User {
   id            String     @id @default(uuid())
-  username      String     @unique
+
+  // username      String     @unique
   email         String     @unique
-  password_hash String
+  passwordHash String
   name          String?
+
   createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  monitors     Monitor[]
 }
+
+// monitor will also need a timestamp to store the time data of the last check
+// also we are using cronjobs of cloudfare to ping the monitor to check every 5 min
+// so we will need to store the last check time and the status of the monitor
+
+model Monitor {
+  id            String    @id @default(uuid())
+
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  url          String
+  name          String    
+  active        Boolean   @default(true)
+
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  checks        MonitorCheck[]
+
+  @@unique([userId,url])
+}
+
+
+enum MonitorStatus {
+  UP
+  DOWN
+}
+
+model MonitorCheck {
+  id            String          @id @default(uuid())
+
+  monitor       Monitor         @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  monitorId     String
+
+  status        MonitorStatus
+  statusCode    Int
+  responseTime  Int
+  checkedAt     DateTime        @default(now())
+
+//indexing : since we will be querying the monitor checks based on the monitorId,
+// we can create an index on the monitorId field to improve query performance
+  @@index([monitorId])
+}
+
+
