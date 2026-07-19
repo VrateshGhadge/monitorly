@@ -22,3 +22,13 @@ export * from './enums.ts';
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Monitor
+ * 
+ */
+export type Monitor = Prisma.MonitorModel
+/**
+ * Model MonitorCheck
+ * 
+ */
+export type MonitorCheck = Prisma.MonitorCheckModel

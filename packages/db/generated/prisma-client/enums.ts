@@ -9,7 +9,9 @@
 * 🟢 You can import this file directly.
 */
 
+export const MonitorStatus = {
+  UP: 'UP',
+  DOWN: 'DOWN'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type MonitorStatus = (typeof MonitorStatus)[keyof typeof MonitorStatus]

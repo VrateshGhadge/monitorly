@@ -51,7 +51,9 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  Monitor: 'Monitor',
+  MonitorCheck: 'MonitorCheck'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -72,14 +74,39 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
-  username: 'username',
   email: 'email',
-  password_hash: 'password_hash',
+  passwordHash: 'passwordHash',
   name: 'name',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const MonitorScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  url: 'url',
+  name: 'name',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MonitorScalarFieldEnum = (typeof MonitorScalarFieldEnum)[keyof typeof MonitorScalarFieldEnum]
+
+
+export const MonitorCheckScalarFieldEnum = {
+  id: 'id',
+  monitorId: 'monitorId',
+  status: 'status',
+  statusCode: 'statusCode',
+  responseTime: 'responseTime',
+  checkedAt: 'checkedAt'
+} as const
+
+export type MonitorCheckScalarFieldEnum = (typeof MonitorCheckScalarFieldEnum)[keyof typeof MonitorCheckScalarFieldEnum]
 
 
 export const SortOrder = {

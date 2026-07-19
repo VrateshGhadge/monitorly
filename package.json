@@ -13,6 +13,7 @@
     "db:studio:legacy": "node ./scripts/run-legacy-studio.cjs"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "prettier": "^3.7.4",
     "turbo": "^2.9.5",
     "typescript": "5.9.2"
@@ -32,5 +33,9 @@
     "prisma@7.7.0": true,
     "sharp@0.34.5": true,
     "workerd@1.20260410.1": true
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "zod": "^4.4.3"
   }
 }
