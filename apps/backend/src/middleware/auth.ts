@@ -46,3 +46,36 @@ export const authMiddleware = createMiddleware<{
 });
 
 
+
+
+
+// import { verify } from "hono/jwt";
+// import { createMiddleware } from 'hono/factory'
+// import { AppBindings, AppVariables } from "../types/hono";
+
+
+// export const authMiddleware = createMiddleware<{
+//     Bindings: AppBindings;
+//     Variables: AppVariables;
+// }>(async (c, next) => {
+//     const authHeader = c.req.header('Authorization') || '';
+//     // extract token
+//     const token = authHeader.split(' ')[1];
+//     try{
+//         //reject immediately if token is missing
+//         if(!token){
+//             c.status(403);
+//             return c.json({ message : "You are not logged in"})
+//         }
+
+//         //verify and pass forward
+//         const user = await verify(token, c.env.JWT_SECRET, "HS256");
+//         if (user){
+//             c.set("userId", user.id as string)
+//             await next()
+//         }
+//     } catch(e){
+//         c.status(403);
+//         return c.json({ message : "You are not logged in"})
+//     }
+// })
