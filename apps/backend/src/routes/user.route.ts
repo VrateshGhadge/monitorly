@@ -3,12 +3,10 @@ import { createPrisma } from "@repo/db";
 import { sign } from "hono/jwt";
 import bcrypt from "bcryptjs";
 import { signupInput, loginInput } from "@repo/validation";
+import { AppBindings } from "../types/hono";
 
 export const userRouter = new Hono<{
-    Bindings: {
-        DATABASE_URL: string;
-        JWT_SECRET: string;
-    };
+    Bindings: AppBindings;
 }>();
 
 
