@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { createPrisma } from '@repo/db'
 import { userRouter } from './routes/user.route'
 import { cors } from 'hono/cors'
+import { monitorRouter } from './routes/monitor.route'
 
 type CloudflareBindings = {
   DATABASE_URL: string,
@@ -12,6 +13,7 @@ const app = new Hono<{ Bindings: CloudflareBindings }>()
 
 app.use('/*', cors())
 app.route('/api/v1/user', userRouter)
+app.route('/api/v1/monitor', monitorRouter)
 
 app.get('/health', (c) => {
   return c.json({

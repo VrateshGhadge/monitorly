@@ -24,10 +24,17 @@ export const loginInput = z.object({
 export const monitorInput = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name cannot exceed 100 characters"),
   url: z.url("Invalid URL").trim(),
-  interval: z.number().int().min(1, "Interval must be at least 1 minute").max(1440, "Interval cannot exceed 1440 minutes (24 hours)"),
-  userId: z.uuid("Invalid user ID"),
+  // interval: z.number().int().min(1, "Interval must be at least 1 minute").max(1440, "Interval cannot exceed 1440 minutes (24 hours)"),
+  // userId: z.uuid("Invalid user ID"),
 });
 
+export const updateMonitorInput = z.object({
+  name: z.string().trim().min(1).max(100).optional(),
+  url: z.url("Invalid URL").trim().optional(),
+  active: z.boolean().optional(),
+});
+
+export type UpdateMonitorInput = z.infer<typeof updateMonitorInput>;
 export type SignupInput = z.infer<typeof signupInput>
 export type LoginInput = z.infer<typeof loginInput>
 export type MonitorInput = z.infer<typeof monitorInput>
