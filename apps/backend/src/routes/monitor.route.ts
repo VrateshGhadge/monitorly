@@ -58,6 +58,8 @@ monitorRouter.post('/', async(c) => {
         }, 201
     );
     } catch(error){
+        console.error(error);
+        
         return c.json({
             success: false,
             message: "Failed to create monitor"
@@ -88,6 +90,8 @@ monitorRouter.get('/', async(c)=>{
             data: monitors,
         }, 200)
     } catch(error){
+        console.error(error);
+
         return c.json({
             success: false,
             message: "Failed to fetch monitors"
@@ -123,6 +127,8 @@ monitorRouter.get('/:id', async(c) =>{
             data: monitor,
         }, 200)
     } catch(error){
+        console.error(error);
+
         return c.json({
             success: false,
             message: "Failed to fetch monitor"
@@ -146,7 +152,7 @@ monitorRouter.patch('/:id', async(c) =>{
     const prisma = createPrisma(c.env.DATABASE_URL);
     const userId = c.get("userId");
     const monitorId = c.req.param("id");
-    
+
     try{
         const existingMonitor = await prisma.monitor.findFirst({
             where:{
@@ -175,6 +181,8 @@ monitorRouter.patch('/:id', async(c) =>{
         }, 200)
 
     }catch(error){
+        console.error(error);
+
         return c.json({
             success: false,
             message: "Failed to update monitor"
@@ -213,6 +221,8 @@ monitorRouter.delete('/:id', async(c) =>{
             message: "Monitor deleted successfully",
         }, 200)
     } catch(error){
+        console.error(error);
+        
         return c.json({
             success: false,
             message: "Failed to delete monitor"

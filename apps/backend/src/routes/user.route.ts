@@ -4,7 +4,7 @@ import { sign } from "hono/jwt";
 import bcrypt from "bcryptjs";
 import { signupInput, loginInput } from "@repo/validation";
 import { AppBindings } from "../types/hono";
-
+    
 export const userRouter = new Hono<{
     Bindings: AppBindings;
 }>();
@@ -16,7 +16,11 @@ userRouter.post('/signup', async(c)=> {
     const result = signupInput.safeParse(body);
 
     if (!result.success) {
-    return c.json({ error: "Invalid input" }, 400);
+    return c.json({ 
+        success: false, 
+        message: "Invalid input",
+        errors: result.error.issues
+    }, 400);
     }
     
     const { name, email, password } = result.data;
@@ -39,17 +43,30 @@ userRouter.post('/signup', async(c)=> {
         
         // safety check, though prisma usually throws on failure
         if(!user){
-            return c.json({ error: "Invalid credentials" }, 400);
+            return c.json({ 
+                success: false,
+                message: "User creation failed" 
+            }, 400);
         }
 
         const expTime = Math.floor(Date.now() / 1000) + (60 * 60 * 24); // 1 day in seconds
         // generate token so the user can stay logged in
         const token = await sign({ id: user.id, email: user.email, exp: expTime }, c.env.JWT_SECRET, "HS256");
 
-        return c.json({ token }, 201);
+        return c.json({ 
+            success: true,
+            message: "User created successfully",
+            data: {
+                token
+            },
+        }, 201);
     } catch(error){
+        console.error(error);
         // if prisma throws here, it's usually a unique constraint error (email taken)
-        return c.json({ error: "User already exists"}, 409)
+        return c.json({
+            success: false,
+            message: "User already exists"
+        }, 409)
     }
 })
 
@@ -59,7 +76,11 @@ userRouter.post('/login', async (c)=>{
     const result = loginInput.safeParse(body);
 
     if (!result.success) {
-    return c.json({ error: "Invalid input" }, 400);
+    return c.json({ 
+        success: false, 
+        message: "Invalid input",
+        errors: result.error.issues
+    }, 400);
     }
     
     const { email, password } = result.data;
@@ -75,22 +96,33 @@ userRouter.post('/login', async (c)=>{
         })
 
         if(!user || !user.passwordHash){
-            return c.json({ error: "Invalid email or password" }, 401);
+            return c.json({ success: false, message: "Invalid email or password" }, 401);
         }
         
         // compare provided password with the hashed one in db
         const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
         if(!isPasswordValid){
-            return c.json({ error: "Invalid email or password" }, 401);
+            return c.json({ success: false, message: "Invalid email or password" }, 401);
         }
 
         const expTime = Math.floor(Date.now() / 1000) + (60 * 60 * 24); // 1 day in seconds
 
         // password matches, create and return jwt
         const token = await sign({ id: user.id, email: user.email, exp: expTime }, c.env.JWT_SECRET, "HS256");
-        return c.json({ token }, 200);
+        return c.json({ 
+            success: true,
+            message: "Login successful",
+            data: {
+                token
+            },
+        }, 200);
 
     } catch(error){
-        return c.json({ error: "Invalid credentials" }, 400)
+        console.error(error);
+
+        return c.json({ 
+            success: false,
+            message: "Internal server error"
+        }, 500);
     }
 })

@@ -13,6 +13,7 @@
     "db:studio:legacy": "node ./scripts/run-legacy-studio.cjs"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.7",
     "@types/bcryptjs": "^2.4.6",
     "prettier": "^3.7.4",
     "turbo": "^2.9.5",
