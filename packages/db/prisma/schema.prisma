@@ -57,8 +57,8 @@ model MonitorCheck {
   monitorId     String
 
   status        MonitorStatus
-  statusCode    Int
-  responseTime  Int
+  statusCode    Int?
+  responseTime  Int?
   checkedAt     DateTime        @default(now())
 
 //indexing : since we will be querying the monitor checks based on the monitorId,

@@ -3,6 +3,8 @@ import { createPrisma } from '@repo/db'
 import { userRouter } from './routes/user.route'
 import { cors } from 'hono/cors'
 import { monitorRouter } from './routes/monitor.route'
+import{ checkAllMonitors } from './services/monitor.service'
+
 
 type CloudflareBindings = {
   DATABASE_URL: string,
@@ -32,4 +34,15 @@ app.get('/health/db', async (c) => {
   }
 })
 
-export default app
+export default {
+  fetch: app.fetch,
+
+  async scheduled(
+    controller: ScheduledController,
+    env: CloudflareBindings,
+    ctx: ExecutionContext
+  ) {
+    console.log("Cron triggered");
+    await checkAllMonitors(env);
+  }
+}
