@@ -229,3 +229,56 @@ monitorRouter.delete('/:id', async(c) =>{
         }, 500)
     }
 })
+
+
+// GET /api/v1/monitor/:id/history
+
+monitorRouter.get('/:id/history', async(c) =>{
+    const userId = c.get("userId");
+    const prisma = createPrisma(c.env.DATABASE_URL);
+    const monitorId = c.req.param("id");
+
+    try{
+        const existingMonitor = await prisma.monitor.findFirst({
+            where:{
+                id: monitorId,
+                userId,
+            }
+        })
+        if(!existingMonitor){
+            return c.json({
+                success: false,
+                message: "Monitor not found"
+            }, 404)
+        }
+        //limit history to last 50 checks
+        const history = await prisma.monitorCheck.findMany({
+            where:{
+                monitorId: existingMonitor.id,
+            },
+            orderBy:{
+                checkedAt: "desc",
+            },
+            take: 50,
+            select:{
+                status: true,
+                statusCode: true,
+                responseTime: true,
+                checkedAt: true,
+            }
+        })
+        
+        return c.json({
+            success: true,
+            message: "History fetched successfully",
+            data: history,
+        }, 200)
+    } catch(error){
+        console.error(error);
+
+        return c.json({
+            success: false,
+            message: "Failed to fetch history"
+        }, 500)
+    }
+})
