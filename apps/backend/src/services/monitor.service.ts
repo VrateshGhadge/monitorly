@@ -1,5 +1,5 @@
 
-import { createPrisma, MonitorStatus } from "@repo/db";
+import { createPrisma, MonitorStatus, type Monitor } from "@repo/db";
 
 
 export async function checkAllMonitors( env: CloudflareBindings ) {
@@ -30,7 +30,9 @@ export async function checkAllMonitors( env: CloudflareBindings ) {
     }
 }
 
-export async function checkMonitor(monitor: any) {
+type MonitorToCheck = Pick<Monitor, "name" | "url">;
+
+export async function checkMonitor(monitor: MonitorToCheck) {
   console.log(`Checking ${monitor.name}`);
 
   const start = Date.now();
