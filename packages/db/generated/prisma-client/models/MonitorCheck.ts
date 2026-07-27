@@ -431,10 +431,6 @@ export type MonitorCheckUncheckedUpdateManyWithoutMonitorNestedInput = {
   deleteMany?: Prisma.MonitorCheckScalarWhereInput | Prisma.MonitorCheckScalarWhereInput[]
 }
 
-export type EnumMonitorStatusFieldUpdateOperationsInput = {
-  set?: $Enums.MonitorStatus
-}
-
 export type NullableIntFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number

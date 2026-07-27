@@ -686,7 +686,8 @@ export const MonitorScalarFieldEnum = {
   name: 'name',
   active: 'active',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  currentStatus: 'currentStatus'
 } as const
 
 export type MonitorScalarFieldEnum = (typeof MonitorScalarFieldEnum)[keyof typeof MonitorScalarFieldEnum]

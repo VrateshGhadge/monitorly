@@ -1,9 +1,11 @@
 import { Hono } from "hono";
 import { createPrisma } from "@repo/db";
-import { AppBindings, AppVariables } from "../types/hono";
+import { AppVariables } from "../types/hono";
 import { authMiddleware } from "../middleware/auth";
 import { monitorInput, updateMonitorInput } from "@repo/validation";
-
+import { CloudflareBindings }  from "../index";
+import { sendTestEmail } from "../services/notification.service";
+import { checkAllMonitors } from "../services/monitor.service";
 
 const monitorSelect = {
     id: true,
@@ -17,7 +19,7 @@ const monitorSelect = {
 
 
 export const monitorRouter = new Hono<{
-    Bindings: AppBindings;
+    Bindings: CloudflareBindings;
     Variables: AppVariables;
 }>();
 
@@ -96,6 +98,73 @@ monitorRouter.get('/', async(c)=>{
     }
 })
 
+
+monitorRouter.get("/test-email", async (c) => {
+  const prisma = createPrisma(c.env.DATABASE_URL);
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: c.get("userId"),
+      },
+      select: {
+        email: true,
+      },
+    });
+
+    if (!user) {
+      return c.json(
+        {
+          success: false,
+          message: "User not found",
+        },
+        404
+      );
+    }
+
+    const result = await sendTestEmail(c.env, user.email);
+
+    return c.json({
+      success: true,
+      message: "Test email sent successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return c.json(
+      {
+        success: false,
+        message: "Failed to send test email",
+      },
+      500
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+});
+
+
+monitorRouter.get("/run-check", async (c) => {
+  try {
+    await checkAllMonitors(c.env);
+
+    return c.json({
+      success: true,
+      message: "Monitor check completed successfully",
+    });
+  } catch (error) {
+    console.error(error);
+
+    return c.json(
+      {
+        success: false,
+        message: "Failed to run monitor check",
+      },
+      500
+    );
+  }
+});
 
 // GET /monitors/:id
 

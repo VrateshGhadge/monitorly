@@ -6,9 +6,10 @@ import { monitorRouter } from './routes/monitor.route'
 import{ checkAllMonitors } from './services/monitor.service'
 
 
-type CloudflareBindings = {
+export type CloudflareBindings = {
   DATABASE_URL: string,
-  JWT_SECRET: string
+  JWT_SECRET: string,
+  RESEND_API_KEY: string,
 }
 
 const app = new Hono<{ Bindings: CloudflareBindings }>()

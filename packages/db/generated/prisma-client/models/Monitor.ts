@@ -32,6 +32,7 @@ export type MonitorMinAggregateOutputType = {
   active: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  currentStatus: $Enums.MonitorStatus | null
 }
 
 export type MonitorMaxAggregateOutputType = {
@@ -42,6 +43,7 @@ export type MonitorMaxAggregateOutputType = {
   active: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  currentStatus: $Enums.MonitorStatus | null
 }
 
 export type MonitorCountAggregateOutputType = {
@@ -52,6 +54,7 @@ export type MonitorCountAggregateOutputType = {
   active: number
   createdAt: number
   updatedAt: number
+  currentStatus: number
   _all: number
 }
 
@@ -64,6 +67,7 @@ export type MonitorMinAggregateInputType = {
   active?: true
   createdAt?: true
   updatedAt?: true
+  currentStatus?: true
 }
 
 export type MonitorMaxAggregateInputType = {
@@ -74,6 +78,7 @@ export type MonitorMaxAggregateInputType = {
   active?: true
   createdAt?: true
   updatedAt?: true
+  currentStatus?: true
 }
 
 export type MonitorCountAggregateInputType = {
@@ -84,6 +89,7 @@ export type MonitorCountAggregateInputType = {
   active?: true
   createdAt?: true
   updatedAt?: true
+  currentStatus?: true
   _all?: true
 }
 
@@ -167,6 +173,7 @@ export type MonitorGroupByOutputType = {
   active: boolean
   createdAt: Date
   updatedAt: Date
+  currentStatus: $Enums.MonitorStatus
   _count: MonitorCountAggregateOutputType | null
   _min: MonitorMinAggregateOutputType | null
   _max: MonitorMaxAggregateOutputType | null
@@ -198,6 +205,7 @@ export type MonitorWhereInput = {
   active?: Prisma.BoolFilter<"Monitor"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Monitor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Monitor"> | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusFilter<"Monitor"> | $Enums.MonitorStatus
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   checks?: Prisma.MonitorCheckListRelationFilter
 }
@@ -210,6 +218,7 @@ export type MonitorOrderByWithRelationInput = {
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  currentStatus?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   checks?: Prisma.MonitorCheckOrderByRelationAggregateInput
 }
@@ -226,6 +235,7 @@ export type MonitorWhereUniqueInput = Prisma.AtLeast<{
   active?: Prisma.BoolFilter<"Monitor"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Monitor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Monitor"> | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusFilter<"Monitor"> | $Enums.MonitorStatus
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   checks?: Prisma.MonitorCheckListRelationFilter
 }, "id" | "userId_url">
@@ -238,6 +248,7 @@ export type MonitorOrderByWithAggregationInput = {
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  currentStatus?: Prisma.SortOrder
   _count?: Prisma.MonitorCountOrderByAggregateInput
   _max?: Prisma.MonitorMaxOrderByAggregateInput
   _min?: Prisma.MonitorMinOrderByAggregateInput
@@ -254,6 +265,7 @@ export type MonitorScalarWhereWithAggregatesInput = {
   active?: Prisma.BoolWithAggregatesFilter<"Monitor"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Monitor"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Monitor"> | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusWithAggregatesFilter<"Monitor"> | $Enums.MonitorStatus
 }
 
 export type MonitorCreateInput = {
@@ -263,6 +275,7 @@ export type MonitorCreateInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentStatus?: $Enums.MonitorStatus
   user: Prisma.UserCreateNestedOneWithoutMonitorsInput
   checks?: Prisma.MonitorCheckCreateNestedManyWithoutMonitorInput
 }
@@ -275,6 +288,7 @@ export type MonitorUncheckedCreateInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentStatus?: $Enums.MonitorStatus
   checks?: Prisma.MonitorCheckUncheckedCreateNestedManyWithoutMonitorInput
 }
 
@@ -285,6 +299,7 @@ export type MonitorUpdateInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
   user?: Prisma.UserUpdateOneRequiredWithoutMonitorsNestedInput
   checks?: Prisma.MonitorCheckUpdateManyWithoutMonitorNestedInput
 }
@@ -297,6 +312,7 @@ export type MonitorUncheckedUpdateInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
   checks?: Prisma.MonitorCheckUncheckedUpdateManyWithoutMonitorNestedInput
 }
 
@@ -308,6 +324,7 @@ export type MonitorCreateManyInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentStatus?: $Enums.MonitorStatus
 }
 
 export type MonitorUpdateManyMutationInput = {
@@ -317,6 +334,7 @@ export type MonitorUpdateManyMutationInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
 }
 
 export type MonitorUncheckedUpdateManyInput = {
@@ -327,6 +345,7 @@ export type MonitorUncheckedUpdateManyInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
 }
 
 export type MonitorListRelationFilter = {
@@ -352,6 +371,7 @@ export type MonitorCountOrderByAggregateInput = {
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  currentStatus?: Prisma.SortOrder
 }
 
 export type MonitorMaxOrderByAggregateInput = {
@@ -362,6 +382,7 @@ export type MonitorMaxOrderByAggregateInput = {
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  currentStatus?: Prisma.SortOrder
 }
 
 export type MonitorMinOrderByAggregateInput = {
@@ -372,6 +393,7 @@ export type MonitorMinOrderByAggregateInput = {
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  currentStatus?: Prisma.SortOrder
 }
 
 export type MonitorScalarRelationFilter = {
@@ -425,6 +447,10 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type EnumMonitorStatusFieldUpdateOperationsInput = {
+  set?: $Enums.MonitorStatus
+}
+
 export type MonitorCreateNestedOneWithoutChecksInput = {
   create?: Prisma.XOR<Prisma.MonitorCreateWithoutChecksInput, Prisma.MonitorUncheckedCreateWithoutChecksInput>
   connectOrCreate?: Prisma.MonitorCreateOrConnectWithoutChecksInput
@@ -446,6 +472,7 @@ export type MonitorCreateWithoutUserInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentStatus?: $Enums.MonitorStatus
   checks?: Prisma.MonitorCheckCreateNestedManyWithoutMonitorInput
 }
 
@@ -456,6 +483,7 @@ export type MonitorUncheckedCreateWithoutUserInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentStatus?: $Enums.MonitorStatus
   checks?: Prisma.MonitorCheckUncheckedCreateNestedManyWithoutMonitorInput
 }
 
@@ -496,6 +524,7 @@ export type MonitorScalarWhereInput = {
   active?: Prisma.BoolFilter<"Monitor"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Monitor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Monitor"> | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusFilter<"Monitor"> | $Enums.MonitorStatus
 }
 
 export type MonitorCreateWithoutChecksInput = {
@@ -505,6 +534,7 @@ export type MonitorCreateWithoutChecksInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentStatus?: $Enums.MonitorStatus
   user: Prisma.UserCreateNestedOneWithoutMonitorsInput
 }
 
@@ -516,6 +546,7 @@ export type MonitorUncheckedCreateWithoutChecksInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentStatus?: $Enums.MonitorStatus
 }
 
 export type MonitorCreateOrConnectWithoutChecksInput = {
@@ -541,6 +572,7 @@ export type MonitorUpdateWithoutChecksInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
   user?: Prisma.UserUpdateOneRequiredWithoutMonitorsNestedInput
 }
 
@@ -552,6 +584,7 @@ export type MonitorUncheckedUpdateWithoutChecksInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
 }
 
 export type MonitorCreateManyUserInput = {
@@ -561,6 +594,7 @@ export type MonitorCreateManyUserInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentStatus?: $Enums.MonitorStatus
 }
 
 export type MonitorUpdateWithoutUserInput = {
@@ -570,6 +604,7 @@ export type MonitorUpdateWithoutUserInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
   checks?: Prisma.MonitorCheckUpdateManyWithoutMonitorNestedInput
 }
 
@@ -580,6 +615,7 @@ export type MonitorUncheckedUpdateWithoutUserInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
   checks?: Prisma.MonitorCheckUncheckedUpdateManyWithoutMonitorNestedInput
 }
 
@@ -590,6 +626,7 @@ export type MonitorUncheckedUpdateManyWithoutUserInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentStatus?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
 }
 
 
@@ -631,6 +668,7 @@ export type MonitorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  currentStatus?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   checks?: boolean | Prisma.Monitor$checksArgs<ExtArgs>
   _count?: boolean | Prisma.MonitorCountOutputTypeDefaultArgs<ExtArgs>
@@ -644,6 +682,7 @@ export type MonitorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  currentStatus?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["monitor"]>
 
@@ -655,6 +694,7 @@ export type MonitorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  currentStatus?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["monitor"]>
 
@@ -666,9 +706,10 @@ export type MonitorSelectScalar = {
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  currentStatus?: boolean
 }
 
-export type MonitorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "url" | "name" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["monitor"]>
+export type MonitorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "url" | "name" | "active" | "createdAt" | "updatedAt" | "currentStatus", ExtArgs["result"]["monitor"]>
 export type MonitorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   checks?: boolean | Prisma.Monitor$checksArgs<ExtArgs>
@@ -695,6 +736,7 @@ export type $MonitorPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     active: boolean
     createdAt: Date
     updatedAt: Date
+    currentStatus: $Enums.MonitorStatus
   }, ExtArgs["result"]["monitor"]>
   composites: {}
 }
@@ -1127,6 +1169,7 @@ export interface MonitorFieldRefs {
   readonly active: Prisma.FieldRef<"Monitor", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Monitor", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Monitor", 'DateTime'>
+  readonly currentStatus: Prisma.FieldRef<"Monitor", 'MonitorStatus'>
 }
     
 

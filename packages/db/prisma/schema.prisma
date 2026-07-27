@@ -41,6 +41,8 @@ model Monitor {
 
   checks        MonitorCheck[]
 
+  currentStatus  MonitorStatus @default(UP)
+
   @@unique([userId,url])
 }
 

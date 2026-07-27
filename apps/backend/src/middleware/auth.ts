@@ -1,11 +1,12 @@
 
 import { createMiddleware } from "hono/factory";
 import { verify } from "hono/jwt";
-import type { AppBindings, AppVariables} from "../types/hono";
+import type { AppVariables} from "../types/hono";
 import type { JwtPayload } from "../types/auth";
+import { CloudflareBindings } from "../index";
 
 export const authMiddleware = createMiddleware<{
-  Bindings: AppBindings;
+  Bindings: CloudflareBindings;
   Variables: AppVariables;
 }>(async (c, next) => {
   // Get Authorization header

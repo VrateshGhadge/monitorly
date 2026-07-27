@@ -115,6 +115,13 @@ export type BoolFilter<$PrismaModel = never> = {
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
 }
 
+export type EnumMonitorStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MonitorStatus | Prisma.EnumMonitorStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MonitorStatus[] | Prisma.ListEnumMonitorStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MonitorStatus[] | Prisma.ListEnumMonitorStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMonitorStatusFilter<$PrismaModel> | $Enums.MonitorStatus
+}
+
 export type BoolWithAggregatesFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
@@ -123,11 +130,14 @@ export type BoolWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
-export type EnumMonitorStatusFilter<$PrismaModel = never> = {
+export type EnumMonitorStatusWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.MonitorStatus | Prisma.EnumMonitorStatusFieldRefInput<$PrismaModel>
   in?: $Enums.MonitorStatus[] | Prisma.ListEnumMonitorStatusFieldRefInput<$PrismaModel>
   notIn?: $Enums.MonitorStatus[] | Prisma.ListEnumMonitorStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumMonitorStatusFilter<$PrismaModel> | $Enums.MonitorStatus
+  not?: Prisma.NestedEnumMonitorStatusWithAggregatesFilter<$PrismaModel> | $Enums.MonitorStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMonitorStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMonitorStatusFilter<$PrismaModel>
 }
 
 export type IntNullableFilter<$PrismaModel = never> = {
@@ -139,16 +149,6 @@ export type IntNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
   gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
   not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
-}
-
-export type EnumMonitorStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.MonitorStatus | Prisma.EnumMonitorStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.MonitorStatus[] | Prisma.ListEnumMonitorStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.MonitorStatus[] | Prisma.ListEnumMonitorStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumMonitorStatusWithAggregatesFilter<$PrismaModel> | $Enums.MonitorStatus
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumMonitorStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumMonitorStatusFilter<$PrismaModel>
 }
 
 export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -281,19 +281,19 @@ export type NestedBoolFilter<$PrismaModel = never> = {
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
 }
 
+export type NestedEnumMonitorStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MonitorStatus | Prisma.EnumMonitorStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MonitorStatus[] | Prisma.ListEnumMonitorStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MonitorStatus[] | Prisma.ListEnumMonitorStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMonitorStatusFilter<$PrismaModel> | $Enums.MonitorStatus
+}
+
 export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedBoolFilter<$PrismaModel>
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
-}
-
-export type NestedEnumMonitorStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.MonitorStatus | Prisma.EnumMonitorStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.MonitorStatus[] | Prisma.ListEnumMonitorStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.MonitorStatus[] | Prisma.ListEnumMonitorStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumMonitorStatusFilter<$PrismaModel> | $Enums.MonitorStatus
 }
 
 export type NestedEnumMonitorStatusWithAggregatesFilter<$PrismaModel = never> = {
