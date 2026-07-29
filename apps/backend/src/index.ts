@@ -14,7 +14,16 @@ export type CloudflareBindings = {
 
 const app = new Hono<{ Bindings: CloudflareBindings }>()
 
-app.use('/*', cors())
+
+app.use(
+  "/*",
+  cors({
+    origin: "http://localhost:5173",
+    allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.route('/api/v1/user', userRouter)
 app.route('/api/v1/monitor', monitorRouter)
 

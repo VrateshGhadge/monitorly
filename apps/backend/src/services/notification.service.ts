@@ -10,10 +10,7 @@ export async function sendTestEmail(
     from: "Monitorly <onboarding@resend.dev>",
     to: userEmail,
     subject: "Monitorly Test Email",
-    html: `
-      <h1>🎉 Monitorly</h1>
-      <p>Your email integration is working!</p>
-    `,
+    html: `<h1>Monitorly</h1><p>Your email integration is working!</p>`,
   });
 
   return result;
@@ -25,7 +22,6 @@ export async function sendMonitorDownEmail(
   monitorName: string,
   monitorUrl: string
 ) {
-  console.log("Sending email to:", userEmail);
 
   const resend = new Resend(env.RESEND_API_KEY);
 
@@ -51,7 +47,6 @@ export async function sendMonitorRecoveryEmail(
   monitorName: string,
   monitorUrl: string
 ) {
-  console.log("Sending email to:", userEmail);
 
   const resend = new Resend(env.RESEND_API_KEY);
 

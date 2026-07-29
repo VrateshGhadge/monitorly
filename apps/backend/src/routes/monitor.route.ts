@@ -6,6 +6,7 @@ import { monitorInput, updateMonitorInput } from "@repo/validation";
 import { CloudflareBindings }  from "../index";
 import { sendTestEmail } from "../services/notification.service";
 import { checkAllMonitors } from "../services/monitor.service";
+import { isSafeMonitorUrl } from "../utils/url";
 
 const monitorSelect = {
     id: true,
@@ -42,6 +43,13 @@ monitorRouter.post('/', async(c) => {
     }
 
     const { name, url } = result.data;
+    if (!isSafeMonitorUrl(url)) {
+      return c.json({
+        success: false,
+        message: "Local and private network URLs are not allowed.",
+      },400);
+    }
+    
     try{
         const monitor = await prisma.monitor.create({
             data:{
@@ -66,8 +74,6 @@ monitorRouter.post('/', async(c) => {
     }
 })
 
-
-// GET /monitors
 
 monitorRouter.get('/', async(c)=>{
     const userId = c.get("userId");
@@ -166,7 +172,6 @@ monitorRouter.get("/run-check", async (c) => {
   }
 });
 
-// GET /monitors/:id
 
 monitorRouter.get('/:id', async(c) =>{
     const userId = c.get("userId");
@@ -202,8 +207,6 @@ monitorRouter.get('/:id', async(c) =>{
     }
 })
 
-// PATCH /monitors/:id 
-
 monitorRouter.patch('/:id', async(c) =>{
     const body = await c.req.json();
     const result = updateMonitorInput.safeParse(body);
@@ -215,6 +218,14 @@ monitorRouter.patch('/:id', async(c) =>{
             errors: result.error.issues,
         }, 400)
     }
+
+    if (result.data.url && !isSafeMonitorUrl(result.data.url)) {
+      return c.json({
+        success: false,
+        message: "Local and private network URLs are not allowed.",
+      },400);
+    }
+
     const prisma = createPrisma(c.env.DATABASE_URL);
     const userId = c.get("userId");
     const monitorId = c.req.param("id");
@@ -257,8 +268,6 @@ monitorRouter.patch('/:id', async(c) =>{
 
 })
 
-// DELETE /monitors/:id
-
 monitorRouter.delete('/:id', async(c) =>{
     const userId = c.get("userId");
     const prisma = createPrisma(c.env.DATABASE_URL);
@@ -296,8 +305,6 @@ monitorRouter.delete('/:id', async(c) =>{
     }
 })
 
-
-// GET /api/v1/monitor/:id/history
 
 monitorRouter.get('/:id/history', async(c) =>{
     const userId = c.get("userId");
@@ -348,18 +355,6 @@ monitorRouter.get('/:id/history', async(c) =>{
         }, 500)
     }
 })
-
-// GET /api/v1/monitor/:id/stats
-// Verify monitor ownership
-// Get latest check
-// Get average response time
-// Get total count
-// Get successful count
-// Get failed count
-// Calculate uptime
-// Return JSON
-
-//add promice.all to fetch all stats in parallel 
 
 monitorRouter.get('/:id/stats', async(c)=>{
     const userId = c.get("userId");

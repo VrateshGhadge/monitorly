@@ -3,15 +3,13 @@ import { createPrisma } from "@repo/db";
 import { sign } from "hono/jwt";
 import bcrypt from "bcryptjs";
 import { signupInput, loginInput } from "@repo/validation";
-import { AppBindings } from "../types/hono";
     
 export const userRouter = new Hono<{
-    Bindings: AppBindings;
+    Bindings: CloudflareBindings;
 }>();
 
 
 userRouter.post('/signup', async(c)=> {
-    // grab request body and validate it against the schema
     const body = await c.req.json();
     const result = signupInput.safeParse(body);
 
@@ -24,14 +22,11 @@ userRouter.post('/signup', async(c)=> {
     }
     
     const { name, email, password } = result.data;
-    // init prisma using db url from env bindings
     const prisma = createPrisma(c.env.DATABASE_URL);
     
     try {
-        // hash the password before saving to db
         const hashedPassword = await bcrypt.hash(password, 10);
         
-        // save new user
         const user = await prisma.user.create({
             data: {
                 name,
@@ -39,9 +34,7 @@ userRouter.post('/signup', async(c)=> {
                 passwordHash: hashedPassword,
             }
         })
-        // console.log("User created:", user);
         
-        // safety check, though prisma usually throws on failure
         if(!user){
             return c.json({ 
                 success: false,
@@ -49,8 +42,7 @@ userRouter.post('/signup', async(c)=> {
             }, 400);
         }
 
-        const expTime = Math.floor(Date.now() / 1000) + (60 * 60 * 24); // 1 day in seconds
-        // generate token so the user can stay logged in
+        const expTime = Math.floor(Date.now() / 1000) + (60 * 60 * 24); 
         const token = await sign({ id: user.id, email: user.email, exp: expTime }, c.env.JWT_SECRET, "HS256");
 
         return c.json({ 
@@ -62,7 +54,6 @@ userRouter.post('/signup', async(c)=> {
         }, 201);
     } catch(error){
         console.error(error);
-        // if prisma throws here, it's usually a unique constraint error (email taken)
         return c.json({
             success: false,
             message: "User already exists"
@@ -71,7 +62,6 @@ userRouter.post('/signup', async(c)=> {
 })
 
 userRouter.post('/login', async (c)=>{
-    // get user input and validate
     const body = await c.req.json();
     const result = loginInput.safeParse(body);
 
@@ -88,7 +78,6 @@ userRouter.post('/login', async (c)=>{
     const prisma = createPrisma(c.env.DATABASE_URL);
     
     try {
-        // look up the user by their email
         const user = await prisma.user.findUnique({
             where:{
                 email
@@ -99,7 +88,6 @@ userRouter.post('/login', async (c)=>{
             return c.json({ success: false, message: "Invalid email or password" }, 401);
         }
         
-        // compare provided password with the hashed one in db
         const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
         if(!isPasswordValid){
             return c.json({ success: false, message: "Invalid email or password" }, 401);
@@ -107,7 +95,6 @@ userRouter.post('/login', async (c)=>{
 
         const expTime = Math.floor(Date.now() / 1000) + (60 * 60 * 24); // 1 day in seconds
 
-        // password matches, create and return jwt
         const token = await sign({ id: user.id, email: user.email, exp: expTime }, c.env.JWT_SECRET, "HS256");
         return c.json({ 
             success: true,
