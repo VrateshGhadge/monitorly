@@ -1,5 +1,5 @@
 {
-  "name": "dev-plus",
+  "name": "monitorly",
   "private": true,
   "scripts": {
     "build": "turbo run build",
