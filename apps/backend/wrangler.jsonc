@@ -2,14 +2,26 @@
   "name": "backend",
   "main": "src/index.ts",
   "compatibility_date": "2026-04-11",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
 
-  //cron every 5 minutes but for development every min
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "MONITOR_EVENTS",
+        "class_name": "MonitorEvents",
+      },
+    ],
+  },
+
+  "exports": {
+    "MonitorEvents": {
+      "type": "durable-object",
+      "storage": "sqlite",
+    },
+  },
+
   "triggers": {
-    "crons": [
-      "* * * * *"
-    ]
-  }
+    //cron every 5 minutes but for development every min
+    "crons": ["* * * * *"],
+  },
 }

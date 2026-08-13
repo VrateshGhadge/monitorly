@@ -1,9 +1,9 @@
-
-import { createPrisma, MonitorStatus, type Monitor } from "@repo/db";
+import { createPrisma, MonitorStatus, AlertType, type Monitor } from "@repo/db";
 import {
   sendMonitorDownEmail,
   sendMonitorRecoveryEmail,
 } from "./notification.service";
+import type { CloudflareBindings } from "../types/cloudflare";
 
 export async function checkAllMonitors(env: CloudflareBindings) {
   const prisma = createPrisma(env.DATABASE_URL);
@@ -17,57 +17,85 @@ export async function checkAllMonitors(env: CloudflareBindings) {
     },
   });
 
-
   for (const monitor of monitors) {
     const result = await checkMonitor(monitor);
 
     const oldStatus = monitor.currentStatus;
     const newStatus = result.status;
 
+    // Get the Durable Object stub for this user (once per monitor)
+    const id = env.MONITOR_EVENTS.idFromName(monitor.userId);
+    const stub = env.MONITOR_EVENTS.get(id);
 
-    // Status changed?
+    // Handle status change
     if (oldStatus !== newStatus) {
-      // Update database first
+      // Update monitor status in DB
       await prisma.monitor.update({
-        where: {
-          id: monitor.id,
-        },
-        data: {
-          currentStatus: newStatus,
-        },
+        where: { id: monitor.id },
+        data: { currentStatus: newStatus },
       });
 
-      // Then send notification
       try {
-        // UP -> DOWN
+        let alertType: AlertType;
+        let message: string;
+        let alertStatus: "SENT" | "RESOLVED";
+
         if (
           oldStatus === MonitorStatus.UP &&
           newStatus === MonitorStatus.DOWN
         ) {
+          alertType = AlertType.DOWN;
+          message = `${monitor.name} is down`;
+          alertStatus = "SENT";
 
           await sendMonitorDownEmail(
             env,
             monitor.user.email,
             monitor.name,
-            monitor.url
+            monitor.url,
           );
-        }
-
-        // DOWN -> UP
-        else if (
+        } else if (
           oldStatus === MonitorStatus.DOWN &&
           newStatus === MonitorStatus.UP
         ) {
+          alertType = AlertType.RECOVERY;
+          message = `${monitor.name} recovered`;
+          alertStatus = "RESOLVED";
 
           await sendMonitorRecoveryEmail(
             env,
             monitor.user.email,
             monitor.name,
-            monitor.url
+            monitor.url,
           );
+        } else {
+          // Should never happen, but just in case
+          continue;
         }
+
+        // Persist alert in DB
+        const alert = await prisma.alert.create({
+          data: {
+            userId: monitor.userId,
+            monitorId: monitor.id,
+            type: alertType,
+            message,
+            status: alertStatus,
+          },
+        });
+
+        // Broadcast alert via SSE
+        await stub.broadcastAlertUpdate({
+          id: alert.id,
+          monitor: monitor.name,
+          type: alertType,
+          message,
+          status: alertStatus,
+          email: monitor.user.email,
+          createdAt: alert.createdAt.toISOString(),
+        });
       } catch (err) {
-        console.error("Failed to send notification:", err);
+        console.error("Failed to process alert:", err);
       }
     }
 
@@ -80,33 +108,41 @@ export async function checkAllMonitors(env: CloudflareBindings) {
         statusCode: result.statusCode,
       },
     });
+
+    // Broadcast monitor update
+    await stub.broadcastMonitorUpdate({
+      monitorId: monitor.id,
+      status: result.status,
+      responseTime: result.responseTime,
+      statusCode: result.statusCode,
+      checkedAt: new Date().toISOString(),
+    });
   }
 }
 
 type MonitorToCheck = Pick<Monitor, "name" | "url">;
 
 export async function checkMonitor(monitor: MonitorToCheck) {
-
   const start = Date.now();
-
-  // Create an AbortController to cancel the request if it takes too long
   const controller = new AbortController();
-
-  // Abort the request after 10 seconds
-  const timeoutId = setTimeout(() => {
-    controller.abort();
-  }, 10000);
-
-  let status: MonitorStatus;
-  let responseTime: number | null;
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
   try {
     const response = await fetch(monitor.url, {
       signal: controller.signal,
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      },
     });
 
-    status = response.status >= 500 ? MonitorStatus.DOWN : MonitorStatus.UP;
-    responseTime = Date.now() - start;
+    const status =
+      response.status >= 200 && response.status < 400
+        ? MonitorStatus.UP
+        : MonitorStatus.DOWN;
+    const responseTime = Date.now() - start;
 
     return {
       status,

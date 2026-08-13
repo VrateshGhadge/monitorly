@@ -7,11 +7,11 @@
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
-    "bcryptjs": "^3.0.3",
     "@repo/db": "*",
     "@repo/validation": "*",
-    "hono": "^4.12.13"
-
+    "bcryptjs": "^3.0.3",
+    "hono": "^4.12.13",
+    "resend": "^6.18.1"
   },
   "devDependencies": {
     "wrangler": "^4.4.0"

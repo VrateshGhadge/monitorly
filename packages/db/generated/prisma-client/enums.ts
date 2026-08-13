@@ -15,3 +15,35 @@ export const MonitorStatus = {
 } as const
 
 export type MonitorStatus = (typeof MonitorStatus)[keyof typeof MonitorStatus]
+
+
+export const MonitorType = {
+  WEBSITE: 'WEBSITE',
+  API: 'API'
+} as const
+
+export type MonitorType = (typeof MonitorType)[keyof typeof MonitorType]
+
+
+export const HttpMethod = {
+  GET: 'GET',
+  POST: 'POST'
+} as const
+
+export type HttpMethod = (typeof HttpMethod)[keyof typeof HttpMethod]
+
+
+export const AlertType = {
+  DOWN: 'DOWN',
+  RECOVERY: 'RECOVERY'
+} as const
+
+export type AlertType = (typeof AlertType)[keyof typeof AlertType]
+
+
+export const AlertStatus = {
+  SENT: 'SENT',
+  RESOLVED: 'RESOLVED'
+} as const
+
+export type AlertStatus = (typeof AlertStatus)[keyof typeof AlertStatus]

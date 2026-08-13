@@ -42,6 +42,7 @@ export type MonitorCheckMinAggregateOutputType = {
   status: $Enums.MonitorStatus | null
   statusCode: number | null
   responseTime: number | null
+  errorMessage: string | null
   checkedAt: Date | null
 }
 
@@ -51,6 +52,7 @@ export type MonitorCheckMaxAggregateOutputType = {
   status: $Enums.MonitorStatus | null
   statusCode: number | null
   responseTime: number | null
+  errorMessage: string | null
   checkedAt: Date | null
 }
 
@@ -60,6 +62,7 @@ export type MonitorCheckCountAggregateOutputType = {
   status: number
   statusCode: number
   responseTime: number
+  errorMessage: number
   checkedAt: number
   _all: number
 }
@@ -81,6 +84,7 @@ export type MonitorCheckMinAggregateInputType = {
   status?: true
   statusCode?: true
   responseTime?: true
+  errorMessage?: true
   checkedAt?: true
 }
 
@@ -90,6 +94,7 @@ export type MonitorCheckMaxAggregateInputType = {
   status?: true
   statusCode?: true
   responseTime?: true
+  errorMessage?: true
   checkedAt?: true
 }
 
@@ -99,6 +104,7 @@ export type MonitorCheckCountAggregateInputType = {
   status?: true
   statusCode?: true
   responseTime?: true
+  errorMessage?: true
   checkedAt?: true
   _all?: true
 }
@@ -195,6 +201,7 @@ export type MonitorCheckGroupByOutputType = {
   status: $Enums.MonitorStatus
   statusCode: number | null
   responseTime: number | null
+  errorMessage: string | null
   checkedAt: Date
   _count: MonitorCheckCountAggregateOutputType | null
   _avg: MonitorCheckAvgAggregateOutputType | null
@@ -227,6 +234,7 @@ export type MonitorCheckWhereInput = {
   status?: Prisma.EnumMonitorStatusFilter<"MonitorCheck"> | $Enums.MonitorStatus
   statusCode?: Prisma.IntNullableFilter<"MonitorCheck"> | number | null
   responseTime?: Prisma.IntNullableFilter<"MonitorCheck"> | number | null
+  errorMessage?: Prisma.StringNullableFilter<"MonitorCheck"> | string | null
   checkedAt?: Prisma.DateTimeFilter<"MonitorCheck"> | Date | string
   monitor?: Prisma.XOR<Prisma.MonitorScalarRelationFilter, Prisma.MonitorWhereInput>
 }
@@ -237,6 +245,7 @@ export type MonitorCheckOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   statusCode?: Prisma.SortOrderInput | Prisma.SortOrder
   responseTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   checkedAt?: Prisma.SortOrder
   monitor?: Prisma.MonitorOrderByWithRelationInput
 }
@@ -250,6 +259,7 @@ export type MonitorCheckWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumMonitorStatusFilter<"MonitorCheck"> | $Enums.MonitorStatus
   statusCode?: Prisma.IntNullableFilter<"MonitorCheck"> | number | null
   responseTime?: Prisma.IntNullableFilter<"MonitorCheck"> | number | null
+  errorMessage?: Prisma.StringNullableFilter<"MonitorCheck"> | string | null
   checkedAt?: Prisma.DateTimeFilter<"MonitorCheck"> | Date | string
   monitor?: Prisma.XOR<Prisma.MonitorScalarRelationFilter, Prisma.MonitorWhereInput>
 }, "id">
@@ -260,6 +270,7 @@ export type MonitorCheckOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   statusCode?: Prisma.SortOrderInput | Prisma.SortOrder
   responseTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   checkedAt?: Prisma.SortOrder
   _count?: Prisma.MonitorCheckCountOrderByAggregateInput
   _avg?: Prisma.MonitorCheckAvgOrderByAggregateInput
@@ -277,6 +288,7 @@ export type MonitorCheckScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumMonitorStatusWithAggregatesFilter<"MonitorCheck"> | $Enums.MonitorStatus
   statusCode?: Prisma.IntNullableWithAggregatesFilter<"MonitorCheck"> | number | null
   responseTime?: Prisma.IntNullableWithAggregatesFilter<"MonitorCheck"> | number | null
+  errorMessage?: Prisma.StringNullableWithAggregatesFilter<"MonitorCheck"> | string | null
   checkedAt?: Prisma.DateTimeWithAggregatesFilter<"MonitorCheck"> | Date | string
 }
 
@@ -285,6 +297,7 @@ export type MonitorCheckCreateInput = {
   status: $Enums.MonitorStatus
   statusCode?: number | null
   responseTime?: number | null
+  errorMessage?: string | null
   checkedAt?: Date | string
   monitor: Prisma.MonitorCreateNestedOneWithoutChecksInput
 }
@@ -295,6 +308,7 @@ export type MonitorCheckUncheckedCreateInput = {
   status: $Enums.MonitorStatus
   statusCode?: number | null
   responseTime?: number | null
+  errorMessage?: string | null
   checkedAt?: Date | string
 }
 
@@ -303,6 +317,7 @@ export type MonitorCheckUpdateInput = {
   status?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
   statusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checkedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   monitor?: Prisma.MonitorUpdateOneRequiredWithoutChecksNestedInput
 }
@@ -313,6 +328,7 @@ export type MonitorCheckUncheckedUpdateInput = {
   status?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
   statusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checkedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -322,6 +338,7 @@ export type MonitorCheckCreateManyInput = {
   status: $Enums.MonitorStatus
   statusCode?: number | null
   responseTime?: number | null
+  errorMessage?: string | null
   checkedAt?: Date | string
 }
 
@@ -330,6 +347,7 @@ export type MonitorCheckUpdateManyMutationInput = {
   status?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
   statusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checkedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -339,6 +357,7 @@ export type MonitorCheckUncheckedUpdateManyInput = {
   status?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
   statusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checkedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -358,6 +377,7 @@ export type MonitorCheckCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   statusCode?: Prisma.SortOrder
   responseTime?: Prisma.SortOrder
+  errorMessage?: Prisma.SortOrder
   checkedAt?: Prisma.SortOrder
 }
 
@@ -372,6 +392,7 @@ export type MonitorCheckMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   statusCode?: Prisma.SortOrder
   responseTime?: Prisma.SortOrder
+  errorMessage?: Prisma.SortOrder
   checkedAt?: Prisma.SortOrder
 }
 
@@ -381,6 +402,7 @@ export type MonitorCheckMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   statusCode?: Prisma.SortOrder
   responseTime?: Prisma.SortOrder
+  errorMessage?: Prisma.SortOrder
   checkedAt?: Prisma.SortOrder
 }
 
@@ -444,6 +466,7 @@ export type MonitorCheckCreateWithoutMonitorInput = {
   status: $Enums.MonitorStatus
   statusCode?: number | null
   responseTime?: number | null
+  errorMessage?: string | null
   checkedAt?: Date | string
 }
 
@@ -452,6 +475,7 @@ export type MonitorCheckUncheckedCreateWithoutMonitorInput = {
   status: $Enums.MonitorStatus
   statusCode?: number | null
   responseTime?: number | null
+  errorMessage?: string | null
   checkedAt?: Date | string
 }
 
@@ -490,6 +514,7 @@ export type MonitorCheckScalarWhereInput = {
   status?: Prisma.EnumMonitorStatusFilter<"MonitorCheck"> | $Enums.MonitorStatus
   statusCode?: Prisma.IntNullableFilter<"MonitorCheck"> | number | null
   responseTime?: Prisma.IntNullableFilter<"MonitorCheck"> | number | null
+  errorMessage?: Prisma.StringNullableFilter<"MonitorCheck"> | string | null
   checkedAt?: Prisma.DateTimeFilter<"MonitorCheck"> | Date | string
 }
 
@@ -498,6 +523,7 @@ export type MonitorCheckCreateManyMonitorInput = {
   status: $Enums.MonitorStatus
   statusCode?: number | null
   responseTime?: number | null
+  errorMessage?: string | null
   checkedAt?: Date | string
 }
 
@@ -506,6 +532,7 @@ export type MonitorCheckUpdateWithoutMonitorInput = {
   status?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
   statusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checkedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -514,6 +541,7 @@ export type MonitorCheckUncheckedUpdateWithoutMonitorInput = {
   status?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
   statusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checkedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -522,6 +550,7 @@ export type MonitorCheckUncheckedUpdateManyWithoutMonitorInput = {
   status?: Prisma.EnumMonitorStatusFieldUpdateOperationsInput | $Enums.MonitorStatus
   statusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checkedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -533,6 +562,7 @@ export type MonitorCheckSelect<ExtArgs extends runtime.Types.Extensions.Internal
   status?: boolean
   statusCode?: boolean
   responseTime?: boolean
+  errorMessage?: boolean
   checkedAt?: boolean
   monitor?: boolean | Prisma.MonitorDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["monitorCheck"]>
@@ -543,6 +573,7 @@ export type MonitorCheckSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   status?: boolean
   statusCode?: boolean
   responseTime?: boolean
+  errorMessage?: boolean
   checkedAt?: boolean
   monitor?: boolean | Prisma.MonitorDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["monitorCheck"]>
@@ -553,6 +584,7 @@ export type MonitorCheckSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   status?: boolean
   statusCode?: boolean
   responseTime?: boolean
+  errorMessage?: boolean
   checkedAt?: boolean
   monitor?: boolean | Prisma.MonitorDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["monitorCheck"]>
@@ -563,10 +595,11 @@ export type MonitorCheckSelectScalar = {
   status?: boolean
   statusCode?: boolean
   responseTime?: boolean
+  errorMessage?: boolean
   checkedAt?: boolean
 }
 
-export type MonitorCheckOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "monitorId" | "status" | "statusCode" | "responseTime" | "checkedAt", ExtArgs["result"]["monitorCheck"]>
+export type MonitorCheckOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "monitorId" | "status" | "statusCode" | "responseTime" | "errorMessage" | "checkedAt", ExtArgs["result"]["monitorCheck"]>
 export type MonitorCheckInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   monitor?: boolean | Prisma.MonitorDefaultArgs<ExtArgs>
 }
@@ -588,6 +621,7 @@ export type $MonitorCheckPayload<ExtArgs extends runtime.Types.Extensions.Intern
     status: $Enums.MonitorStatus
     statusCode: number | null
     responseTime: number | null
+    errorMessage: string | null
     checkedAt: Date
   }, ExtArgs["result"]["monitorCheck"]>
   composites: {}
@@ -1018,6 +1052,7 @@ export interface MonitorCheckFieldRefs {
   readonly status: Prisma.FieldRef<"MonitorCheck", 'MonitorStatus'>
   readonly statusCode: Prisma.FieldRef<"MonitorCheck", 'Int'>
   readonly responseTime: Prisma.FieldRef<"MonitorCheck", 'Int'>
+  readonly errorMessage: Prisma.FieldRef<"MonitorCheck", 'String'>
   readonly checkedAt: Prisma.FieldRef<"MonitorCheck", 'DateTime'>
 }
     

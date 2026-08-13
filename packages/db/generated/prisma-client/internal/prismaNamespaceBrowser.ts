@@ -53,7 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Monitor: 'Monitor',
-  MonitorCheck: 'MonitorCheck'
+  MonitorCheck: 'MonitorCheck',
+  Alert: 'Alert'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -87,12 +88,15 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const MonitorScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  url: 'url',
   name: 'name',
+  url: 'url',
+  type: 'type',
+  method: 'method',
   active: 'active',
+  emailAlerts: 'emailAlerts',
+  currentStatus: 'currentStatus',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  currentStatus: 'currentStatus'
+  updatedAt: 'updatedAt'
 } as const
 
 export type MonitorScalarFieldEnum = (typeof MonitorScalarFieldEnum)[keyof typeof MonitorScalarFieldEnum]
@@ -104,10 +108,24 @@ export const MonitorCheckScalarFieldEnum = {
   status: 'status',
   statusCode: 'statusCode',
   responseTime: 'responseTime',
+  errorMessage: 'errorMessage',
   checkedAt: 'checkedAt'
 } as const
 
 export type MonitorCheckScalarFieldEnum = (typeof MonitorCheckScalarFieldEnum)[keyof typeof MonitorCheckScalarFieldEnum]
+
+
+export const AlertScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  monitorId: 'monitorId',
+  type: 'type',
+  message: 'message',
+  status: 'status',
+  createdAt: 'createdAt'
+} as const
+
+export type AlertScalarFieldEnum = (typeof AlertScalarFieldEnum)[keyof typeof AlertScalarFieldEnum]
 
 
 export const SortOrder = {

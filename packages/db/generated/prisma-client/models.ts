@@ -11,4 +11,5 @@
 export type * from './models/User.ts'
 export type * from './models/Monitor.ts'
 export type * from './models/MonitorCheck.ts'
+export type * from './models/Alert.ts'
 export type * from './commonInputTypes.ts'

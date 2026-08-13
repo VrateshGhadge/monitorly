@@ -1,9 +1,9 @@
-
 import { createMiddleware } from "hono/factory";
 import { verify } from "hono/jwt";
-import type { AppVariables} from "../types/hono";
+import type { AppVariables } from "../types/hono";
 import type { JwtPayload } from "../types/auth";
-import { CloudflareBindings } from "../index";
+// import { CloudflareBindings } from "../index";
+import { CloudflareBindings } from "../types/cloudflare";
 
 export const authMiddleware = createMiddleware<{
   Bindings: CloudflareBindings;
@@ -17,14 +17,18 @@ export const authMiddleware = createMiddleware<{
         success: false,
         message: "Unauthorized",
       },
-      401
+      401,
     );
   }
 
   const token = authHeader.substring(7);
 
   try {
-    const jwtpayload = await verify(token, c.env.JWT_SECRET, "HS256") as JwtPayload;
+    const jwtpayload = (await verify(
+      token,
+      c.env.JWT_SECRET,
+      "HS256",
+    )) as JwtPayload;
 
     c.set("userId", jwtpayload.id);
 
@@ -35,8 +39,7 @@ export const authMiddleware = createMiddleware<{
         success: false,
         message: "Invalid or expired token",
       },
-      401
+      401,
     );
   }
 });
-

@@ -1,73 +1,55 @@
-# React + TypeScript + Vite
+# Monitorly
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Frontend architecture
 
-Currently, two official plugins are available:
+The UI is modernized around Tailwind CSS v4 design tokens and reusable, accessible primitives. Shared controls use Radix-based shadcn-style composition, `clsx` + `tailwind-merge` via `cn`, CVA button variants, Lucide icons, Framer Motion dialogs, Sonner notifications, and React Hook Form with Zod validation for authentication and monitor creation.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The existing stylesheet remains in place to preserve the established marketing and dashboard visual language while screens are progressively migrated to the Tailwind component layer.
 
-## React Compiler
+A Vite + React + TypeScript marketing site with an embedded interactive product-dashboard demo.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting started
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev      # start local dev server
+npm run build    # type-check and build for production
+npm run preview  # preview the production build
+npm run lint      # lint the project
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Project structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+  main.tsx                     # app entry point, mounts <App />
+  App.tsx                      # top-level page composition
+  styles/
+    global.css                 # global styles (design tokens, layout, components)
+  types/
+    dashboard.ts                # shared domain types (Monitor, AlertEvent, ...)
+  data/                         # static content & seed data, kept out of components
+    monitors.ts, responseTimeGraph.ts, incidentHistory.ts, alerts.ts,
+    navigation.ts, features.ts, flowSteps.ts, whyPoints.ts, uptimeBars.ts,
+    pricingPlans.ts, faqs.ts, footerLinks.ts
+  utils/
+    number.ts                   # clamp()
+    path.ts                     # buildSmoothPath() for the response-time line graph
+    incidents.ts                 # downtimeMinutes(), used by the uptime-history bar chart
+    responseTimeGraph.ts         # yToLatency(), xToTime(), nearestIndex()
+  hooks/
+    useDashboardState.ts         # shared state + handlers for the dashboard demo
+  components/
+    layout/                      # Nav, Footer
+    sections/                    # one component per marketing section
+    dashboard/                   # the interactive dashboard preview
+      panels/                    # one panel per sidebar section
+    common/                      # small reusable pieces (Toggle)
+```
+
+## Notes
+
+This is a structural refactor of a single-file prototype into a conventional
+Vite project layout. No UI or behavior was intentionally changed — components
+were extracted 1:1 from the original markup, styles were moved verbatim into
+`src/styles/global.css`, and all hardcoded data was lifted into `src/data`.

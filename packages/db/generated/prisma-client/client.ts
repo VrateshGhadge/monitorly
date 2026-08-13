@@ -53,3 +53,8 @@ export type Monitor = Prisma.MonitorModel
  * 
  */
 export type MonitorCheck = Prisma.MonitorCheckModel
+/**
+ * Model Alert
+ * 
+ */
+export type Alert = Prisma.AlertModel

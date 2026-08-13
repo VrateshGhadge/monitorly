@@ -191,6 +191,7 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   monitors?: Prisma.MonitorListRelationFilter
+  alerts?: Prisma.AlertListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -201,6 +202,7 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   monitors?: Prisma.MonitorOrderByRelationAggregateInput
+  alerts?: Prisma.AlertOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -214,6 +216,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   monitors?: Prisma.MonitorListRelationFilter
+  alerts?: Prisma.AlertListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -248,6 +251,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   monitors?: Prisma.MonitorCreateNestedManyWithoutUserInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -258,6 +262,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   monitors?: Prisma.MonitorUncheckedCreateNestedManyWithoutUserInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -268,6 +273,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   monitors?: Prisma.MonitorUpdateManyWithoutUserNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -278,6 +284,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   monitors?: Prisma.MonitorUncheckedUpdateManyWithoutUserNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -365,6 +372,20 @@ export type UserUpdateOneRequiredWithoutMonitorsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMonitorsInput, Prisma.UserUpdateWithoutMonitorsInput>, Prisma.UserUncheckedUpdateWithoutMonitorsInput>
 }
 
+export type UserCreateNestedOneWithoutAlertsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAlertsInput, Prisma.UserUncheckedCreateWithoutAlertsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAlertsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAlertsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAlertsInput, Prisma.UserUncheckedCreateWithoutAlertsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAlertsInput
+  upsert?: Prisma.UserUpsertWithoutAlertsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAlertsInput, Prisma.UserUpdateWithoutAlertsInput>, Prisma.UserUncheckedUpdateWithoutAlertsInput>
+}
+
 export type UserCreateWithoutMonitorsInput = {
   id?: string
   email: string
@@ -372,6 +393,7 @@ export type UserCreateWithoutMonitorsInput = {
   name?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  alerts?: Prisma.AlertCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMonitorsInput = {
@@ -381,6 +403,7 @@ export type UserUncheckedCreateWithoutMonitorsInput = {
   name?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMonitorsInput = {
@@ -406,6 +429,7 @@ export type UserUpdateWithoutMonitorsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  alerts?: Prisma.AlertUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMonitorsInput = {
@@ -415,6 +439,63 @@ export type UserUncheckedUpdateWithoutMonitorsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAlertsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  monitors?: Prisma.MonitorCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAlertsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  monitors?: Prisma.MonitorUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAlertsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAlertsInput, Prisma.UserUncheckedCreateWithoutAlertsInput>
+}
+
+export type UserUpsertWithoutAlertsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAlertsInput, Prisma.UserUncheckedUpdateWithoutAlertsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAlertsInput, Prisma.UserUncheckedCreateWithoutAlertsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAlertsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAlertsInput, Prisma.UserUncheckedUpdateWithoutAlertsInput>
+}
+
+export type UserUpdateWithoutAlertsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monitors?: Prisma.MonitorUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAlertsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monitors?: Prisma.MonitorUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -424,10 +505,12 @@ export type UserUncheckedUpdateWithoutMonitorsInput = {
 
 export type UserCountOutputType = {
   monitors: number
+  alerts: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   monitors?: boolean | UserCountOutputTypeCountMonitorsArgs
+  alerts?: boolean | UserCountOutputTypeCountAlertsArgs
 }
 
 /**
@@ -447,6 +530,13 @@ export type UserCountOutputTypeCountMonitorsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.MonitorWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAlertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AlertWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -456,6 +546,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   monitors?: boolean | Prisma.User$monitorsArgs<ExtArgs>
+  alerts?: boolean | Prisma.User$alertsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -489,6 +580,7 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   monitors?: boolean | Prisma.User$monitorsArgs<ExtArgs>
+  alerts?: boolean | Prisma.User$alertsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -498,6 +590,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     monitors: Prisma.$MonitorPayload<ExtArgs>[]
+    alerts: Prisma.$AlertPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -901,6 +994,7 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   monitors<T extends Prisma.User$monitorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$monitorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MonitorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  alerts<T extends Prisma.User$alertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$alertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1350,6 +1444,30 @@ export type User$monitorsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.MonitorScalarFieldEnum | Prisma.MonitorScalarFieldEnum[]
+}
+
+/**
+ * User.alerts
+ */
+export type User$alertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Alert
+   */
+  select?: Prisma.AlertSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Alert
+   */
+  omit?: Prisma.AlertOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AlertInclude<ExtArgs> | null
+  where?: Prisma.AlertWhereInput
+  orderBy?: Prisma.AlertOrderByWithRelationInput | Prisma.AlertOrderByWithRelationInput[]
+  cursor?: Prisma.AlertWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AlertScalarFieldEnum | Prisma.AlertScalarFieldEnum[]
 }
 
 /**

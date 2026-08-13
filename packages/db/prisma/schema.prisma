@@ -9,63 +9,104 @@ datasource db {
 }
 
 model User {
-  id            String     @id @default(uuid())
+  id           String   @id @default(uuid())
 
-  // username      String     @unique
-  email         String     @unique
+  email        String   @unique
   passwordHash String
-  name          String?
+  name         String?
 
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   monitors     Monitor[]
+  alerts       Alert[]
 }
-
-// monitor will also need a timestamp to store the time data of the last check
-// also we are using cronjobs of cloudfare to ping the monitor to check every 5 min
-// so we will need to store the last check time and the status of the monitor
 
 model Monitor {
-  id            String    @id @default(uuid())
+  id            String        @id @default(uuid())
 
   userId        String
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  url          String
-  name          String    
-  active        Boolean   @default(true)
+  name          String
+  url           String
 
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  type          MonitorType   @default(WEBSITE)
+  method        HttpMethod    @default(GET)
+
+  active        Boolean       @default(true)
+  emailAlerts   Boolean       @default(true)
+
+  currentStatus MonitorStatus @default(UP)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   checks        MonitorCheck[]
+  alerts        Alert[]
 
-  currentStatus  MonitorStatus @default(UP)
-
-  @@unique([userId,url])
+  @@unique([userId, url])
+  @@index([userId])
 }
 
+model MonitorCheck {
+  id            String        @id @default(uuid())
+
+  monitorId     String
+  monitor       Monitor       @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+
+  status        MonitorStatus
+
+  statusCode    Int?
+  responseTime  Int?
+  errorMessage  String?
+
+  checkedAt     DateTime      @default(now())
+
+  @@index([monitorId, checkedAt])
+}
+
+model Alert {
+  id            String       @id @default(uuid())
+
+  userId        String
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  monitorId     String
+  monitor       Monitor      @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+
+  type          AlertType
+
+  message       String
+
+  status        AlertStatus  @default(SENT)
+
+  createdAt     DateTime     @default(now())
+
+  @@index([userId, createdAt])
+}
 
 enum MonitorStatus {
   UP
   DOWN
 }
 
-model MonitorCheck {
-  id            String          @id @default(uuid())
-
-  monitor       Monitor         @relation(fields: [monitorId], references: [id], onDelete: Cascade)
-  monitorId     String
-
-  status        MonitorStatus
-  statusCode    Int?
-  responseTime  Int?
-  checkedAt     DateTime        @default(now())
-
-//indexing : since we will be querying the monitor checks based on the monitorId,
-// we can create an index on the monitorId field to improve query performance
-  @@index([monitorId])
+enum MonitorType {
+  WEBSITE
+  API
 }
 
+enum HttpMethod {
+  GET
+  POST
+}
 
+enum AlertType {
+  DOWN
+  RECOVERY
+}
+
+enum AlertStatus {
+  SENT
+  RESOLVED
+}

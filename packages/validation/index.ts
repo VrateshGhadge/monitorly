@@ -1,1 +1,1 @@
-export * from './zodValidations'
+export * from "./zodValidations";

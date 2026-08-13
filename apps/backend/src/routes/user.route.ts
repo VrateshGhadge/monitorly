@@ -2,114 +2,251 @@ import { Hono } from "hono";
 import { createPrisma } from "@repo/db";
 import { sign } from "hono/jwt";
 import bcrypt from "bcryptjs";
-import { signupInput, loginInput } from "@repo/validation";
-    
+import { signupInput, loginInput, deleteAccountInput } from "@repo/validation";
+import { authMiddleware } from "../middleware/auth";
+import { AppVariables } from "../types/hono";
 export const userRouter = new Hono<{
-    Bindings: CloudflareBindings;
+  Bindings: CloudflareBindings;
+  Variables: AppVariables;
 }>();
 
+userRouter.post("/signup", async (c) => {
+  const body = await c.req.json();
+  const result = signupInput.safeParse(body);
 
-userRouter.post('/signup', async(c)=> {
-    const body = await c.req.json();
-    const result = signupInput.safeParse(body);
-
-    if (!result.success) {
-    return c.json({ 
-        success: false, 
+  if (!result.success) {
+    return c.json(
+      {
+        success: false,
         message: "Invalid input",
-        errors: result.error.issues
-    }, 400);
-    }
-    
-    const { name, email, password } = result.data;
-    const prisma = createPrisma(c.env.DATABASE_URL);
-    
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        
-        const user = await prisma.user.create({
-            data: {
-                name,
-                email,
-                passwordHash: hashedPassword,
-            }
-        })
-        
-        if(!user){
-            return c.json({ 
-                success: false,
-                message: "User creation failed" 
-            }, 400);
-        }
+        errors: result.error.issues,
+      },
+      400,
+    );
+  }
 
-        const expTime = Math.floor(Date.now() / 1000) + (60 * 60 * 24); 
-        const token = await sign({ id: user.id, email: user.email, exp: expTime }, c.env.JWT_SECRET, "HS256");
+  const { name, email, password } = result.data;
+  const prisma = createPrisma(c.env.DATABASE_URL);
 
-        return c.json({ 
-            success: true,
-            message: "User created successfully",
-            data: {
-                token
-            },
-        }, 201);
-    } catch(error){
-        console.error(error);
-        return c.json({
-            success: false,
-            message: "User already exists"
-        }, 409)
-    }
-})
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
 
-userRouter.post('/login', async (c)=>{
-    const body = await c.req.json();
-    const result = loginInput.safeParse(body);
+  if (existingUser) {
+    return c.json(
+      {
+        success: false,
+        message: "Email already exists",
+      },
+      409,
+    );
+  }
 
-    if (!result.success) {
-    return c.json({ 
-        success: false, 
+  try {
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        passwordHash,
+      },
+    });
+
+    const token = await sign(
+      {
+        id: user.id,
+        email: user.email,
+        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
+      },
+      c.env.JWT_SECRET,
+    );
+
+    return c.json(
+      {
+        success: true,
+        data: {
+          token,
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+          },
+        },
+      },
+      201,
+    );
+  } catch (err) {
+    console.error(err);
+
+    return c.json(
+      {
+        success: false,
+        message: "Internal server error",
+      },
+      500,
+    );
+  }
+});
+
+userRouter.post("/login", async (c) => {
+  const body = await c.req.json();
+
+  const result = loginInput.safeParse(body);
+
+  if (!result.success) {
+    return c.json(
+      {
+        success: false,
         message: "Invalid input",
-        errors: result.error.issues
-    }, 400);
+        errors: result.error.issues,
+      },
+      400,
+    );
+  }
+
+  const { email, password } = result.data;
+
+  const prisma = createPrisma(c.env.DATABASE_URL);
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      return c.json(
+        {
+          success: false,
+          message: "Invalid email or password",
+        },
+        401,
+      );
     }
-    
-    const { email, password } = result.data;
-    
-    const prisma = createPrisma(c.env.DATABASE_URL);
-    
-    try {
-        const user = await prisma.user.findUnique({
-            where:{
-                email
-            }
-        })
 
-        if(!user || !user.passwordHash){
-            return c.json({ success: false, message: "Invalid email or password" }, 401);
-        }
-        
-        const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
-        if(!isPasswordValid){
-            return c.json({ success: false, message: "Invalid email or password" }, 401);
-        }
+    const validPassword = await bcrypt.compare(password, user.passwordHash);
 
-        const expTime = Math.floor(Date.now() / 1000) + (60 * 60 * 24); // 1 day in seconds
-
-        const token = await sign({ id: user.id, email: user.email, exp: expTime }, c.env.JWT_SECRET, "HS256");
-        return c.json({ 
-            success: true,
-            message: "Login successful",
-            data: {
-                token
-            },
-        }, 200);
-
-    } catch(error){
-        console.error(error);
-
-        return c.json({ 
-            success: false,
-            message: "Internal server error"
-        }, 500);
+    if (!validPassword) {
+      return c.json(
+        {
+          success: false,
+          message: "Invalid email or password",
+        },
+        401,
+      );
     }
-})
+
+    const token = await sign(
+      {
+        id: user.id,
+        email: user.email,
+        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
+      },
+      c.env.JWT_SECRET,
+    );
+
+    return c.json({
+      success: true,
+      data: {
+        token,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        },
+      },
+    });
+  } catch (err) {
+    console.error(err);
+
+    return c.json(
+      {
+        success: false,
+        message: "Internal server error",
+      },
+      500,
+    );
+  }
+});
+userRouter.use(authMiddleware);
+
+userRouter.delete("/", async (c) => {
+  const body = await c.req.json();
+
+  const result = deleteAccountInput.safeParse(body);
+
+  if (!result.success) {
+    return c.json(
+      {
+        success: false,
+        message: "Invalid input",
+        errors: result.error.issues,
+      },
+      400,
+    );
+  }
+
+  const { password } = result.data;
+
+  const userId = c.get("userId");
+
+  const prisma = createPrisma(c.env.DATABASE_URL);
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      return c.json(
+        {
+          success: false,
+          message: "User not found",
+        },
+        404,
+      );
+    }
+
+    const passwordMatches = await bcrypt.compare(password, user.passwordHash);
+
+    if (!passwordMatches) {
+      return c.json(
+        {
+          success: false,
+          message: "Incorrect password",
+        },
+        401,
+      );
+    }
+
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+
+    return c.json(
+      {
+        success: true,
+        message: "Account deleted successfully.",
+      },
+      200,
+    );
+  } catch (error) {
+    console.error(error);
+
+    return c.json(
+      {
+        success: false,
+        message: "Failed to delete account.",
+      },
+      500,
+    );
+  }
+});
