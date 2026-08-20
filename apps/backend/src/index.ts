@@ -13,8 +13,12 @@ const app = new Hono<{ Bindings: CloudflareBindings }>();
 
 app.use(
   "/*",
-  cors({
-    origin: "http://localhost:5174",
+    cors({
+    origin: [
+      "http://localhost:5174",
+      "https://monitorly.live",
+      "https://www.monitorly.live",
+    ],
     allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
   }),
