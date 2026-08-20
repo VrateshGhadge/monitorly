@@ -5,4 +5,7 @@ export type CloudflareBindings = {
   JWT_SECRET: string;
   RESEND_API_KEY: string;
   MONITOR_EVENTS: DurableObjectNamespace<MonitorEvents>;
+  LOGIN_RATE_LIMITER: {
+    limit(options: { key: string }): Promise<{ success: boolean }>;
+};
 };

@@ -4,6 +4,7 @@ import {
   sendMonitorRecoveryEmail,
 } from "./notification.service";
 import type { CloudflareBindings } from "../types/cloudflare";
+import { isSafeMonitorUrl } from "../utils/url";
 
 export async function checkAllMonitors(env: CloudflareBindings) {
   const prisma = createPrisma(env.DATABASE_URL);
@@ -123,12 +124,20 @@ export async function checkAllMonitors(env: CloudflareBindings) {
 type MonitorToCheck = Pick<Monitor, "name" | "url">;
 
 export async function checkMonitor(monitor: MonitorToCheck) {
+  if (!isSafeMonitorUrl(monitor.url)) {
+    return {
+      status: MonitorStatus.DOWN,
+      responseTime: null,
+      statusCode: null,
+    };
+  }
   const start = Date.now();
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
 
   try {
     const response = await fetch(monitor.url, {
+      redirect: "manual",
       signal: controller.signal,
       headers: {
         "User-Agent":
@@ -137,6 +146,41 @@ export async function checkMonitor(monitor: MonitorToCheck) {
           "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       },
     });
+    const redirectStatuses = new Set([301, 302, 303, 307, 308]);
+
+    if (redirectStatuses.has(response.status)) {
+      const location = response.headers.get("Location");
+
+      if (!location) {
+        return {
+          status: MonitorStatus.DOWN,
+          responseTime: Date.now() - start,
+          statusCode: response.status,
+        };
+      }
+
+      try {
+        const redirectUrl = new URL(location, monitor.url);
+
+        if (!isSafeMonitorUrl(redirectUrl.toString())) {
+          console.warn(
+            `Blocked unsafe redirect for ${monitor.name}: ${redirectUrl.hostname}`,
+          );
+
+          return {
+            status: MonitorStatus.DOWN,
+            responseTime: Date.now() - start,
+            statusCode: response.status,
+          };
+        }
+      } catch {
+        return {
+          status: MonitorStatus.DOWN,
+          responseTime: Date.now() - start,
+          statusCode: response.status,
+        };
+      }
+    }
 
     const status =
       response.status >= 200 && response.status < 400

@@ -5,6 +5,8 @@ import bcrypt from "bcryptjs";
 import { signupInput, loginInput, deleteAccountInput } from "@repo/validation";
 import { authMiddleware } from "../middleware/auth";
 import { AppVariables } from "../types/hono";
+import type { CloudflareBindings } from "../types/cloudflare";
+
 export const userRouter = new Hono<{
   Bindings: CloudflareBindings;
   Variables: AppVariables;
@@ -29,9 +31,7 @@ userRouter.post("/signup", async (c) => {
   const prisma = createPrisma(c.env.DATABASE_URL);
 
   const existingUser = await prisma.user.findUnique({
-    where: {
-      email,
-    },
+    where: { email },
   });
 
   if (existingUser) {
@@ -80,7 +80,6 @@ userRouter.post("/signup", async (c) => {
     );
   } catch (err) {
     console.error(err);
-
     return c.json(
       {
         success: false,
@@ -93,8 +92,31 @@ userRouter.post("/signup", async (c) => {
 
 userRouter.post("/login", async (c) => {
   const body = await c.req.json();
-
   const result = loginInput.safeParse(body);
+
+  const ip =
+    c.req.header("CF-Connecting-IP")?.trim() ||
+    c.req.header("X-Forwarded-For")?.split(",")[0]?.trim() ||
+    "unknown";
+  const rateLimitKey = result.success
+    ? `login:${ip}:${result.data.email}`
+    : `login:${ip}:invalid`;
+
+  const rateLimit = await c.env.LOGIN_RATE_LIMITER.limit({
+    key: rateLimitKey,
+  });
+
+  if (!rateLimit.success) {
+    console.warn("LOGIN RATE LIMITED:", ip);
+
+    return c.json(
+        {
+        success: false,
+        message: "Too many login attempts. Please try again later.",
+        },
+        429,
+    );
+    }
 
   if (!result.success) {
     return c.json(
@@ -108,14 +130,11 @@ userRouter.post("/login", async (c) => {
   }
 
   const { email, password } = result.data;
-
   const prisma = createPrisma(c.env.DATABASE_URL);
 
   try {
     const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
+      where: { email },
     });
 
     if (!user) {
@@ -162,7 +181,6 @@ userRouter.post("/login", async (c) => {
     });
   } catch (err) {
     console.error(err);
-
     return c.json(
       {
         success: false,
@@ -172,11 +190,12 @@ userRouter.post("/login", async (c) => {
     );
   }
 });
+
+// All routes below require authentication
 userRouter.use(authMiddleware);
 
 userRouter.delete("/", async (c) => {
   const body = await c.req.json();
-
   const result = deleteAccountInput.safeParse(body);
 
   if (!result.success) {
@@ -191,16 +210,12 @@ userRouter.delete("/", async (c) => {
   }
 
   const { password } = result.data;
-
   const userId = c.get("userId");
-
   const prisma = createPrisma(c.env.DATABASE_URL);
 
   try {
     const user = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -226,9 +241,7 @@ userRouter.delete("/", async (c) => {
     }
 
     await prisma.user.delete({
-      where: {
-        id: userId,
-      },
+      where: { id: userId },
     });
 
     return c.json(
@@ -240,7 +253,6 @@ userRouter.delete("/", async (c) => {
     );
   } catch (error) {
     console.error(error);
-
     return c.json(
       {
         success: false,

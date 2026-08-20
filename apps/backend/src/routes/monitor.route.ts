@@ -236,27 +236,6 @@ monitorRouter.get("/test-email", async (c) => {
   }
 });
 
-monitorRouter.get("/run-check", async (c) => {
-  try {
-    await checkAllMonitors(c.env);
-    return c.json(
-      {
-        success: true,
-        message: "Monitor check completed successfully",
-      },
-      200,
-    );
-  } catch (error) {
-    console.error(error);
-    return c.json(
-      {
-        success: false,
-        message: "Failed to run monitor check",
-      },
-      500,
-    );
-  }
-});
 
 monitorRouter.get("/alerts", async (c) => {
   try {
