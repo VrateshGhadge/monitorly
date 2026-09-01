@@ -1,37 +1,44 @@
 {
-  "name": "backend",
-  "main": "src/index.ts",
-  "compatibility_date": "2026-04-11",
-  "compatibility_flags": ["nodejs_compat"],
-  
-  "ratelimits": [
-    {
-      "name": "LOGIN_RATE_LIMITER",
-      "namespace_id": "987654",
-      "simple": {
-        "limit": 10,
-        "period": 60
-      }
-    }
-  ],
-
-  "durable_objects": {
-    "bindings": [
-      {
-        "name": "MONITOR_EVENTS",
-        "class_name": "MonitorEvents"
-      }
-    ]
-  },
-
-  "exports": {
-    "MonitorEvents": {
-      "type": "durable-object",
-      "storage": "sqlite"
-    }
-  },
-
-  "triggers": {
-    "crons": ["*/5 * * * *"]
-  }
+	"name": "backend",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-04-11",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "monitorly-db",
+			"database_id": "f827938e-4730-471e-9deb-77b7c792fca0"
+		}
+	],
+	"ratelimits": [
+		{
+			"name": "LOGIN_RATE_LIMITER",
+			"namespace_id": "987654",
+			"simple": {
+				"limit": 10,
+				"period": 60
+			}
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "MONITOR_EVENTS",
+				"class_name": "MonitorEvents"
+			}
+		]
+	},
+	"exports": {
+		"MonitorEvents": {
+			"type": "durable-object",
+			"storage": "sqlite"
+		}
+	},
+	"triggers": {
+		"crons": [
+			"*/5 * * * *"
+		]
+	}
 }

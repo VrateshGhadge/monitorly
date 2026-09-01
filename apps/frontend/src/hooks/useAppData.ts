@@ -4,6 +4,7 @@ import * as monitorApi from "../api/monitor";
 import type { ActivityItem, AppAlert, AppMonitor } from "../types/app";
 import type { CreateMonitorInput } from "@repo/validation";
 import { createSlug } from "../utils/slug";
+import { BACKEND_URL } from "../config";
 
 // ---------------------------------------------------------------------------
 // Helper: append a new point and remove points older than `maxAge` ms
@@ -108,7 +109,7 @@ export function useAppData(isNewAccount: boolean) {
         }
 
         const response = await fetch(
-          "http://localhost:8787/api/v1/monitor/events",
+          `${BACKEND_URL}/api/v1/monitor/events`,
           {
             method: "GET",
             headers: {

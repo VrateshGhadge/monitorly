@@ -15,7 +15,7 @@ app.use(
   "/*",
     cors({
     origin: [
-      "http://localhost:5174",
+      "http://localhost:5173",
       "https://monitorly.live",
       "https://www.monitorly.live",
     ],
@@ -34,7 +34,7 @@ app.get("/health", (c) => {
 });
 
 app.get("/health/db", async (c) => {
-  const prisma = createPrisma(c.env.DATABASE_URL);
+  const prisma = createPrisma(c.env.DB);
 
   try {
     await prisma.$queryRaw`SELECT 1`;

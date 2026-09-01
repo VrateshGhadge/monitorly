@@ -28,7 +28,7 @@ userRouter.post("/signup", async (c) => {
   }
 
   const { name, email, password } = result.data;
-  const prisma = createPrisma(c.env.DATABASE_URL);
+  const prisma = createPrisma(c.env.DB);
 
   const existingUser = await prisma.user.findUnique({
     where: { email },
@@ -130,7 +130,7 @@ userRouter.post("/login", async (c) => {
   }
 
   const { email, password } = result.data;
-  const prisma = createPrisma(c.env.DATABASE_URL);
+  const prisma = createPrisma(c.env.DB);
 
   try {
     const user = await prisma.user.findUnique({
@@ -211,7 +211,7 @@ userRouter.delete("/", async (c) => {
 
   const { password } = result.data;
   const userId = c.get("userId");
-  const prisma = createPrisma(c.env.DATABASE_URL);
+  const prisma = createPrisma(c.env.DB);
 
   try {
     const user = await prisma.user.findUnique({

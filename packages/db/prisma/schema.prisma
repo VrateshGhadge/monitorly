@@ -5,11 +5,11 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 model User {
-  id           String   @id @default(uuid())
+  id           String   @id @default(cuid())
 
   email        String   @unique
   passwordHash String
@@ -23,24 +23,24 @@ model User {
 }
 
 model Monitor {
-  id            String        @id @default(uuid())
+  id            String   @id @default(cuid())
 
   userId        String
-  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   name          String
   url           String
 
-  type          MonitorType   @default(WEBSITE)
-  method        HttpMethod    @default(GET)
+  type          String   @default("WEBSITE")
+  method        String   @default("GET")
 
-  active        Boolean       @default(true)
-  emailAlerts   Boolean       @default(true)
+  active        Boolean  @default(true)
+  emailAlerts   Boolean  @default(true)
 
-  currentStatus MonitorStatus @default(UP)
+  currentStatus String   @default("UP")
 
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   checks        MonitorCheck[]
   alerts        Alert[]
@@ -50,63 +50,38 @@ model Monitor {
 }
 
 model MonitorCheck {
-  id            String        @id @default(uuid())
+  id           String   @id @default(cuid())
 
-  monitorId     String
-  monitor       Monitor       @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  monitorId    String
+  monitor      Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
 
-  status        MonitorStatus
+  status       String
 
-  statusCode    Int?
-  responseTime  Int?
-  errorMessage  String?
+  statusCode   Int?
+  responseTime Int?
+  errorMessage String?
 
-  checkedAt     DateTime      @default(now())
+  checkedAt    DateTime @default(now())
 
-  @@index([monitorId, checkedAt])
+  @@index([monitorId])
 }
 
 model Alert {
-  id            String       @id @default(uuid())
+  id        String   @id @default(cuid())
 
-  userId        String
-  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  monitorId     String
-  monitor       Monitor      @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  monitorId String
+  monitor   Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
 
-  type          AlertType
+  type      String
 
-  message       String
+  message   String
 
-  status        AlertStatus  @default(SENT)
+  status    String   @default("SENT")
 
-  createdAt     DateTime     @default(now())
+  createdAt DateTime @default(now())
 
-  @@index([userId, createdAt])
-}
-
-enum MonitorStatus {
-  UP
-  DOWN
-}
-
-enum MonitorType {
-  WEBSITE
-  API
-}
-
-enum HttpMethod {
-  GET
-  POST
-}
-
-enum AlertType {
-  DOWN
-  RECOVERY
-}
-
-enum AlertStatus {
-  SENT
-  RESOLVED
+  @@index([userId])
 }

@@ -85,7 +85,7 @@ function buildPathFromPoints(
   }));
 
   if (mapped.length === 1) {
-    return `M${mapped[0].x},${mapped[0].y} L${mapped[0].x},${mapped[0].y}`;
+    return `M${mapped[0].x},${mapped[0].y} L${mapped[0].x + 0.01},${mapped[0].y}`;
   }
 
   let d = `M${mapped[0].x},${mapped[0].y}`;
@@ -332,6 +332,7 @@ function SingleMonitorGraph({
   );
 
   const hasData = data.some((p) => p.value !== null);
+  const hasMultiplePoints = toValidPoints(data).length > 1;
 
   const handlePointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
     if (!hasData) return;
@@ -391,11 +392,13 @@ function SingleMonitorGraph({
             strokeWidth="2"
             strokeDasharray={hasData ? undefined : "4 4"}
           />
-          <path
-            d={fillPath}
-            fill="url(#fade-single)"
-            opacity={hasData ? 0.22 : 0.08}
-          />
+          {hasMultiplePoints && (
+            <path
+              d={fillPath}
+              fill="url(#fade-single)"
+              opacity={hasData ? 0.22 : 0.08}
+            />
+          )}
           <defs>
             <linearGradient id="fade-single" x1="0" y1="0" x2="0" y2="1">
               <stop stopColor={hasData ? "#50d890" : "#3a4048"} />
@@ -520,6 +523,7 @@ function SelectableMonitorGraph({
   );
 
   const hasData = activeData.some((p) => p.value !== null);
+  const hasMultiplePoints = toValidPoints(activeData).length > 1;
 
   const handlePointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
     if (!hasData) return;
@@ -603,11 +607,13 @@ function SelectableMonitorGraph({
             strokeWidth="2"
             strokeDasharray={hasData ? undefined : "4 4"}
           />
-          <path
-            d={fillPath}
-            fill="url(#rt-fade)"
-            opacity={hasData ? 0.2 : 0.08}
-          />
+          {hasMultiplePoints && (
+            <path
+              d={fillPath}
+              fill="url(#rt-fade)"
+              opacity={hasData ? 0.2 : 0.08}
+            />
+          )}
           <defs>
             <linearGradient id="rt-fade" x1="0" y1="0" x2="0" y2="1">
               <stop stopColor={hasData ? activeColor : "#3a4048"} />

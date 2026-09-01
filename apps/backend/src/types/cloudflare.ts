@@ -1,7 +1,7 @@
 import type { MonitorEvents } from "../durable-objects/MonitorEvents";
 
 export type CloudflareBindings = {
-  DATABASE_URL: string;
+  DB: D1Database;
   JWT_SECRET: string;
   RESEND_API_KEY: string;
   MONITOR_EVENTS: DurableObjectNamespace<MonitorEvents>;

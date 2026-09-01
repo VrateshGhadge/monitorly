@@ -1,7 +1,7 @@
 import { MonitorStatus } from "@repo/db";
 
 type Check = {
-  status: MonitorStatus;
+  status: string;
   responseTime: number | null;
   checkedAt: Date;
 };

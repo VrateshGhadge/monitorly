@@ -9,8 +9,8 @@
     "check-types": "turbo run check-types",
     "db:migrate": "npm run db:migrate --workspace=@repo/db",
     "db:studio": "npm run db:studio --workspace=@repo/db",
-    "db:studio:stable": "PRISMA_QUERY_COMPILER=0 npx -y node@22.13.1 ./node_modules/prisma/build/index.js studio --config ./packages/db/prisma.studio.config.ts --browser default",
-    "db:studio:legacy": "node ./scripts/run-legacy-studio.cjs"
+    "db:migrate:d1": "cd apps/backend && wrangler d1 migrations apply monitorly-db --local",
+    "postinstall": "node scripts/ensure-deploy-deps.cjs"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
@@ -28,12 +28,15 @@
     "packages/*"
   ],
   "allowScripts": {
-    "@prisma/engines@7.7.0": true,
+    "@prisma/engines@7.9.1": true,
     "esbuild@0.27.3": true,
+    "esbuild@0.28.1": true,
+    "esbuild@0.28.2": true,
     "fsevents@2.3.3": true,
-    "prisma@7.7.0": true,
+    "prisma@7.9.1": true,
     "sharp@0.34.5": true,
-    "workerd@1.20260410.1": true
+    "workerd@1.20260815.1": true,
+    "workerd@1.20260828.1": true
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

@@ -41,6 +41,10 @@ yarn-error.log*
 .DS_Store
 *.pem
 
+# Wrangler / Cloudflare local state
+.wrangler/
+apps/*/.wrangler/
+
 
 *.tsbuildinfo
 packages/db/generated/

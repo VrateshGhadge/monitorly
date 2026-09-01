@@ -7,7 +7,7 @@ import type { CloudflareBindings } from "../types/cloudflare";
 import { isSafeMonitorUrl } from "../utils/url";
 
 export async function checkAllMonitors(env: CloudflareBindings) {
-  const prisma = createPrisma(env.DATABASE_URL);
+  const prisma = createPrisma(env.DB);
 
   const monitors = await prisma.monitor.findMany({
     where: {

@@ -46,7 +46,7 @@ monitorRouter.get("/events", async (c) => {
 monitorRouter.post("/", async (c) => {
   const body = await c.req.json();
   const userId = c.get("userId");
-  const prisma = createPrisma(c.env.DATABASE_URL);
+  const prisma = createPrisma(c.env.DB);
   const result = createMonitorInput.safeParse(body);
   if (!result.success) {
     return c.json(
@@ -121,7 +121,7 @@ monitorRouter.post("/", async (c) => {
 
 monitorRouter.get("/", async (c) => {
   const userId = c.get("userId");
-  const prisma = createPrisma(c.env.DATABASE_URL);
+  const prisma = createPrisma(c.env.DB);
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -194,7 +194,7 @@ monitorRouter.get("/", async (c) => {
 });
 
 monitorRouter.get("/test-email", async (c) => {
-  const prisma = createPrisma(c.env.DATABASE_URL);
+  const prisma = createPrisma(c.env.DB);
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -240,7 +240,7 @@ monitorRouter.get("/test-email", async (c) => {
 monitorRouter.get("/alerts", async (c) => {
   try {
     const userId = c.get("userId");
-    const prisma = createPrisma(c.env.DATABASE_URL);
+    const prisma = createPrisma(c.env.DB);
 
     const alerts = await prisma.alert.findMany({
       where: { userId },
@@ -281,7 +281,7 @@ monitorRouter.get("/alerts", async (c) => {
 monitorRouter.get("/:id", async (c) => {
   const userId = c.get("userId");
   const monitorId = c.req.param("id");
-  const prisma = createPrisma(c.env.DATABASE_URL);
+  const prisma = createPrisma(c.env.DB);
 
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -387,7 +387,7 @@ monitorRouter.patch("/:id", async (c) => {
     );
   }
 
-  const prisma = createPrisma(c.env.DATABASE_URL);
+  const prisma = createPrisma(c.env.DB);
   const userId = c.get("userId");
   const monitorId = c.req.param("id");
 
@@ -470,7 +470,7 @@ monitorRouter.patch("/:id", async (c) => {
 monitorRouter.delete("/:id", async (c) => {
   const userId = c.get("userId");
   const monitorId = c.req.param("id");
-  const prisma = createPrisma(c.env.DATABASE_URL);
+  const prisma = createPrisma(c.env.DB);
 
   try {
     const existingMonitor = await prisma.monitor.findFirst({
@@ -520,7 +520,7 @@ monitorRouter.delete("/:id", async (c) => {
 monitorRouter.get("/:id/history", async (c) => {
   const userId = c.get("userId");
   const monitorId = c.req.param("id");
-  const prisma = createPrisma(c.env.DATABASE_URL);
+  const prisma = createPrisma(c.env.DB);
 
   try {
     const existingMonitor = await prisma.monitor.findFirst({
@@ -580,7 +580,7 @@ monitorRouter.get("/:id/history", async (c) => {
 monitorRouter.get("/:id/stats", async (c) => {
   const userId = c.get("userId");
   const monitorId = c.req.param("id");
-  const prisma = createPrisma(c.env.DATABASE_URL);
+  const prisma = createPrisma(c.env.DB);
 
   try {
     const existingMonitor = await prisma.monitor.findFirst({
