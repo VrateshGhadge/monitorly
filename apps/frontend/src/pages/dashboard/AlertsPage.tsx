@@ -105,20 +105,26 @@ export default function AlertsPage() {
             </div>
             {filtered.map((a) => (
               <div className="table-row" key={a.id}>
-                <div className="table-cell">
+                <div className="table-cell" data-label="Severity">
                   <SeverityBadge severity={a.severity} />
                 </div>
-                <div className="table-cell">
+                <div className="table-cell" data-label="Monitor">
                   <b>{a.monitor}</b>
                 </div>
-                <div className="table-cell table-cell-muted">{a.message}</div>
-                <div className="table-cell table-cell-muted">{a.email}</div>
-                {/* <div className="table-cell table-cell-muted">{a.time}</div> */}
-                <div className="table-cell table-cell-muted">
-                  {" "}
-                  {formatLastChecked(a.time)}{" "}
+                <div className="table-cell table-cell-muted" data-label="Message">
+                  {a.message}
                 </div>
-                <div className="table-cell">
+                <div
+                  className="table-cell table-cell-muted"
+                  data-label="Sent to"
+                >
+                  {a.email}
+                </div>
+                {/* <div className="table-cell table-cell-muted">{a.time}</div> */}
+                <div className="table-cell table-cell-muted" data-label="Time">
+                  {formatLastChecked(a.time)}
+                </div>
+                <div className="table-cell" data-label="Status">
                   <span
                     className={`hb-status${a.status === "sent" ? " late" : ""}`}
                   >

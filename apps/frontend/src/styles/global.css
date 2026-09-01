@@ -95,6 +95,25 @@ button {
   gap: 20px;
   font-size: 13px;
 }
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: #c5cad1;
+  border-radius: 7px;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.nav-toggle:hover {
+  color: #fff;
+  border-color: #3a4048;
+}
+.nav-links-wrap {
+  display: contents;
+}
 .button {
   border: 0;
   cursor: pointer;
@@ -1218,6 +1237,440 @@ main > section {
   padding: 8px 9px 0;
 }
 
+/* ===================================================================
+   Mobile dashboard demo (hero preview, <600px)
+   Hidden by default; shown only on small viewports via the media query
+   below. Purpose-built single-column phone mockup — the desktop demo
+   (.app) is hidden at the same breakpoint so it never renders squeezed.
+   =================================================================== */
+.m-demo {
+  display: none;
+}
+
+/* ===================================================================
+   Responsive — landing page
+   =================================================================== */
+@media (max-width: 1080px) {
+  .app {
+    grid-template-columns: 178px 1fr;
+  }
+  .integration-area {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .integration-grid {
+    max-width: 560px;
+  }
+  .analytics {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .analytics-card {
+    order: 2;
+  }
+}
+
+@media (max-width: 960px) {
+  .quotes {
+    grid-template-columns: 1fr;
+  }
+  .flow {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .arrow {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .nav {
+    height: 64px;
+  }
+  .nav-toggle {
+    display: inline-flex;
+  }
+  .nav-links-wrap {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 19;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: #0d1014;
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 24px 40px rgba(0, 0, 0, 0.45);
+    padding: 8px 22px 18px;
+    transform: translateY(-8px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      transform 0.18s ease,
+      opacity 0.18s ease,
+      visibility 0.18s;
+  }
+  .nav-links-wrap.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .nav-links-wrap .links {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .nav-links-wrap .links a {
+    padding: 10px 2px;
+    font-size: 14px;
+  }
+  .nav-links-wrap .nav-actions {
+    gap: 10px;
+    margin-top: 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .nav-links-wrap .nav-actions .button {
+    flex: 1;
+    text-align: center;
+  }
+  .nav-links-wrap .nav-actions .ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+  }
+  .hero {
+    padding: 76px 0 56px;
+  }
+  .hero h1 {
+    letter-spacing: -2.6px;
+  }
+  .dash-grid {
+    grid-template-columns: 1fr;
+  }
+  main > section {
+    padding: 76px 0;
+  }
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .pricing {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+  }
+  .feature-head {
+    display: block;
+  }
+  .feature-head .section-copy {
+    margin: 14px 0 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .wrap {
+    width: calc(100% - 40px);
+  }
+  .nav .wrap {
+    gap: 12px;
+  }
+  .nav-actions {
+    gap: 6px;
+  }
+  .brand {
+    font-size: 16px;
+    letter-spacing: -0.5px;
+  }
+  .nav-actions .button.primary {
+    padding: 8px 12px;
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+  .nav-actions .ghost {
+    display: none;
+  }
+  .nav-toggle {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+  .hero {
+    padding: 56px 0 44px;
+  }
+  .hero h1 {
+    font-size: clamp(30px, 9vw, 40px);
+    letter-spacing: -1.6px;
+    line-height: 1.08;
+  }
+  .hero p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 26px;
+  }
+  .hero-actions .button {
+    display: flex;
+    justify-content: center;
+    padding: 13px 18px;
+    font-size: 14px;
+    white-space: normal;
+  }
+  main > section {
+    padding: 56px 0;
+  }
+  .feature-grid {
+    grid-template-columns: 1fr;
+    margin-top: 28px;
+    gap: 10px;
+  }
+  .feature {
+    min-height: 0;
+    padding: 20px;
+  }
+  .feature-icon {
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-size: clamp(26px, 7.5vw, 32px);
+    letter-spacing: -1.2px;
+  }
+  .section-copy {
+    font-size: 14.5px;
+    margin-top: 12px;
+  }
+  .integration-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: none;
+  }
+  .integration {
+    height: 90px;
+  }
+  .quotes {
+    margin-top: 28px;
+  }
+  .flow {
+    margin-top: 28px;
+  }
+  .flow-card {
+    min-height: 0;
+  }
+  .amount {
+    font-size: 28px;
+    margin: 14px 0;
+  }
+  .price > p {
+    height: auto;
+    min-height: 0;
+    margin: 4px 0 0;
+  }
+  .faq {
+    margin-top: 28px;
+  }
+  .faq-question {
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .cta-box {
+    padding: 32px 20px;
+  }
+  .cta h2 {
+    font-size: clamp(26px, 7.5vw, 32px);
+    letter-spacing: -1.2px;
+    line-height: 1.15;
+  }
+}
+
+@media (max-width: 380px) {
+  .nav .wrap {
+    gap: 8px;
+  }
+  .nav-actions .button.primary {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  .integration-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .integration {
+    font-size: 10.5px;
+  }
+}
+
+/* Mobile hero dashboard demo: swap the desktop preview for the phone
+   mockup below 600px. Both are always rendered; only visibility flips. */
+@media (max-width: 599px) {
+  .app {
+    display: none;
+  }
+  .m-demo {
+    display: block;
+    max-width: 440px;
+    margin: 42px auto 0;
+    background: #0e1115;
+    border: 1px solid #2b3038;
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.32);
+    text-align: left;
+    padding: 18px 16px 16px;
+    overflow: hidden;
+  }
+  .m-demo-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .m-demo-head h3 {
+    font-size: 15px;
+    letter-spacing: -0.4px;
+    margin: 0;
+  }
+  .m-demo-head span {
+    color: var(--muted);
+    font-size: 10.5px;
+    margin-top: 2px;
+    display: block;
+  }
+  .m-demo-head .live {
+    flex-shrink: 0;
+  }
+  .m-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .m-summary-tile {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #11151a;
+    padding: 10px 12px;
+  }
+  .m-summary-tile span {
+    display: block;
+    color: #818994;
+    font-size: 9.5px;
+    margin-bottom: 6px;
+  }
+  .m-summary-tile strong {
+    font-size: 18px;
+    letter-spacing: -0.5px;
+  }
+  .m-summary-tile strong.bad {
+    color: var(--red);
+  }
+  .m-spark {
+    margin-top: 8px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #11151a;
+    padding: 12px;
+  }
+  .m-spark-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .m-spark-head span {
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .m-spark-head small {
+    font: 9px "DM Mono";
+    color: #737c87;
+  }
+  .m-spark svg {
+    display: block;
+    width: 100%;
+    height: 64px;
+  }
+  .m-spark-axis {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    color: #68717d;
+    font: 8.5px "DM Mono";
+  }
+  .m-monitors {
+    margin-top: 8px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #11151a;
+    padding: 12px;
+  }
+  .m-monitors-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .m-monitors-head h4 {
+    font-size: 11px;
+    margin: 0;
+    font-weight: 600;
+  }
+  .m-monitors-head small {
+    font: 9px "DM Mono";
+    color: #737c87;
+  }
+  .m-monitor {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 0;
+    border-top: 1px solid #222830;
+    font-size: 10.5px;
+  }
+  .m-monitor:first-of-type {
+    border-top: none;
+  }
+  .m-monitor .status-dot {
+    width: 7px;
+    height: 7px;
+    flex-shrink: 0;
+    margin: 0;
+  }
+  .m-monitor-name {
+    flex: 1;
+    min-width: 0;
+  }
+  .m-monitor-name b {
+    display: block;
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .m-monitor-name span {
+    color: #85909a;
+    font-size: 9px;
+  }
+  .m-monitor-up {
+    color: #85909a;
+    font: 9.5px "DM Mono";
+  }
+  .m-monitor > strong {
+    font: 10.5px "DM Mono";
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-links {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================================================================
+   Footer (mobile)
+   =================================================================== */
 @media (max-width: 760px) {
   .footer {
     padding: 32px 0 60px;

@@ -5,6 +5,7 @@ import OverviewPanel from "./panels/OverviewPanel";
 import MonitorsPanel from "./panels/MonitorsPanel";
 import AlertsPanel from "./panels/AlertsPanel";
 import SettingsPanel from "./panels/SettingsPanel";
+import MobileDashboardDemo from "./MobileDashboardDemo";
 
 export default function DashboardDemo() {
   const {
@@ -23,10 +24,11 @@ export default function DashboardDemo() {
   } = useDashboardState();
 
   return (
-    <div
-      className="app"
-      aria-label="Monitorly dashboard preview (interactive demo)"
-    >
+    <>
+      <div
+        className="app"
+        aria-label="Monitorly dashboard preview (interactive demo)"
+      >
       <Sidebar
         activeSection={activeSection}
         onSelect={setActiveSection}
@@ -71,7 +73,10 @@ export default function DashboardDemo() {
             onToggle={toggleNotification}
           />
         )}
+        </div>
       </div>
-    </div>
+
+      <MobileDashboardDemo />
+    </>
   );
 }

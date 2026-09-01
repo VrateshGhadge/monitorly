@@ -30,7 +30,9 @@ export default function Dropdown({
       <Select.Root value={value} onValueChange={onChange}>
         <Select.Trigger
           className={`flex w-full items-center justify-between rounded-md border border-border bg-[#0d1014] px-3 text-left text-sm text-foreground outline-none focus:ring-2 focus:ring-brand/15 ${
-            size === "sm" ? "h-8 min-w-35 text-xs" : "h-10 min-w-40"
+            size === "sm"
+              ? "h-8 min-w-35 text-xs"
+              : "h-10 min-w-40 max-sm:min-w-0"
           }`}
         >
           <Select.Value />

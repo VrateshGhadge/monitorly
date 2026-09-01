@@ -56,6 +56,28 @@ export interface MonitorHistory {
   checkedAt: string;
 }
 
+/** A single check as returned by the monitor detail endpoint (30-day window). */
+export interface MonitorCheck {
+  id: string;
+  status: "UP" | "DOWN";
+  statusCode: number | null;
+  responseTime: number | null;
+  errorMessage: string | null;
+  checkedAt: string;
+}
+
+/** Monitor detail endpoint response: monitor + 30 days of checks and alerts. */
+export interface MonitorDetail extends Monitor {
+  checks: MonitorCheck[];
+  alerts: {
+    id: string;
+    type: "DOWN" | "RECOVERY";
+    message: string;
+    status: "SENT" | "RESOLVED";
+    createdAt: string;
+  }[];
+}
+
 export interface MonitorStats {
   currentStatus: "UP" | "DOWN";
   lastChecked: string | null;
@@ -96,7 +118,7 @@ interface MonitorResponse {
 
 interface SingleMonitorResponse {
   success: boolean;
-  data: Monitor;
+  data: MonitorDetail;
 }
 
 interface HistoryResponse {

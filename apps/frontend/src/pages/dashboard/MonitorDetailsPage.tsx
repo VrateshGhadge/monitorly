@@ -14,7 +14,7 @@ import CheckHistoryPanel from "../../components/dashboard/CheckHistoryPanel";
 import type { ResponseRange } from "../../utils/monitorGraphs";
 import { formatLastChecked } from "../../lib/date";
 
-import { getMonitorHistory } from "../../api/monitor";
+import { getMonitor } from "../../api/monitor";
 
 // ---------- Types ----------
 interface Incident {
@@ -84,7 +84,7 @@ export default function MonitorDetailsPage() {
     }>
   >([]);
 
-  // ----- Fetch check history for incidents -----
+  // ----- Fetch 30-day check history (from the detail endpoint) for incidents -----
   useEffect(() => {
     if (!monitor?.id) return;
 
@@ -92,9 +92,11 @@ export default function MonitorDetailsPage() {
 
     const loadHistory = async () => {
       try {
-        const data = await getMonitorHistory(monitor.id);
+        const data = await getMonitor(monitor.id);
         if (!cancelled) {
-          setHistory(data);
+          // The detail endpoint returns checks newest-first; the incident
+          // builder below sorts chronologically, so order doesn't matter.
+          setHistory(data.checks);
         }
       } catch (error) {
         console.error("Failed to load monitor history", error);
