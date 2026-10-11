@@ -6,6 +6,7 @@
  * `npm install` so deploys never break on missing modules.
  */
 const { execSync } = require("node:child_process");
+const fs = require("node:fs");
 const path = require("node:path");
 
 const REQUIRED = [
@@ -16,13 +17,21 @@ const REQUIRED = [
 
 const root = path.resolve(__dirname, "..");
 
+// Where a hoisted install can legitimately live: the repo root, or the
+// workspace that declares the package. Never resolve through the package
+// `exports` map - several of these packages do not export ./package.json,
+// which made the previous require.resolve() check report false negatives and
+// reinstall them (at "latest", ignoring the lockfile) on every npm install.
+const INSTALL_ROOTS = [
+  root,
+  path.join(root, "apps", "backend"),
+  path.join(root, "apps", "frontend"),
+];
+
 function missing(name) {
-  try {
-    require.resolve(`${name}/package.json`, { paths: [root] });
-    return false;
-  } catch {
-    return true;
-  }
+  return !INSTALL_ROOTS.some((base) =>
+    fs.existsSync(path.join(base, "node_modules", name, "package.json")),
+  );
 }
 
 const missingPkgs = REQUIRED.filter(missing);

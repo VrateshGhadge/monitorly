@@ -1,8 +1,11 @@
+import { useState } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import AuthLayout from "../../components/auth/AuthLayout";
+import GoogleSignInButton from "../../components/auth/GoogleSignInButton";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import PasswordInput from "../../components/ui/PasswordInput";
@@ -15,8 +18,10 @@ import { signInInput, type SignInInput } from "@repo/validation";
 type SignInValues = SignInInput;
 
 export default function SignInPage() {
-  const { signIn } = useAuth();
+  const { signIn, signInWithGoogle } = useAuth();
   const { showToast } = useToast();
+
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -51,6 +56,29 @@ export default function SignInPage() {
         getErrorMessage(error, "Invalid email or password. Please try again."),
         "error",
       );
+    }
+  };
+
+  const handleGoogleSignIn = async (credential: string) => {
+    if (googleLoading) return;
+
+    try {
+      setGoogleLoading(true);
+
+      await signInWithGoogle(credential);
+
+      showToast("Welcome back — you're signed in.");
+
+      navigate(redirectTo, {
+        replace: true,
+      });
+    } catch (error) {
+      showToast(
+        getErrorMessage(error, "Google sign-in failed. Please try again."),
+        "error",
+      );
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
@@ -97,6 +125,13 @@ export default function SignInPage() {
           Sign in
         </Button>
       </form>
+
+      <div className="auth-divider">or</div>
+
+      <GoogleSignInButton
+        onCredential={handleGoogleSignIn}
+        text="signin_with"
+      />
 
       <p className="auth-switch">
         Don't have an account? <Link to="/signup">Sign up</Link>

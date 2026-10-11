@@ -4,6 +4,7 @@ export interface AuthUser {
   id: string;
   email: string;
   name: string | null;
+  hasPassword?: boolean;
 }
 
 interface AuthResponse {
@@ -32,4 +33,23 @@ export async function login(email: string, password: string) {
   });
 
   return data.data;
+}
+
+export async function googleSignIn(credential: string) {
+  const { data } = await api.post<AuthResponse>("/api/v1/user/google", {
+    credential,
+  });
+
+  return data.data;
+}
+
+export async function deleteAccount(
+  payload: { password: string } | { credential: string },
+) {
+  const { data } = await api.delete<{ success: boolean; message: string }>(
+    "/api/v1/user",
+    { data: payload },
+  );
+
+  return data;
 }

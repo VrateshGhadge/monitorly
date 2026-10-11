@@ -5,7 +5,7 @@ import { authMiddleware } from "../middleware/auth";
 import { createMonitorInput, updateMonitorInput } from "@repo/validation";
 import type { CloudflareBindings } from "../types/cloudflare";
 import { sendTestEmail } from "../services/notification.service";
-import { checkAllMonitors } from "../services/monitor.service";
+import { runMonitorCheck } from "../services/monitor.service";
 import { isSafeMonitorUrl } from "../utils/url";
 import {
   calculateAverageResponse,
@@ -98,6 +98,14 @@ monitorRouter.post("/", async (c) => {
       },
       select: monitorSelect,
     });
+
+    // Run the first check right away so the dashboard has data without
+    // waiting for the next scheduled run. Failures are logged, never surfaced.
+    c.executionCtx.waitUntil(
+      runMonitorCheck(c.env, monitor.id).catch((error) => {
+        console.error("Initial monitor check failed:", error);
+      }),
+    );
 
     return c.json(
       {

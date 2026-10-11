@@ -1,6 +1,8 @@
 //src->pages->dashboard->OverviewPage
+import { useState } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import type { AppData } from "../../hooks/useAppData";
+import HowItWorksModal from "../../components/app/HowItWorksModal";
 import PageHeader from "../../components/ui/PageHeader";
 import StatCard from "../../components/ui/StatCard";
 import Button from "../../components/ui/Button";
@@ -42,6 +44,8 @@ export default function OverviewPage() {
     openCreateModal,
   } = data;
 
+  const [guideOpen, setGuideOpen] = useState(false);
+
   const handleCreateMonitor = () => {
     if (monitors.length >= monitorLimit) {
       return;
@@ -68,10 +72,20 @@ export default function OverviewPage() {
           <Button icon={<PlusIcon />} onClick={handleCreateMonitor}>
             Create monitor
           </Button>
-          <a className="btn btn-ghost" href="/#product">
+
+          <Button variant="ghost" onClick={() => setGuideOpen(true)}>
             Learn how Monitorly works
-          </a>
+          </Button>
         </div>
+
+        <HowItWorksModal
+          open={guideOpen}
+          onClose={() => setGuideOpen(false)}
+          onCreate={() => {
+            setGuideOpen(false);
+            handleCreateMonitor();
+          }}
+        />
       </div>
     );
   }

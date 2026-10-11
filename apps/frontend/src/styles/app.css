@@ -551,6 +551,8 @@
 .onboarding-actions {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 16px;
 }
 
@@ -781,6 +783,10 @@
   flex: 1;
   height: 1px;
   background: var(--line);
+}
+.auth-google {
+  display: flex;
+  justify-content: center;
 }
 .auth-switch {
   text-align: center;

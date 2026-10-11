@@ -1,15 +1,24 @@
 import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import PageHeader from "../../components/ui/PageHeader";
 import Input from "../../components/ui/Input";
+import PasswordInput from "../../components/ui/PasswordInput";
 import Button from "../../components/ui/Button";
 import Modal from "../../components/ui/Modal";
+import GoogleSignInButton from "../../components/auth/GoogleSignInButton";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
+import { getErrorMessage } from "../../lib/api";
 import { sendTestEmail } from "../../api/monitor";
+import { deleteAccount } from "../../api/auth";
 
 export default function SettingsPage() {
   const { user, signOut } = useAuth();
   const { showToast } = useToast();
+  const navigate = useNavigate();
+
+  // Sessions persisted before Google support lack hasPassword - treat them as password accounts.
+  const needsGoogleConfirm = user?.hasPassword === false;
 
   const [notificationEmail, setNotificationEmail] = useState(user?.email || "");
 
@@ -17,6 +26,8 @@ export default function SettingsPage() {
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [confirmText, setConfirmText] = useState("");
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   const handleNotificationSave = async (e: FormEvent) => {
     e.preventDefault();
@@ -34,6 +45,64 @@ export default function SettingsPage() {
       showToast("Failed to send notification email");
     } finally {
       setIsSendingEmail(false);
+    }
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteOpen(false);
+    setConfirmText("");
+    setDeletePassword("");
+  };
+
+  const finishDelete = () => {
+    showToast("Your account has been deleted.");
+
+    closeDeleteModal();
+    signOut();
+    navigate("/signin", { replace: true });
+  };
+
+  const handlePasswordDelete = async () => {
+    if (deleting) return;
+
+    try {
+      setDeleting(true);
+
+      await deleteAccount({ password: deletePassword });
+
+      finishDelete();
+    } catch (error) {
+      showToast(
+        getErrorMessage(
+          error,
+          "Failed to delete your account. Please try again.",
+        ),
+        "error",
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const handleGoogleDelete = async (credential: string) => {
+    if (deleting) return;
+
+    try {
+      setDeleting(true);
+
+      await deleteAccount({ credential });
+
+      finishDelete();
+    } catch (error) {
+      showToast(
+        getErrorMessage(
+          error,
+          "Failed to delete your account. Please try again.",
+        ),
+        "error",
+      );
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -124,25 +193,25 @@ export default function SettingsPage() {
 
       <Modal
         open={deleteOpen}
-        onClose={() => setDeleteOpen(false)}
+        onClose={closeDeleteModal}
         title="Delete account"
         description="This will permanently delete your account, monitors and alert history."
         footer={
           <>
-            <Button variant="outline" onClick={() => setDeleteOpen(false)}>
+            <Button variant="outline" onClick={closeDeleteModal}>
               Cancel
             </Button>
 
-            <Button
-              variant="danger"
-              disabled={confirmText !== "DELETE"}
-              onClick={() => {
-                setDeleteOpen(false);
-                signOut();
-              }}
-            >
-              Delete permanently
-            </Button>
+            {!needsGoogleConfirm && (
+              <Button
+                variant="danger"
+                loading={deleting}
+                disabled={confirmText !== "DELETE" || !deletePassword}
+                onClick={handlePasswordDelete}
+              >
+                Delete permanently
+              </Button>
+            )}
           </>
         }
       >
@@ -152,6 +221,35 @@ export default function SettingsPage() {
           onChange={(e) => setConfirmText(e.target.value)}
           placeholder="DELETE"
         />
+
+        {needsGoogleConfirm && confirmText === "DELETE" && (
+          <div className="flex flex-col items-center gap-3">
+            <p className="text-xs text-muted-foreground">
+              Confirm with Google to delete your account.
+            </p>
+
+            <GoogleSignInButton
+              onCredential={handleGoogleDelete}
+              text="continue_with"
+            />
+
+            {deleting && (
+              <p className="text-xs text-muted-foreground">
+                Deleting your account…
+              </p>
+            )}
+          </div>
+        )}
+
+        {!needsGoogleConfirm && (
+          <PasswordInput
+            label="Confirm your password"
+            autoComplete="current-password"
+            placeholder="Enter your password"
+            value={deletePassword}
+            onChange={(e) => setDeletePassword(e.target.value)}
+          />
+        )}
       </Modal>
     </>
   );

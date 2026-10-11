@@ -6,6 +6,10 @@ import {
 import type { CloudflareBindings } from "../types/cloudflare";
 import { isSafeMonitorUrl } from "../utils/url";
 
+// A check recorded within this window makes a second run a duplicate (e.g. the
+// on-create check racing a scheduled run), so it is skipped.
+const CHECK_DEDUPE_WINDOW_MS = 60_000;
+
 export async function checkAllMonitors(env: CloudflareBindings) {
   const prisma = createPrisma(env.DB);
 
@@ -13,112 +17,144 @@ export async function checkAllMonitors(env: CloudflareBindings) {
     where: {
       active: true,
     },
-    include: {
-      user: true,
+    select: {
+      id: true,
     },
   });
 
   for (const monitor of monitors) {
-    const result = await checkMonitor(monitor);
+    try {
+      await runMonitorCheck(env, monitor.id);
+    } catch (error) {
+      console.error(`Failed to check monitor ${monitor.id}:`, error);
+    }
+  }
+}
 
-    const oldStatus = monitor.currentStatus;
-    const newStatus = result.status;
+export async function runMonitorCheck(
+  env: CloudflareBindings,
+  monitorId: string,
+) {
+  const prisma = createPrisma(env.DB);
 
-    // Get the Durable Object stub for this user (once per monitor)
-    const id = env.MONITOR_EVENTS.idFromName(monitor.userId);
-    const stub = env.MONITOR_EVENTS.get(id);
+  const monitor = await prisma.monitor.findUnique({
+    where: { id: monitorId },
+    include: { user: true },
+  });
 
-    // Handle status change
-    if (oldStatus !== newStatus) {
-      // Update monitor status in DB
-      await prisma.monitor.update({
-        where: { id: monitor.id },
-        data: { currentStatus: newStatus },
-      });
+  if (!monitor || !monitor.active) {
+    return;
+  }
 
-      try {
-        let alertType: AlertType;
-        let message: string;
-        let alertStatus: "SENT" | "RESOLVED";
+  const latestCheck = await prisma.monitorCheck.findFirst({
+    where: { monitorId: monitor.id },
+    orderBy: { checkedAt: "desc" },
+    select: { checkedAt: true },
+  });
 
-        if (
-          oldStatus === MonitorStatus.UP &&
-          newStatus === MonitorStatus.DOWN
-        ) {
-          alertType = AlertType.DOWN;
-          message = `${monitor.name} is down`;
-          alertStatus = "SENT";
+  if (
+    latestCheck &&
+    Date.now() - latestCheck.checkedAt.getTime() < CHECK_DEDUPE_WINDOW_MS
+  ) {
+    return;
+  }
 
-          await sendMonitorDownEmail(
-            env,
-            monitor.user.email,
-            monitor.name,
-            monitor.url,
-          );
-        } else if (
-          oldStatus === MonitorStatus.DOWN &&
-          newStatus === MonitorStatus.UP
-        ) {
-          alertType = AlertType.RECOVERY;
-          message = `${monitor.name} recovered`;
-          alertStatus = "RESOLVED";
+  const result = await checkMonitor(monitor);
 
-          await sendMonitorRecoveryEmail(
-            env,
-            monitor.user.email,
-            monitor.name,
-            monitor.url,
-          );
-        } else {
-          // Should never happen, but just in case
-          continue;
-        }
+  const oldStatus = monitor.currentStatus;
+  const newStatus = result.status;
 
-        // Persist alert in DB
-        const alert = await prisma.alert.create({
-          data: {
-            userId: monitor.userId,
-            monitorId: monitor.id,
-            type: alertType,
-            message,
-            status: alertStatus,
-          },
-        });
+  // Get the Durable Object stub for this user (once per monitor)
+  const id = env.MONITOR_EVENTS.idFromName(monitor.userId);
+  const stub = env.MONITOR_EVENTS.get(id);
 
-        // Broadcast alert via SSE
-        await stub.broadcastAlertUpdate({
-          id: alert.id,
-          monitor: monitor.name,
+  // Handle status change
+  if (oldStatus !== newStatus) {
+    // Update monitor status in DB
+    await prisma.monitor.update({
+      where: { id: monitor.id },
+      data: { currentStatus: newStatus },
+    });
+
+    try {
+      let alertType: AlertType;
+      let message: string;
+      let alertStatus: "SENT" | "RESOLVED";
+
+      if (oldStatus === MonitorStatus.UP && newStatus === MonitorStatus.DOWN) {
+        alertType = AlertType.DOWN;
+        message = `${monitor.name} is down`;
+        alertStatus = "SENT";
+
+        await sendMonitorDownEmail(
+          env,
+          monitor.user.email,
+          monitor.name,
+          monitor.url,
+        );
+      } else if (
+        oldStatus === MonitorStatus.DOWN &&
+        newStatus === MonitorStatus.UP
+      ) {
+        alertType = AlertType.RECOVERY;
+        message = `${monitor.name} recovered`;
+        alertStatus = "RESOLVED";
+
+        await sendMonitorRecoveryEmail(
+          env,
+          monitor.user.email,
+          monitor.name,
+          monitor.url,
+        );
+      } else {
+        // Should never happen, but just in case
+        return;
+      }
+
+      // Persist alert in DB
+      const alert = await prisma.alert.create({
+        data: {
+          userId: monitor.userId,
+          monitorId: monitor.id,
           type: alertType,
           message,
           status: alertStatus,
-          email: monitor.user.email,
-          createdAt: alert.createdAt.toISOString(),
-        });
-      } catch (err) {
-        console.error("Failed to process alert:", err);
-      }
+        },
+      });
+
+      // Broadcast alert via SSE
+      await stub.broadcastAlertUpdate({
+        id: alert.id,
+        monitor: monitor.name,
+        type: alertType,
+        message,
+        status: alertStatus,
+        email: monitor.user.email,
+        createdAt: alert.createdAt.toISOString(),
+      });
+    } catch (err) {
+      console.error("Failed to process alert:", err);
     }
+  }
 
-    // Always save the monitor check
-    await prisma.monitorCheck.create({
-      data: {
-        monitorId: monitor.id,
-        status: result.status,
-        responseTime: result.responseTime,
-        statusCode: result.statusCode,
-      },
-    });
-
-    // Broadcast monitor update
-    await stub.broadcastMonitorUpdate({
+  // Always save the monitor check
+  await prisma.monitorCheck.create({
+    data: {
       monitorId: monitor.id,
       status: result.status,
       responseTime: result.responseTime,
       statusCode: result.statusCode,
-      checkedAt: new Date().toISOString(),
-    });
-  }
+    },
+  });
+
+  // Broadcast monitor update
+  await stub.broadcastMonitorUpdate({
+    monitorId: monitor.id,
+    status: result.status,
+    responseTime: result.responseTime,
+    statusCode: result.statusCode,
+    checkedAt: new Date().toISOString(),
+  });
 }
 
 type MonitorToCheck = Pick<Monitor, "name" | "url">;

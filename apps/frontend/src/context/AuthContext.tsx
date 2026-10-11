@@ -14,6 +14,7 @@ export interface AuthUser {
   id: string;
   email: string;
   name: string | null;
+  hasPassword?: boolean;
 }
 
 interface AuthContextValue {
@@ -25,6 +26,8 @@ interface AuthContextValue {
   signIn: (email: string, password: string) => Promise<AuthUser>;
 
   signUp: (name: string, email: string, password: string) => Promise<AuthUser>;
+
+  signInWithGoogle: (credential: string) => Promise<AuthUser>;
 
   signOut: () => void;
   clearSessionExpired: () => void;
@@ -90,6 +93,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return user;
   };
 
+  const signInWithGoogle: AuthContextValue["signInWithGoogle"] = async (
+    credential,
+  ) => {
+    const { user, token } = await authApi.googleSignIn(credential);
+    persist(user, token);
+    return user;
+  };
+
   const signOut = () => {
     setUser(null);
     localStorage.removeItem(USER_STORAGE_KEY);
@@ -123,6 +134,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       sessionExpired,
       signIn,
       signUp,
+      signInWithGoogle,
       signOut,
       clearSessionExpired,
       updateUser,

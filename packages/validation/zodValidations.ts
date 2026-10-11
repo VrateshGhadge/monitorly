@@ -21,9 +21,25 @@ export const signInInput = loginInput.extend({
   remember: z.boolean(),
 });
 
-export const deleteAccountInput = z.object({
-  password: z.string().min(1, "Password is required"),
+export const googleAuthInput = z.object({
+  credential: z
+    .string()
+    .trim()
+    .min(1, "Google credential is required")
+    .max(8192),
 });
+
+export const deleteAccountInput = z
+  .object({
+    password: z.string().min(1, "Password is required").optional(),
+    credential: z.string().min(1).optional(),
+  })
+  .refine(
+    (data) => data.password !== undefined || data.credential !== undefined,
+    {
+      message: "Password or Google confirmation is required",
+    },
+  );
 
 const httpUrlSchema = z
   .url("Invalid URL")
@@ -69,6 +85,7 @@ export type ForgotPasswordInput = z.infer<typeof forgotPasswordInput>;
 export type SignupInput = z.infer<typeof signupInput>;
 export type LoginInput = z.infer<typeof loginInput>;
 export type SignInInput = z.infer<typeof signInInput>;
+export type GoogleAuthInput = z.infer<typeof googleAuthInput>;
 export type MonitorInput = z.infer<typeof monitorInput>;
 export type CreateMonitorInput = z.infer<typeof createMonitorInput>;
 export type UpdateMonitorInput = z.infer<typeof updateMonitorInput>;

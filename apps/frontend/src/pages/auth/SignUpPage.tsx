@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../../components/auth/AuthLayout";
+import GoogleSignInButton from "../../components/auth/GoogleSignInButton";
 import Input from "../../components/ui/Input";
 import PasswordInput from "../../components/ui/PasswordInput";
 import Button from "../../components/ui/Button";
@@ -25,9 +26,11 @@ function passwordStrength(password: string) {
 }
 
 export default function SignUpPage() {
-  const { signUp } = useAuth();
+  const { signUp, signInWithGoogle } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
+
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -73,6 +76,27 @@ export default function SignUpPage() {
       );
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleGoogleSignUp = async (credential: string) => {
+    if (googleLoading) return;
+
+    try {
+      setGoogleLoading(true);
+
+      await signInWithGoogle(credential);
+
+      showToast("Account created — welcome to Monitorly.");
+
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      showToast(
+        getErrorMessage(error, "Google sign-in failed. Please try again."),
+        "error",
+      );
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
@@ -139,6 +163,13 @@ export default function SignUpPage() {
           Privacy Policy.
         </p>
       </form>
+
+      <div className="auth-divider">or</div>
+
+      <GoogleSignInButton
+        onCredential={handleGoogleSignUp}
+        text="signup_with"
+      />
 
       <p className="auth-switch">
         Already have an account? <Link to="/signin">Sign in</Link>
