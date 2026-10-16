@@ -9,6 +9,15 @@
       name="description"
       content="Fast, reliable website and API monitoring with instant email alerts for teams that take production seriously."
     />
+    <!-- Warm the connection to Google Identity Services during HTML parse. The
+         sign-in button is a cross-origin iframe, so DNS + TLS to
+         accounts.google.com sit directly on its critical path. -->
+    <link rel="preconnect" href="https://accounts.google.com" />
+    <link rel="dns-prefetch" href="https://accounts.google.com" />
+    <!-- Start downloading GSI alongside the app bundle. The button cannot
+         render until this script + its iframe load, so fetching it after React
+         mounts serializes 3+ round trips behind first paint. -->
+    <script src="https://accounts.google.com/gsi/client" async></script>
   </head>
   <body>
     <div id="root"></div>

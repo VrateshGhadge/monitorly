@@ -268,6 +268,7 @@ monitorRouter.get("/alerts", async (c) => {
       orderBy: {
         createdAt: "desc",
       },
+      take: 200,
     });
 
     return c.json({
@@ -608,49 +609,55 @@ monitorRouter.get("/:id/stats", async (c) => {
       );
     }
 
-    const [latestCheck, stats, totalChecks, successfulChecks, failedChecks] =
-      await Promise.all([
-        prisma.monitorCheck.findFirst({
-          where: {
-            monitorId: existingMonitor.id,
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const [latestCheck, statusGroups, avgResponseTime] = await Promise.all([
+      prisma.monitorCheck.findFirst({
+        where: {
+          monitorId: existingMonitor.id,
+        },
+        orderBy: {
+          checkedAt: "desc",
+        },
+        select: {
+          status: true,
+          statusCode: true,
+          responseTime: true,
+          errorMessage: true,
+          checkedAt: true,
+        },
+      }),
+      prisma.monitorCheck.groupBy({
+        by: ["status"],
+        where: {
+          monitorId: existingMonitor.id,
+          checkedAt: {
+            gte: thirtyDaysAgo,
           },
-          orderBy: {
-            checkedAt: "desc",
+        },
+        _count: {
+          _all: true,
+        },
+      }),
+      prisma.monitorCheck.aggregate({
+        where: {
+          monitorId: existingMonitor.id,
+          checkedAt: {
+            gte: thirtyDaysAgo,
           },
-          select: {
-            status: true,
-            statusCode: true,
-            responseTime: true,
-            errorMessage: true,
-            checkedAt: true,
-          },
-        }),
-        prisma.monitorCheck.aggregate({
-          where: {
-            monitorId: existingMonitor.id,
-          },
-          _avg: {
-            responseTime: true,
-          },
-        }),
-        prisma.monitorCheck.count({
-          where: {
-            monitorId: existingMonitor.id,
-          },
-        }),
-        prisma.monitorCheck.count({
-          where: {
-            monitorId: existingMonitor.id,
-            status: "UP",
-          },
-        }),
-        prisma.monitorCheck.count({
-          where: {
-            monitorId: existingMonitor.id,
-            status: "DOWN",
-          },
-        }),
-      ]);
+        },
+        _avg: {
+          responseTime: true,
+        },
+      }),
+    ]);
+
+    const successfulChecks =
+      statusGroups.find((group) => group.status === "UP")?._count._all ?? 0;
+    const failedChecks =
+      statusGroups.find((group) => group.status === "DOWN")?._count._all ?? 0;
+    const totalChecks = successfulChecks + failedChecks;
 
     const uptimePercentage =
       totalChecks > 0
@@ -667,8 +674,8 @@ monitorRouter.get("/:id/stats", async (c) => {
           errorMessage: latestCheck?.errorMessage ?? null,
           lastChecked: latestCheck?.checkedAt ?? null,
           averageResponseTime:
-            stats._avg.responseTime !== null
-              ? Math.round(stats._avg.responseTime)
+            avgResponseTime._avg.responseTime !== null
+              ? Math.round(avgResponseTime._avg.responseTime)
               : null,
           totalChecks,
           successfulChecks,

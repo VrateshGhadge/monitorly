@@ -4,6 +4,10 @@ import { userRouter } from "./routes/user.route";
 import { cors } from "hono/cors";
 import { monitorRouter } from "./routes/monitor.route";
 import { checkAllMonitors } from "./services/monitor.service";
+import {
+  pruneOldMonitorChecks,
+  RETENTION_DAYS,
+} from "./services/maintenance.service";
 import { MonitorEvents } from "./durable-objects/MonitorEvents";
 import type { CloudflareBindings } from "./types/cloudflare";
 
@@ -52,6 +56,14 @@ export default {
     env: CloudflareBindings,
     ctx: ExecutionContext,
   ) {
+    if (controller.cron === "0 3 * * *") {
+      const pruned = await pruneOldMonitorChecks(env);
+      console.log(
+        `Pruned ${pruned} check rows older than ${RETENTION_DAYS} days`,
+      );
+      return;
+    }
+
     console.log("Cron triggered");
     await checkAllMonitors(env);
   },

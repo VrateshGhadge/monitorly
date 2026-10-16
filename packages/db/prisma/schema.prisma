@@ -48,6 +48,7 @@ model Monitor {
 
   @@unique([userId, url])
   @@index([userId])
+  @@index([active])
 }
 
 model MonitorCheck {
@@ -65,6 +66,8 @@ model MonitorCheck {
   checkedAt    DateTime @default(now())
 
   @@index([monitorId])
+  @@index([monitorId, checkedAt])
+  @@index([checkedAt])
 }
 
 model Alert {
@@ -85,4 +88,6 @@ model Alert {
   createdAt DateTime @default(now())
 
   @@index([userId])
+  @@index([userId, createdAt])
+  @@index([monitorId, createdAt])
 }

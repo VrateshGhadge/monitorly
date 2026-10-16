@@ -1,4 +1,3 @@
-// src/hooks/useAppData.ts
 import { useCallback, useEffect, useMemo, useState } from "react";
 import * as monitorApi from "../api/monitor";
 import type { ActivityItem, AppAlert, AppMonitor } from "../types/app";

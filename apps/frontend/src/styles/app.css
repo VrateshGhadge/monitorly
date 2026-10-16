@@ -784,9 +784,57 @@
   height: 1px;
   background: var(--line);
 }
+.auth-google-slot {
+  position: relative;
+  width: 100%;
+  min-height: 40px;
+}
 .auth-google {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+/* Stand-in for Google's button while its script loads. Geometry mirrors what
+   GIS renders (40px tall, 4px radius, 1px #dadce0 border, 12px side padding,
+   18px logo + 8px gap, centred label) so revealing the real button causes no
+   shift. pointer-events: none, so a click during the hand-off still reaches
+   the real button underneath instead of being swallowed. */
+.auth-google-fallback {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 400px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  background: #fff;
+  color: #3c4043;
+  font-family: Roboto, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  pointer-events: none;
+}
+.auth-google-fallback svg {
+  flex: none;
+}
+.auth-google-fallback span {
+  flex: 1;
+  text-align: center;
+}
+/* GIS stamps its button into .auth-google whenever it is ready (sometimes
+   synchronously, sometimes seconds later on a cold connection). Hide the
+   placeholder the moment anything lands there, so the swap is driven by
+   Google's own render instead of a timer racing it. */
+.auth-google-slot:has(.auth-google > *) .auth-google-fallback {
+  display: none;
 }
 .auth-switch {
   text-align: center;

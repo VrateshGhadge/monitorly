@@ -39,7 +39,15 @@ export async function runMonitorCheck(
 
   const monitor = await prisma.monitor.findUnique({
     where: { id: monitorId },
-    include: { user: true },
+    select: {
+      id: true,
+      name: true,
+      url: true,
+      currentStatus: true,
+      active: true,
+      userId: true,
+      user: { select: { email: true } },
+    },
   });
 
   if (!monitor || !monitor.active) {
