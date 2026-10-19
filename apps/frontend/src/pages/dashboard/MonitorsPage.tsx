@@ -106,9 +106,9 @@ export default function MonitorsPage() {
         }
       />
 
-      <div className="table-card">
-        <div className="table-toolbar">
-          <div className="search-field">
+      <div className="overflow-hidden rounded-[10px] border border-line bg-panel">
+        <div className="flex flex-wrap items-center gap-3 border-b border-line px-4 py-3.5">
+          <div className="flex min-w-[200px] flex-1 items-center gap-[9px] rounded-[7px] border border-line bg-[#0d1014] px-[11px] py-2 text-[#7c828c] light:bg-white light:text-[#14161a] [&>input]:flex-1 [&>input]:border-0 [&>input]:bg-transparent [&>input]:text-[13px] [&>input]:text-ink [&>input]:outline-none [&>input::placeholder]:text-[#5b6169]">
             <SearchIcon size={15} />
             <input
               placeholder="Search by name or URL..."
@@ -131,8 +131,8 @@ export default function MonitorsPage() {
         </div>
 
         {isLoading ? (
-          <div className="table">
-            <div className="table-head">
+          <div className="w-full">
+            <div className="grid grid-cols-[90px_1.4fr_1.6fr_0.8fr_0.9fr_0.7fr_90px] gap-2.5 border-b border-line px-4 py-2.5 font-code text-[10px] leading-[normal] tracking-[0.06em] text-[#6f7782] uppercase [@media(max-width:720px)]:hidden">
               <span>Status</span>
               <span>Name</span>
               <span>URL</span>
@@ -181,8 +181,8 @@ export default function MonitorsPage() {
             }
           />
         ) : (
-          <div className="table">
-            <div className="table-head">
+          <div className="w-full">
+            <div className="grid grid-cols-[90px_1.4fr_1.6fr_0.8fr_0.9fr_0.7fr_90px] gap-2.5 border-b border-line px-4 py-2.5 font-code text-[10px] leading-[normal] tracking-[0.06em] text-[#6f7782] uppercase [@media(max-width:720px)]:hidden">
               <span>Status</span>
               <span>Name</span>
               <span>URL</span>
@@ -194,30 +194,30 @@ export default function MonitorsPage() {
 
             {pageItems.map((m) => (
               <div
-                className="table-row cursor-pointer"
+                className="grid grid-cols-[90px_1.4fr_1.6fr_0.8fr_0.9fr_0.7fr_90px] items-center gap-2.5 border-b border-[#1b2027] px-4 py-[13px] text-[13px] [transition:0.12s] last:border-b-0 hover:bg-[#141920] light:border-[#edeef1] light:hover:bg-[#f7f8f9] [@media(max-width:720px)]:relative [@media(max-width:720px)]:grid-cols-1 [@media(max-width:720px)]:gap-1.5 [@media(max-width:720px)]:px-4 [@media(max-width:720px)]:py-3.5 cursor-pointer"
                 key={m.id}
                 onClick={() => navigate(`/dashboard/monitors/${m.slug}`)}
               >
-                <div className="table-cell">
+                <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold">
                   <StatusPill status={m.status} />
                 </div>
-                <div className="table-cell table-cell-name">
+                <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold flex flex-col gap-0.5">
                   <b>{m.name}</b>
-                  <span className="table-cell-sub">
+                  <span className="text-[11px] text-muted">
                     {m.type === "API" ? `${m.method} · API` : "Website"}
                   </span>
                 </div>
-                <div className="table-cell table-cell-url">{m.url}</div>
-                <div className="table-cell">
+                <div className="min-w-0 overflow-hidden font-code text-[12px] leading-[normal] text-ellipsis whitespace-nowrap text-[#9aa2ac]">{m.url}</div>
+                <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold">
                   {m.latency ? `${m.latency}ms` : "—"}
                 </div>
-                <div className="table-cell table-cell-muted">
+                <div className="min-w-0 text-[12.5px] text-muted">
                   {formatLastChecked(m.lastChecked, now)}
                 </div>
-                <div className="table-cell">{m.uptimePct}%</div>
-                <div className="table-cell table-actions">
+                <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold">{m.uptimePct}%</div>
+                <div className="min-w-0 flex justify-end gap-1.5 [@media(max-width:720px)]:absolute [@media(max-width:720px)]:top-3 [@media(max-width:720px)]:right-3.5">
                   <button
-                    className="icon-btn"
+                    className="relative inline-flex size-[34px] cursor-pointer items-center justify-center rounded-[7px] border border-line bg-panel-2 text-[#b8bec7] [transition:0.15s] hover:border-[#3a4048] hover:text-white light:text-[#5b6470] light:hover:border-[#c7cbd2] light:hover:text-[#14161a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md"
                     aria-label="Edit monitor"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -227,7 +227,7 @@ export default function MonitorsPage() {
                     <Pencil size={13} strokeWidth={2} />
                   </button>
                   <button
-                    className="icon-btn icon-btn-danger"
+                    className="relative inline-flex size-[34px] cursor-pointer items-center justify-center rounded-[7px] border border-line bg-panel-2 text-[#b8bec7] [transition:0.15s] hover:border-[#3a4048] hover:text-white light:text-[#5b6470] light:hover:border-[#c7cbd2] light:hover:text-[#14161a] hover:border-[rgba(240,100,100,0.4)] hover:text-[#ff9d9d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md"
                     aria-label="Delete monitor"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -244,12 +244,12 @@ export default function MonitorsPage() {
         )}
 
         {!isLoading && filtered.length > 0 && (
-          <div className="table-pagination">
+          <div className="flex items-center justify-between border-t border-line px-4 py-3.5 text-[12px] text-muted [@media(max-width:560px)]:flex-col [@media(max-width:560px)]:items-start [@media(max-width:560px)]:gap-3">
             <span>
               Showing {(page - 1) * PAGE_SIZE + 1}–
               {Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
             </span>
-            <div className="pagination-controls">
+            <div className="flex items-center gap-2.5 [&>button]:cursor-pointer [&>button]:rounded-md [&>button]:border [&>button]:border-line [&>button]:bg-panel-2 [&>button]:px-[11px] [&>button]:py-1.5 [&>button]:text-[12px] [&>button]:text-[#c9cdd3] [&>button:hover:not(:disabled)]:border-[#3a4048] [&>button:hover:not(:disabled)]:text-white [&>button:disabled]:cursor-not-allowed [&>button:disabled]:opacity-40 [&>button:focus-visible]:outline-2 [&>button:focus-visible]:outline-offset-2 [&>button:focus-visible]:outline-brand [&>button:focus-visible]:rounded-md light:[&>button]:bg-[#f1f2f5] light:[&>button]:text-[#3a4048]">
               <button
                 disabled={page === 1}
                 onClick={() => setPage((p) => p - 1)}
@@ -399,9 +399,9 @@ export default function MonitorsPage() {
 //         }
 //       />
 
-//       <div className="table-card">
-//         <div className="table-toolbar">
-//           <div className="search-field">
+//       <div className="overflow-hidden rounded-[10px] border border-line bg-panel">
+//         <div className="flex flex-wrap items-center gap-3 border-b border-line px-4 py-3.5">
+//           <div className="flex min-w-[200px] flex-1 items-center gap-[9px] rounded-[7px] border border-line bg-[#0d1014] px-[11px] py-2 text-[#7c828c] light:bg-white light:text-[#14161a] [&>input]:flex-1 [&>input]:border-0 [&>input]:bg-transparent [&>input]:text-[13px] [&>input]:text-ink [&>input]:outline-none [&>input::placeholder]:text-[#5b6169]">
 //             <SearchIcon size={15} />
 
 //             <input
@@ -426,8 +426,8 @@ export default function MonitorsPage() {
 //         </div>
 
 //         {isLoading ? (
-//           <div className="table">
-//             <div className="table-head">
+//           <div className="w-full">
+//             <div className="grid grid-cols-[90px_1.4fr_1.6fr_0.8fr_0.9fr_0.7fr_90px] gap-2.5 border-b border-line px-4 py-2.5 font-code text-[10px] leading-[normal] tracking-[0.06em] text-[#6f7782] uppercase [@media(max-width:720px)]:hidden">
 //               <span>Status</span>
 //               <span>Name</span>
 //               <span>URL</span>
@@ -480,8 +480,8 @@ export default function MonitorsPage() {
 //             }
 //           />
 //         ) : (
-//           <div className="table">
-//             <div className="table-head">
+//           <div className="w-full">
+//             <div className="grid grid-cols-[90px_1.4fr_1.6fr_0.8fr_0.9fr_0.7fr_90px] gap-2.5 border-b border-line px-4 py-2.5 font-code text-[10px] leading-[normal] tracking-[0.06em] text-[#6f7782] uppercase [@media(max-width:720px)]:hidden">
 //               <span>Status</span>
 //               <span>Name</span>
 //               <span>URL</span>
@@ -493,51 +493,51 @@ export default function MonitorsPage() {
 
 //             {pageItems.map((m) => (
 //               <div
-//                 className="table-row cursor-pointer"
+//                 className="grid grid-cols-[90px_1.4fr_1.6fr_0.8fr_0.9fr_0.7fr_90px] items-center gap-2.5 border-b border-[#1b2027] px-4 py-[13px] text-[13px] [transition:0.12s] last:border-b-0 hover:bg-[#141920] light:border-[#edeef1] light:hover:bg-[#f7f8f9] [@media(max-width:720px)]:relative [@media(max-width:720px)]:grid-cols-1 [@media(max-width:720px)]:gap-1.5 [@media(max-width:720px)]:px-4 [@media(max-width:720px)]:py-3.5 cursor-pointer"
 //                 key={m.id}
 //                 // onClick={() => navigate(`/dashboard/monitors/${m.id}`)}
 //                 onClick={() => navigate(`/dashboard/monitors/${m.slug}`)}
 
 //               >
-//                 <div className="table-cell">
+//                 <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold">
 //                   <StatusPill status={m.status} />
 //                 </div>
 
-//                 <div className="table-cell table-cell-name">
+//                 <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold flex flex-col gap-0.5">
 //                   <b>{m.name}</b>
 
-//                   <span className="table-cell-sub">
+//                   <span className="text-[11px] text-muted">
 //                     {m.type === "API"
 //                       ? `${m.method} · API`
 //                       : "Website"}
 //                   </span>
 //                 </div>
 
-//                 <div className="table-cell table-cell-url">
+//                 <div className="min-w-0 overflow-hidden font-code text-[12px] leading-[normal] text-ellipsis whitespace-nowrap text-[#9aa2ac]">
 //                   {m.url}
 //                 </div>
 
-//                 <div className="table-cell">
+//                 <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold">
 //                   {m.latency
 //                     ? `${m.latency}ms`
 //                     : "—"}
 //                 </div>
 
-//                 <div className="table-cell table-cell-muted">
+//                 <div className="min-w-0 text-[12.5px] text-muted">
 //                   {formatLastChecked(m.lastChecked, now)}
 //                 </div>
 
-//                 <div className="table-cell">
+//                 <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold">
 //                   {m.uptimePct}%
 //                 </div>
 
-//                 <div className="table-cell table-actions">
+//                 <div className="min-w-0 flex justify-end gap-1.5 [@media(max-width:720px)]:absolute [@media(max-width:720px)]:top-3 [@media(max-width:720px)]:right-3.5">
 
 //                   {/* ---------------- V2 ---------------- */}
 
 //                   {/*
 //                   <button
-//                     className="icon-btn"
+//                     className="relative inline-flex size-[34px] cursor-pointer items-center justify-center rounded-[7px] border border-line bg-panel-2 text-[#b8bec7] [transition:0.15s] hover:border-[#3a4048] hover:text-white light:text-[#5b6470] light:hover:border-[#c7cbd2] light:hover:text-[#14161a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md"
 //                     aria-label={
 //                       m.status === "paused"
 //                         ? "Resume monitor"
@@ -561,7 +561,7 @@ export default function MonitorsPage() {
 //                   */}
 
 //                   {/* <button
-//                     className="icon-btn icon-btn-danger"
+//                     className="relative inline-flex size-[34px] cursor-pointer items-center justify-center rounded-[7px] border border-line bg-panel-2 text-[#b8bec7] [transition:0.15s] hover:border-[#3a4048] hover:text-white light:text-[#5b6470] light:hover:border-[#c7cbd2] light:hover:text-[#14161a] hover:border-[rgba(240,100,100,0.4)] hover:text-[#ff9d9d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md"
 //                     aria-label="Delete monitor"
 //                     onClick={(e) => {
 //                       e.stopPropagation();
@@ -573,7 +573,7 @@ export default function MonitorsPage() {
 //                   </button> */}
 //                   <>
 //                     <button
-//                       className="icon-btn"
+//                       className="relative inline-flex size-[34px] cursor-pointer items-center justify-center rounded-[7px] border border-line bg-panel-2 text-[#b8bec7] [transition:0.15s] hover:border-[#3a4048] hover:text-white light:text-[#5b6470] light:hover:border-[#c7cbd2] light:hover:text-[#14161a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md"
 //                       aria-label="Edit monitor"
 //                       onClick={(e) => {
 //                         e.stopPropagation();
@@ -585,7 +585,7 @@ export default function MonitorsPage() {
 //                     </button>
 
 //                     <button
-//                       className="icon-btn icon-btn-danger"
+//                       className="relative inline-flex size-[34px] cursor-pointer items-center justify-center rounded-[7px] border border-line bg-panel-2 text-[#b8bec7] [transition:0.15s] hover:border-[#3a4048] hover:text-white light:text-[#5b6470] light:hover:border-[#c7cbd2] light:hover:text-[#14161a] hover:border-[rgba(240,100,100,0.4)] hover:text-[#ff9d9d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md"
 //                       aria-label="Delete monitor"
 //                       onClick={(e) => {
 //                         e.stopPropagation();
@@ -604,7 +604,7 @@ export default function MonitorsPage() {
 
 //         {!isLoading &&
 //           filtered.length > 0 && (
-//             <div className="table-pagination">
+//             <div className="flex items-center justify-between border-t border-line px-4 py-3.5 text-[12px] text-muted [@media(max-width:560px)]:flex-col [@media(max-width:560px)]:items-start [@media(max-width:560px)]:gap-3">
 //               <span>
 //                 Showing{" "}
 //                 {(page - 1) * PAGE_SIZE + 1}
@@ -616,7 +616,7 @@ export default function MonitorsPage() {
 //                 of {filtered.length}
 //               </span>
 
-//               <div className="pagination-controls">
+//               <div className="flex items-center gap-2.5 [&>button]:cursor-pointer [&>button]:rounded-md [&>button]:border [&>button]:border-line [&>button]:bg-panel-2 [&>button]:px-[11px] [&>button]:py-1.5 [&>button]:text-[12px] [&>button]:text-[#c9cdd3] [&>button:hover:not(:disabled)]:border-[#3a4048] [&>button:hover:not(:disabled)]:text-white [&>button:disabled]:cursor-not-allowed [&>button:disabled]:opacity-40 light:[&>button]:bg-[#f1f2f5] light:[&>button]:text-[#3a4048]">
 //                 <button
 //                   disabled={page === 1}
 //                   onClick={() =>
@@ -713,9 +713,9 @@ export default function MonitorsPage() {
 //         }
 //       />
 
-//       <div className="table-card">
-//         <div className="table-toolbar">
-//           <div className="search-field">
+//       <div className="overflow-hidden rounded-[10px] border border-line bg-panel">
+//         <div className="flex flex-wrap items-center gap-3 border-b border-line px-4 py-3.5">
+//           <div className="flex min-w-[200px] flex-1 items-center gap-[9px] rounded-[7px] border border-line bg-[#0d1014] px-[11px] py-2 text-[#7c828c] light:bg-white light:text-[#14161a] [&>input]:flex-1 [&>input]:border-0 [&>input]:bg-transparent [&>input]:text-[13px] [&>input]:text-ink [&>input]:outline-none [&>input::placeholder]:text-[#5b6169]">
 //             <SearchIcon size={15} />
 //             <input
 //               placeholder="Search by name or URL…"
@@ -738,8 +738,8 @@ export default function MonitorsPage() {
 //         </div>
 
 //         {isLoading ? (
-//           <div className="table">
-//             <div className="table-head">
+//           <div className="w-full">
+//             <div className="grid grid-cols-[90px_1.4fr_1.6fr_0.8fr_0.9fr_0.7fr_90px] gap-2.5 border-b border-line px-4 py-2.5 font-code text-[10px] leading-[normal] tracking-[0.06em] text-[#6f7782] uppercase [@media(max-width:720px)]:hidden">
 //               <span>Status</span><span>Name</span><span>URL</span><span>Response</span><span>Last checked</span><span>Uptime</span><span></span>
 //             </div>
 //             {Array.from({ length: 5 }).map((_, i) => <TableRowSkeleton key={i} columns={7} />)}
@@ -773,24 +773,24 @@ export default function MonitorsPage() {
 //             }
 //           />
 //         ) : (
-//           <div className="table">
-//             <div className="table-head">
+//           <div className="w-full">
+//             <div className="grid grid-cols-[90px_1.4fr_1.6fr_0.8fr_0.9fr_0.7fr_90px] gap-2.5 border-b border-line px-4 py-2.5 font-code text-[10px] leading-[normal] tracking-[0.06em] text-[#6f7782] uppercase [@media(max-width:720px)]:hidden">
 //               <span>Status</span><span>Name</span><span>URL</span><span>Response</span><span>Last checked</span><span>Uptime</span><span></span>
 //             </div>
 //             {pageItems.map((m) => (
-//               <div className="table-row" key={m.id}>
-//                 <div className="table-cell"><StatusPill status={m.status} /></div>
-//                 <div className="table-cell table-cell-name">
+//               <div className="grid grid-cols-[90px_1.4fr_1.6fr_0.8fr_0.9fr_0.7fr_90px] items-center gap-2.5 border-b border-[#1b2027] px-4 py-[13px] text-[13px] [transition:0.12s] last:border-b-0 hover:bg-[#141920] light:border-[#edeef1] light:hover:bg-[#f7f8f9] [@media(max-width:720px)]:relative [@media(max-width:720px)]:grid-cols-1 [@media(max-width:720px)]:gap-1.5 [@media(max-width:720px)]:px-4 [@media(max-width:720px)]:py-3.5" key={m.id}>
+//                 <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold"><StatusPill status={m.status} /></div>
+//                 <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold flex flex-col gap-0.5">
 //                   <b>{m.name}</b>
-//                   <span className="table-cell-sub">{m.kind === "API" ? `${m.method} · API` : "Website"}</span>
+//                   <span className="text-[11px] text-muted">{m.kind === "API" ? `${m.method} · API` : "Website"}</span>
 //                 </div>
-//                 <div className="table-cell table-cell-url">{m.url}</div>
-//                 <div className="table-cell">{m.latency ? `${m.latency}ms` : "—"}</div>
-//                 <div className="table-cell table-cell-muted">{m.lastChecked}</div>
-//                 <div className="table-cell">{m.uptimePct}%</div>
-//                 <div className="table-cell table-actions">
+//                 <div className="min-w-0 overflow-hidden font-code text-[12px] leading-[normal] text-ellipsis whitespace-nowrap text-[#9aa2ac]">{m.url}</div>
+//                 <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold">{m.latency ? `${m.latency}ms` : "—"}</div>
+//                 <div className="min-w-0 text-[12.5px] text-muted">{m.lastChecked}</div>
+//                 <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold">{m.uptimePct}%</div>
+//                 <div className="min-w-0 flex justify-end gap-1.5 [@media(max-width:720px)]:absolute [@media(max-width:720px)]:top-3 [@media(max-width:720px)]:right-3.5">
 //                   <button
-//                     className="icon-btn"
+//                     className="relative inline-flex size-[34px] cursor-pointer items-center justify-center rounded-[7px] border border-line bg-panel-2 text-[#b8bec7] [transition:0.15s] hover:border-[#3a4048] hover:text-white light:text-[#5b6470] light:hover:border-[#c7cbd2] light:hover:text-[#14161a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md"
 //                     aria-label={m.status === "paused" ? "Resume monitor" : "Pause monitor"}
 //                     onClick={() => {
 //                       toggleMonitorPause(m.id);
@@ -800,7 +800,7 @@ export default function MonitorsPage() {
 //                     {m.status === "paused" ? <PlayIcon /> : <PauseIcon />}
 //                   </button>
 //                   <button
-//                     className="icon-btn icon-btn-danger"
+//                     className="relative inline-flex size-[34px] cursor-pointer items-center justify-center rounded-[7px] border border-line bg-panel-2 text-[#b8bec7] [transition:0.15s] hover:border-[#3a4048] hover:text-white light:text-[#5b6470] light:hover:border-[#c7cbd2] light:hover:text-[#14161a] hover:border-[rgba(240,100,100,0.4)] hover:text-[#ff9d9d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md"
 //                     aria-label="Delete monitor"
 //                     onClick={() => {
 //                       deleteMonitor(m.id);
@@ -816,11 +816,11 @@ export default function MonitorsPage() {
 //         )}
 
 //         {!isLoading && filtered.length > 0 && (
-//           <div className="table-pagination">
+//           <div className="flex items-center justify-between border-t border-line px-4 py-3.5 text-[12px] text-muted [@media(max-width:560px)]:flex-col [@media(max-width:560px)]:items-start [@media(max-width:560px)]:gap-3">
 //             <span>
 //               Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
 //             </span>
-//             <div className="pagination-controls">
+//             <div className="flex items-center gap-2.5 [&>button]:cursor-pointer [&>button]:rounded-md [&>button]:border [&>button]:border-line [&>button]:bg-panel-2 [&>button]:px-[11px] [&>button]:py-1.5 [&>button]:text-[12px] [&>button]:text-[#c9cdd3] [&>button:hover:not(:disabled)]:border-[#3a4048] [&>button:hover:not(:disabled)]:text-white [&>button:disabled]:cursor-not-allowed [&>button:disabled]:opacity-40 light:[&>button]:bg-[#f1f2f5] light:[&>button]:text-[#3a4048]">
 //               <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>Previous</button>
 //               <span>{page} / {totalPages}</span>
 //               <button disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>Next</button>

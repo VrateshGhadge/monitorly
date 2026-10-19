@@ -84,12 +84,16 @@ export default function SignInPage() {
 
   return (
     <AuthLayout>
-      <div className="auth-head">
-        <h1>Welcome back</h1>
-        <p>Sign in to keep watching your monitors.</p>
+      <div className="mb-[22px]">
+        <h1 className="mt-0 mb-1.5 text-[24px] tracking-[-0.9px] [@media(max-width:520px)]:text-[22px]">
+          Welcome back
+        </h1>
+        <p className="m-0 text-[13.5px] text-muted">
+          Sign in to keep watching your monitors.
+        </p>
       </div>
 
-      <form className="auth-form" onSubmit={handleSubmit(submit)} noValidate>
+      <form className="flex flex-col" onSubmit={handleSubmit(submit)} noValidate>
         <Input
           label="Email"
           type="email"
@@ -107,9 +111,13 @@ export default function SignInPage() {
           {...register("password")}
         />
 
-        <div className="auth-row">
-          <label className="checkbox-field">
-            <input type="checkbox" {...register("remember")} />
+        <div className="-mt-0.5 mb-4 flex items-center justify-between">
+          <label className="flex cursor-pointer items-center gap-[7px] text-[12.5px] text-[#c9cdd3] select-none">
+            <input
+              className="size-3.5 accent-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md"
+              type="checkbox"
+              {...register("remember")}
+            />
             <span>Remember me</span>
           </label>
 
@@ -133,8 +141,11 @@ export default function SignInPage() {
         text="signin_with"
       />
 
-      <p className="auth-switch">
-        Don't have an account? <Link to="/signup">Sign up</Link>
+      <p className="mt-[18px] mb-0 text-center text-[13px] text-muted">
+        Don't have an account?{" "}
+        <Link className="font-semibold text-brand" to="/signup">
+          Sign up
+        </Link>
       </p>
     </AuthLayout>
   );

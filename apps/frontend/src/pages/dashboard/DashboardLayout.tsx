@@ -31,20 +31,22 @@ export default function DashboardLayout() {
   breadcrumb.unshift("Dashboard");
 
   return (
-    <div className="app-shell">
+    // `app-shell` is kept as a hook: the light theme re-declares --bg/--surface/
+    // --line/--muted/--text on it, and the `light:` variant is scoped to it.
+    <div className="app-shell flex min-h-screen bg-background">
       <AppSidebar
         mobileOpen={mobileOpen}
         onCloseMobile={() => setMobileOpen(false)}
         monitorsUp={appData.monitorsUp}
         monitorsTotal={appData.monitorsTotal}
       />
-      <div className="app-main">
+      <div className="flex min-w-0 flex-1 flex-col">
         <AppTopbar
           onOpenMobile={() => setMobileOpen(true)}
           breadcrumb={breadcrumb}
           activity={appData.activity}
         />
-        <div className="app-content">
+        <div className="mx-auto w-full max-w-[1240px] px-[30px] pt-7 pb-[60px] [@media(max-width:860px)]:px-4 [@media(max-width:860px)]:pt-5 [@media(max-width:860px)]:pb-[50px]">
           <Outlet context={appData} />
         </div>
       </div>

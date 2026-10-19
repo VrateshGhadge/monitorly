@@ -4,6 +4,7 @@ import { initialHistory } from "../../data/incidentHistory";
 import { downtimeMinutes, buildMonitorHistory } from "../../utils/incidents";
 import type { HistoryStatus } from "../../types/dashboard";
 
+import { cn } from "../../lib/utils";
 export interface UptimeHistoryMonitor {
   id: string;
   name: string;
@@ -136,12 +137,12 @@ function SingleRowUptimeHistory({ live }: { live: boolean }) {
   );
 
   return (
-    <div className="panel">
-      <div className="panel-head">
-        <h4>Uptime history</h4>
+    <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+      <div className="mb-3 flex items-center justify-between">
+        <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
         <small>30 DAYS</small>
       </div>
-      <div className="incident-summary">
+      <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
         <span>
           {live
             ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"} triggered`
@@ -149,7 +150,7 @@ function SingleRowUptimeHistory({ live }: { live: boolean }) {
         </span>
         <span>{live ? `${totalDowntime} min downtime` : "0 min downtime"}</span>
       </div>
-      <div className="incident-graph">
+      <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full">
         <IncidentBars
           history={history}
           live={live}
@@ -173,7 +174,7 @@ function SingleRowUptimeHistory({ live }: { live: boolean }) {
                   : "Downtime alert";
             return (
               <div
-                className="graph-tooltip"
+                className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand"
                 style={{ left: `${(x / 600) * 100}%`, top: "6%" }}
               >
                 Day {hoverDay + 1} · <b>{label}</b>
@@ -184,12 +185,12 @@ function SingleRowUptimeHistory({ live }: { live: boolean }) {
             );
           })()}
         {!live && (
-          <div className="graph-waiting graph-waiting-inset">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974] items-start pt-2">
             <span>Metrics will appear once monitoring begins.</span>
           </div>
         )}
       </div>
-      <div className="axis">
+      <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
         <span>30d ago</span>
         <span>20d ago</span>
         <span>10d ago</span>
@@ -243,18 +244,18 @@ function MultiRowUptimeHistory({
   const anyDown = allRows.some((r) => r.status === "down");
 
   return (
-    <div className="panel">
-      <div className="panel-head">
-        <h4>Uptime history</h4>
+    <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+      <div className="mb-3 flex items-center justify-between">
+        <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
         <small>30 DAYS · {allRows.length} MONITORS</small>
       </div>
-      <div className="incident-summary">
+      <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
         <span>{anyDown ? "Attention needed" : "All monitors healthy"}</span>
         <span>Hover a monitor to focus it</span>
       </div>
 
       <div
-        className={`uptime-rows${activeId ? " has-hover" : ""}`}
+        className="mt-0.5 flex flex-col gap-4"
         onMouseLeave={() => setActiveId(null)}
       >
         {rows.map((row) => {
@@ -266,13 +267,17 @@ function MultiRowUptimeHistory({
           return (
             <div
               key={row.id}
-              className={`uptime-row${isActive ? " is-active" : ""}`}
+              className={cn(
+                "mx-[-8px] rounded-md px-2 pt-2 pb-1.5 [transition:opacity_0.22s_ease,filter_0.22s_ease,background_0.15s_ease] hover:bg-[#161b21]",
+                activeId && !isActive && "opacity-[0.32] blur-[1.5px]",
+                isActive && "opacity-100 blur-none",
+              )}
               onMouseEnter={() => setActiveId(row.id)}
             >
-              <div className="uptime-row-head">
+              <div className="mb-1.5 flex items-center justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>b]:text-[11px] [&>b]:font-semibold">
                 <span>
                   <i
-                    className="status-dot"
+                    className="mr-1 inline-block size-1.5 rounded-full bg-brand"
                     style={{
                       background:
                         row.status === "down" ? "var(--red)" : "var(--green)",
@@ -289,7 +294,7 @@ function MultiRowUptimeHistory({
                       : "100% uptime"}
                 </span>
               </div>
-              <div className="incident-graph uptime-row-graph">
+              <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full h-10!">
                 <IncidentBars
                   history={row.history}
                   live={live}
@@ -315,7 +320,7 @@ function MultiRowUptimeHistory({
                           : "Downtime alert";
                     return (
                       <div
-                        className="graph-tooltip"
+                        className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand"
                         style={{ left: `${(x / 600) * 100}%`, top: "0%" }}
                       >
                         Day {dayHover + 1} · <b>{label}</b>
@@ -335,12 +340,12 @@ function MultiRowUptimeHistory({
       </div>
 
       {hiddenCount > 0 && (
-        <div className="uptime-rows-viewall" onClick={onViewAll}>
+        <div className="mt-3.5 block cursor-pointer rounded-md border border-dashed border-[#262c34] p-2 text-center font-code text-[10px] leading-[normal] text-[#8b929d] [transition:color_0.15s_ease,border-color_0.15s_ease] hover:border-[#3a4048] hover:text-[#e7eaee]" onClick={onViewAll}>
           View all {allRows.length} monitors →
         </div>
       )}
 
-      <div className="axis">
+      <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
         <span>30d ago</span>
         <span>20d ago</span>
         <span>10d ago</span>
@@ -370,16 +375,16 @@ function MultiRowUptimeHistory({
 //   );
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
 //         <small>30 DAYS</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{live ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"} triggered` : "100% uptime"}</span>
 //         <span>{live ? `${totalDowntime} min downtime` : "0 min downtime"}</span>
 //       </div>
-//       <div className="incident-graph">
+//       <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full">
 //         <svg viewBox="0 0 600 90" preserveAspectRatio="none" onMouseLeave={() => setHoverDay(null)}>
 //           <line x1="0" y1="82" x2="600" y2="82" stroke="#20262e" strokeWidth="1" />
 //           {history.map((h, i) => {
@@ -412,19 +417,19 @@ function MultiRowUptimeHistory({
 //           const mins = downtimeMinutes(h, hoverDay);
 //           const label = h === "ok" ? "No alerts" : h === "warn" ? "Degraded performance" : "Downtime alert";
 //           return (
-//             <div className="graph-tooltip" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
+//             <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
 //               Day {hoverDay + 1} · <b>{label}</b>
 //               {mins > 0 && <span style={{ color: "#9aa2ac" }}> · {mins} min</span>}
 //             </div>
 //           );
 //         })()}
 //         {!live && (
-//           <div className="graph-waiting graph-waiting-inset">
+//           <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974] items-start pt-2">
 //             <span>Metrics will appear once monitoring begins.</span>
 //           </div>
 //         )}
 //       </div>
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>30d ago</span><span>20d ago</span><span>10d ago</span><span>Today</span>
 //       </div>
 //     </div>
@@ -601,17 +606,17 @@ function MultiRowUptimeHistory({
 
 // function WaitingGraph({ label }: { label: string }) {
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
-//         <small>{label}</small>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
+//         <small className="font-code text-[10px] leading-[normal] text-[#737c87]">{label}</small>
 //       </div>
-//       <div className="incident-graph">
-//         <div className="graph-waiting graph-waiting-inset">
+//       <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full">
+//         <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974] items-start pt-2">
 //           <span>Metrics will appear once monitoring begins.</span>
 //         </div>
 //       </div>
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>Start</span><span> </span><span> </span><span>Now</span>
 //       </div>
 //     </div>
@@ -643,16 +648,16 @@ function MultiRowUptimeHistory({
 //   const hoverTimestamp = hoverPoint ? parseTimestamp(hoverPoint.timestamp) : 0;
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
-//         <small>{label}</small>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
+//         <small className="font-code text-[10px] leading-[normal] text-[#737c87]">{label}</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{flaggedDays > 0 ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"} triggered` : "100% uptime"}</span>
 //         <span>{totalDowntime > 0 ? `${totalDowntime} min downtime` : "0 min downtime"}</span>
 //       </div>
-//       <div className="incident-graph">
+//       <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full">
 //         <IncidentBars
 //           points={points}
 //           hoverIndex={hoverIndex}
@@ -661,7 +666,7 @@ function MultiRowUptimeHistory({
 //           baseline={82}
 //         />
 //         {hoverPoint && (
-//           <div className="graph-tooltip" style={{ left: `${(hoverIndex! / points.length) * 100}%`, top: "6%" }}>
+//           <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(hoverIndex! / points.length) * 100}%`, top: "6%" }}>
 //             {new Date(hoverTimestamp).toLocaleString("en-US", {
 //               month: "short",
 //               day: "numeric",
@@ -675,7 +680,7 @@ function MultiRowUptimeHistory({
 //           </div>
 //         )}
 //       </div>
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         {axisLabels.map((l, i) => (
 //           <span key={i}>{l}</span>
 //         ))}
@@ -737,17 +742,17 @@ function MultiRowUptimeHistory({
 //   const axisLabels = useMemo(() => getAxisLabels(minTime, maxTime, range), [minTime, maxTime, range]);
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
 //         <small>{label} · {rows.length} MONITORS</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{anyDown ? "Attention needed" : "All monitors healthy"}</span>
 //         <span>Hover a monitor to focus it</span>
 //       </div>
 
-//       <div className={`uptime-rows${activeId ? " has-hover" : ""}`} onMouseLeave={() => setActiveId(null)}>
+//       <div className="mt-0.5 flex flex-col gap-4" onMouseLeave={() => setActiveId(null)}>
 //         {visibleRows.map((row) => {
 //           const isActive = activeId === row.id;
 //           const hoverIdx = hoverIndex?.id === row.id ? hoverIndex.idx : null;
@@ -758,10 +763,10 @@ function MultiRowUptimeHistory({
 //               className={`uptime-row${isActive ? " is-active" : ""}`}
 //               onMouseEnter={() => setActiveId(row.id)}
 //             >
-//               <div className="uptime-row-head">
+//               <div className="mb-1.5 flex items-center justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>b]:text-[11px] [&>b]:font-semibold">
 //                 <span>
 //                   <i
-//                     className="status-dot"
+//                     className="mr-1 inline-block size-1.5 rounded-full bg-brand"
 //                     style={{
 //                       background: row.status === "down" ? "var(--red)" : "var(--green)",
 //                       marginRight: 6,
@@ -771,7 +776,7 @@ function MultiRowUptimeHistory({
 //                 </span>
 //                 <span>{row.flagged > 0 ? `${row.flagged} alert${row.flagged === 1 ? "" : "s"}` : row.status === "down" ? "Down now" : "100% uptime"}</span>
 //               </div>
-//               <div className="incident-graph uptime-row-graph">
+//               <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full h-10!">
 //                 <IncidentBars
 //                   points={row.points}
 //                   hoverIndex={hoverIdx}
@@ -780,7 +785,7 @@ function MultiRowUptimeHistory({
 //                   baseline={34}
 //                 />
 //                 {hoverIdx !== null && row.points[hoverIdx] && (
-//                   <div className="graph-tooltip" style={{ left: `${(hoverIdx / row.points.length) * 100}%`, top: "0%" }}>
+//                   <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(hoverIdx / row.points.length) * 100}%`, top: "0%" }}>
 //                     {new Date(parseTimestamp(row.points[hoverIdx].timestamp)).toLocaleString("en-US", {
 //                       month: "short",
 //                       day: "numeric",
@@ -797,12 +802,12 @@ function MultiRowUptimeHistory({
 //       </div>
 
 //       {hiddenCount > 0 && (
-//         <div className="uptime-rows-viewall" onClick={onViewAll}>
+//         <div className="mt-3.5 block cursor-pointer rounded-md border border-dashed border-[#262c34] p-2 text-center font-code text-[10px] leading-[normal] text-[#8b929d] [transition:color_0.15s_ease,border-color_0.15s_ease] hover:border-[#3a4048] hover:text-[#e7eaee]" onClick={onViewAll}>
 //           View all {rows.length} monitors →
 //         </div>
 //       )}
 
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         {axisLabels.map((l, i) => (
 //           <span key={i}>{l}</span>
 //         ))}
@@ -928,16 +933,16 @@ function MultiRowUptimeHistory({
 //   );
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
 //         <small>30 DAYS</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{live ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"} triggered` : "100% uptime"}</span>
 //         <span>{live ? `${totalDowntime} min downtime` : "0 min downtime"}</span>
 //       </div>
-//       <div className="incident-graph">
+//       <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full">
 //         <IncidentBars history={history} live={live} hoverDay={hoverDay} onHoverDay={setHoverDay} height={90} baseline={82} />
 //         {live && hoverDay !== null && (() => {
 //           const slot = 600 / history.length;
@@ -946,19 +951,19 @@ function MultiRowUptimeHistory({
 //           const mins = downtimeMinutes(h, hoverDay);
 //           const label = h === "ok" ? "No alerts" : h === "warn" ? "Degraded performance" : "Downtime alert";
 //           return (
-//             <div className="graph-tooltip" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
+//             <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
 //               Day {hoverDay + 1} · <b>{label}</b>
 //               {mins > 0 && <span style={{ color: "#9aa2ac" }}> · {mins} min</span>}
 //             </div>
 //           );
 //         })()}
 //         {!live && (
-//           <div className="graph-waiting graph-waiting-inset">
+//           <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974] items-start pt-2">
 //             <span>Metrics will appear once monitoring begins.</span>
 //           </div>
 //         )}
 //       </div>
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>30d ago</span><span>20d ago</span><span>10d ago</span><span>Today</span>
 //       </div>
 //     </div>
@@ -1007,17 +1012,17 @@ function MultiRowUptimeHistory({
 //   const anyDown = allRows.some((r) => r.status === "down");
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
 //         <small>30 DAYS · {allRows.length} MONITORS</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{anyDown ? "Attention needed" : "All monitors healthy"}</span>
 //         <span>Hover a monitor to focus it</span>
 //       </div>
 
-//       <div className={`uptime-rows${activeId ? " has-hover" : ""}`} onMouseLeave={() => setActiveId(null)}>
+//       <div className="mt-0.5 flex flex-col gap-4" onMouseLeave={() => setActiveId(null)}>
 //         {rows.map((row) => {
 //           const isActive = activeId === row.id;
 //           const dayHover = hoverDay && hoverDay.id === row.id ? hoverDay.day : null;
@@ -1029,10 +1034,10 @@ function MultiRowUptimeHistory({
 //               className={`uptime-row${isActive ? " is-active" : ""}`}
 //               onMouseEnter={() => setActiveId(row.id)}
 //             >
-//               <div className="uptime-row-head">
+//               <div className="mb-1.5 flex items-center justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>b]:text-[11px] [&>b]:font-semibold">
 //                 <span>
 //                   <i
-//                     className="status-dot"
+//                     className="mr-1 inline-block size-1.5 rounded-full bg-brand"
 //                     style={{
 //                       background: row.status === "down" ? "var(--red)" : "var(--green)",
 //                       marginRight: 6,
@@ -1042,7 +1047,7 @@ function MultiRowUptimeHistory({
 //                 </span>
 //                 <span>{live ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"}` : row.status === "down" ? "Down now" : "100% uptime"}</span>
 //               </div>
-//               <div className="incident-graph uptime-row-graph">
+//               <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full h-10!">
 //                 <IncidentBars
 //                   history={row.history}
 //                   live={live}
@@ -1058,7 +1063,7 @@ function MultiRowUptimeHistory({
 //                   const mins = downtimeMinutes(h, dayHover);
 //                   const label = h === "ok" ? "No alerts" : h === "warn" ? "Degraded performance" : "Downtime alert";
 //                   return (
-//                     <div className="graph-tooltip" style={{ left: `${(x / 600) * 100}%`, top: "0%" }}>
+//                     <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(x / 600) * 100}%`, top: "0%" }}>
 //                       Day {dayHover + 1} · <b>{label}</b>
 //                       {mins > 0 && <span style={{ color: "#9aa2ac" }}> · {mins} min</span>}
 //                     </div>
@@ -1071,12 +1076,12 @@ function MultiRowUptimeHistory({
 //       </div>
 
 //       {hiddenCount > 0 && (
-//         <div className="uptime-rows-viewall" onClick={onViewAll}>
+//         <div className="mt-3.5 block cursor-pointer rounded-md border border-dashed border-[#262c34] p-2 text-center font-code text-[10px] leading-[normal] text-[#8b929d] [transition:color_0.15s_ease,border-color_0.15s_ease] hover:border-[#3a4048] hover:text-[#e7eaee]" onClick={onViewAll}>
 //           View all {allRows.length} monitors →
 //         </div>
 //       )}
 
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>30d ago</span><span>20d ago</span><span>10d ago</span><span>Today</span>
 //       </div>
 //     </div>
@@ -1184,16 +1189,16 @@ function MultiRowUptimeHistory({
 //   );
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
 //         <small>30 DAYS</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{live ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"} triggered` : "100% uptime"}</span>
 //         <span>{live ? `${totalDowntime} min downtime` : "0 min downtime"}</span>
 //       </div>
-//       <div className="incident-graph">
+//       <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full">
 //         <IncidentBars history={history} live={live} hoverDay={hoverDay} onHoverDay={setHoverDay} height={90} baseline={82} />
 //         {live && hoverDay !== null && (() => {
 //           const slot = 600 / history.length;
@@ -1202,19 +1207,19 @@ function MultiRowUptimeHistory({
 //           const mins = downtimeMinutes(h, hoverDay);
 //           const label = h === "ok" ? "No alerts" : h === "warn" ? "Degraded performance" : "Downtime alert";
 //           return (
-//             <div className="graph-tooltip" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
+//             <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
 //               Day {hoverDay + 1} · <b>{label}</b>
 //               {mins > 0 && <span style={{ color: "#9aa2ac" }}> · {mins} min</span>}
 //             </div>
 //           );
 //         })()}
 //         {!live && (
-//           <div className="graph-waiting graph-waiting-inset">
+//           <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974] items-start pt-2">
 //             <span>Metrics will appear once monitoring begins.</span>
 //           </div>
 //         )}
 //       </div>
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>30d ago</span><span>20d ago</span><span>10d ago</span><span>Today</span>
 //       </div>
 //     </div>
@@ -1263,12 +1268,12 @@ function MultiRowUptimeHistory({
 //   const anyDown = allRows.some((r) => r.status === "down");
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
 //         <small>30 DAYS · {allRows.length} MONITORS</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{anyDown ? "Attention needed" : "All monitors healthy"}</span>
 //         <span>Hover a monitor to focus it</span>
 //       </div>
@@ -1285,10 +1290,10 @@ function MultiRowUptimeHistory({
 //               className={`uptime-row${isActive ? " is-active" : ""}`}
 //               onMouseEnter={() => setActiveId(row.id)}
 //             >
-//               <div className="uptime-row-head">
+//               <div className="mb-1.5 flex items-center justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>b]:text-[11px] [&>b]:font-semibold">
 //                 <span>
 //                   <i
-//                     className="status-dot"
+//                     className="mr-1 inline-block size-1.5 rounded-full bg-brand"
 //                     style={{
 //                       background: row.status === "down" ? "var(--red)" : "var(--green)",
 //                       marginRight: 6,
@@ -1298,7 +1303,7 @@ function MultiRowUptimeHistory({
 //                 </span>
 //                 <span>{live ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"}` : row.status === "down" ? "Down now" : "100% uptime"}</span>
 //               </div>
-//               <div className="incident-graph uptime-row-graph">
+//               <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full h-10!">
 //                 <IncidentBars
 //                   history={row.history}
 //                   live={live}
@@ -1314,7 +1319,7 @@ function MultiRowUptimeHistory({
 //                   const mins = downtimeMinutes(h, dayHover);
 //                   const label = h === "ok" ? "No alerts" : h === "warn" ? "Degraded performance" : "Downtime alert";
 //                   return (
-//                     <div className="graph-tooltip" style={{ left: `${(x / 600) * 100}%`, top: "0%" }}>
+//                     <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(x / 600) * 100}%`, top: "0%" }}>
 //                       Day {dayHover + 1} · <b>{label}</b>
 //                       {mins > 0 && <span style={{ color: "#9aa2ac" }}> · {mins} min</span>}
 //                     </div>
@@ -1327,12 +1332,12 @@ function MultiRowUptimeHistory({
 //       </div>
 
 //       {hiddenCount > 0 && (
-//         <div className="uptime-rows-viewall" onClick={onViewAll}>
+//         <div className="mt-3.5 block cursor-pointer rounded-md border border-dashed border-[#262c34] p-2 text-center font-code text-[10px] leading-[normal] text-[#8b929d] [transition:color_0.15s_ease,border-color_0.15s_ease] hover:border-[#3a4048] hover:text-[#e7eaee]" onClick={onViewAll}>
 //           View all {allRows.length} monitors →
 //         </div>
 //       )}
 
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>30d ago</span><span>20d ago</span><span>10d ago</span><span>Today</span>
 //       </div>
 //     </div>
@@ -1440,16 +1445,16 @@ function MultiRowUptimeHistory({
 //   );
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
 //         <small>30 DAYS</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{live ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"} triggered` : "100% uptime"}</span>
 //         <span>{live ? `${totalDowntime} min downtime` : "0 min downtime"}</span>
 //       </div>
-//       <div className="incident-graph">
+//       <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full">
 //         <IncidentBars history={history} live={live} hoverDay={hoverDay} onHoverDay={setHoverDay} height={90} baseline={82} />
 //         {live && hoverDay !== null && (() => {
 //           const slot = 600 / history.length;
@@ -1458,19 +1463,19 @@ function MultiRowUptimeHistory({
 //           const mins = downtimeMinutes(h, hoverDay);
 //           const label = h === "ok" ? "No alerts" : h === "warn" ? "Degraded performance" : "Downtime alert";
 //           return (
-//             <div className="graph-tooltip" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
+//             <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
 //               Day {hoverDay + 1} · <b>{label}</b>
 //               {mins > 0 && <span style={{ color: "#9aa2ac" }}> · {mins} min</span>}
 //             </div>
 //           );
 //         })()}
 //         {!live && (
-//           <div className="graph-waiting graph-waiting-inset">
+//           <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974] items-start pt-2">
 //             <span>Metrics will appear once monitoring begins.</span>
 //           </div>
 //         )}
 //       </div>
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>30d ago</span><span>20d ago</span><span>10d ago</span><span>Today</span>
 //       </div>
 //     </div>
@@ -1519,12 +1524,12 @@ function MultiRowUptimeHistory({
 //   const anyDown = allRows.some((r) => r.status === "down");
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
 //         <small>30 DAYS · {allRows.length} MONITORS</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{anyDown ? "Attention needed" : "All monitors healthy"}</span>
 //         <span>Hover a monitor to focus it</span>
 //       </div>
@@ -1541,10 +1546,10 @@ function MultiRowUptimeHistory({
 //               className={`uptime-row${isActive ? " is-active" : ""}`}
 //               onMouseEnter={() => setActiveId(row.id)}
 //             >
-//               <div className="uptime-row-head">
+//               <div className="mb-1.5 flex items-center justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>b]:text-[11px] [&>b]:font-semibold">
 //                 <span>
 //                   <i
-//                     className="status-dot"
+//                     className="mr-1 inline-block size-1.5 rounded-full bg-brand"
 //                     style={{
 //                       background: row.status === "down" ? "var(--red)" : "var(--green)",
 //                       marginRight: 6,
@@ -1554,7 +1559,7 @@ function MultiRowUptimeHistory({
 //                 </span>
 //                 <span>{live ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"}` : row.status === "down" ? "Down now" : "100% uptime"}</span>
 //               </div>
-//               <div className="incident-graph uptime-row-graph">
+//               <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full h-10!">
 //                 <IncidentBars
 //                   history={row.history}
 //                   live={live}
@@ -1570,7 +1575,7 @@ function MultiRowUptimeHistory({
 //                   const mins = downtimeMinutes(h, dayHover);
 //                   const label = h === "ok" ? "No alerts" : h === "warn" ? "Degraded performance" : "Downtime alert";
 //                   return (
-//                     <div className="graph-tooltip" style={{ left: `${(x / 600) * 100}%`, top: "0%" }}>
+//                     <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(x / 600) * 100}%`, top: "0%" }}>
 //                       Day {dayHover + 1} · <b>{label}</b>
 //                       {mins > 0 && <span style={{ color: "#9aa2ac" }}> · {mins} min</span>}
 //                     </div>
@@ -1583,12 +1588,12 @@ function MultiRowUptimeHistory({
 //       </div>
 
 //       {hiddenCount > 0 && (
-//         <div className="uptime-rows-viewall" onClick={onViewAll}>
+//         <div className="mt-3.5 block cursor-pointer rounded-md border border-dashed border-[#262c34] p-2 text-center font-code text-[10px] leading-[normal] text-[#8b929d] [transition:color_0.15s_ease,border-color_0.15s_ease] hover:border-[#3a4048] hover:text-[#e7eaee]" onClick={onViewAll}>
 //           View all {allRows.length} monitors →
 //         </div>
 //       )}
 
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>30d ago</span><span>20d ago</span><span>10d ago</span><span>Today</span>
 //       </div>
 //     </div>
@@ -1615,16 +1620,16 @@ function MultiRowUptimeHistory({
 //   );
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
 //         <small>30 DAYS</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{live ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"} triggered` : "100% uptime"}</span>
 //         <span>{live ? `${totalDowntime} min downtime` : "0 min downtime"}</span>
 //       </div>
-//       <div className="incident-graph">
+//       <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full">
 //         <svg viewBox="0 0 600 90" preserveAspectRatio="none" onMouseLeave={() => setHoverDay(null)}>
 //           <line x1="0" y1="82" x2="600" y2="82" stroke="#20262e" strokeWidth="1" />
 //           {history.map((h, i) => {
@@ -1657,19 +1662,19 @@ function MultiRowUptimeHistory({
 //           const mins = downtimeMinutes(h, hoverDay);
 //           const label = h === "ok" ? "No alerts" : h === "warn" ? "Degraded performance" : "Downtime alert";
 //           return (
-//             <div className="graph-tooltip" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
+//             <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
 //               Day {hoverDay + 1} · <b>{label}</b>
 //               {mins > 0 && <span style={{ color: "#9aa2ac" }}> · {mins} min</span>}
 //             </div>
 //           );
 //         })()}
 //         {!live && (
-//           <div className="graph-waiting graph-waiting-inset">
+//           <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974] items-start pt-2">
 //             <span>Metrics will appear once monitoring begins.</span>
 //           </div>
 //         )}
 //       </div>
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>30d ago</span><span>20d ago</span><span>10d ago</span><span>Today</span>
 //       </div>
 //     </div>
@@ -1774,16 +1779,16 @@ function MultiRowUptimeHistory({
 //   );
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
 //         <small>30 DAYS</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{live ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"} triggered` : "100% uptime"}</span>
 //         <span>{live ? `${totalDowntime} min downtime` : "0 min downtime"}</span>
 //       </div>
-//       <div className="incident-graph">
+//       <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full">
 //         <IncidentBars history={history} live={live} hoverDay={hoverDay} onHoverDay={setHoverDay} height={90} baseline={82} />
 //         {live && hoverDay !== null && (() => {
 //           const slot = 600 / history.length;
@@ -1792,19 +1797,19 @@ function MultiRowUptimeHistory({
 //           const mins = downtimeMinutes(h, hoverDay);
 //           const label = h === "ok" ? "No alerts" : h === "warn" ? "Degraded performance" : "Downtime alert";
 //           return (
-//             <div className="graph-tooltip" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
+//             <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
 //               Day {hoverDay + 1} · <b>{label}</b>
 //               {mins > 0 && <span style={{ color: "#9aa2ac" }}> · {mins} min</span>}
 //             </div>
 //           );
 //         })()}
 //         {!live && (
-//           <div className="graph-waiting graph-waiting-inset">
+//           <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974] items-start pt-2">
 //             <span>Metrics will appear once monitoring begins.</span>
 //           </div>
 //         )}
 //       </div>
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>30d ago</span><span>20d ago</span><span>10d ago</span><span>Today</span>
 //       </div>
 //     </div>
@@ -1827,17 +1832,17 @@ function MultiRowUptimeHistory({
 //   const anyDown = rows.some((r) => r.status === "down");
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
 //         <small>30 DAYS · {rows.length} MONITORS</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{anyDown ? "Attention needed" : "All monitors healthy"}</span>
 //         <span>Hover a monitor to focus it</span>
 //       </div>
 
-//       <div className={`uptime-rows${activeId ? " has-hover" : ""}`} onMouseLeave={() => setActiveId(null)}>
+//       <div className="mt-0.5 flex flex-col gap-4" onMouseLeave={() => setActiveId(null)}>
 //         {rows.map((row) => {
 //           const isActive = activeId === row.id;
 //           const dayHover = hoverDay && hoverDay.id === row.id ? hoverDay.day : null;
@@ -1849,10 +1854,10 @@ function MultiRowUptimeHistory({
 //               className={`uptime-row${isActive ? " is-active" : ""}`}
 //               onMouseEnter={() => setActiveId(row.id)}
 //             >
-//               <div className="uptime-row-head">
+//               <div className="mb-1.5 flex items-center justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>b]:text-[11px] [&>b]:font-semibold">
 //                 <span>
 //                   <i
-//                     className="status-dot"
+//                     className="mr-1 inline-block size-1.5 rounded-full bg-brand"
 //                     style={{
 //                       background: row.status === "down" ? "var(--red)" : "var(--green)",
 //                       marginRight: 6,
@@ -1862,7 +1867,7 @@ function MultiRowUptimeHistory({
 //                 </span>
 //                 <span>{live ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"}` : row.status === "down" ? "Down now" : "100% uptime"}</span>
 //               </div>
-//               <div className="incident-graph uptime-row-graph">
+//               <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full h-10!">
 //                 <IncidentBars
 //                   history={row.history}
 //                   live={live}
@@ -1878,7 +1883,7 @@ function MultiRowUptimeHistory({
 //                   const mins = downtimeMinutes(h, dayHover);
 //                   const label = h === "ok" ? "No alerts" : h === "warn" ? "Degraded performance" : "Downtime alert";
 //                   return (
-//                     <div className="graph-tooltip" style={{ left: `${(x / 600) * 100}%`, top: "0%" }}>
+//                     <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(x / 600) * 100}%`, top: "0%" }}>
 //                       Day {dayHover + 1} · <b>{label}</b>
 //                       {mins > 0 && <span style={{ color: "#9aa2ac" }}> · {mins} min</span>}
 //                     </div>
@@ -1890,7 +1895,7 @@ function MultiRowUptimeHistory({
 //         })}
 //       </div>
 
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>30d ago</span><span>20d ago</span><span>10d ago</span><span>Today</span>
 //       </div>
 //     </div>
@@ -1918,16 +1923,16 @@ function MultiRowUptimeHistory({
 //   );
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Uptime history</h4>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Uptime history</h4>
 //         <small>30 DAYS</small>
 //       </div>
-//       <div className="incident-summary">
+//       <div className="mb-1.5 flex justify-between font-code text-[10px] leading-[normal] text-[#8b929d] [&>span:last-child]:text-warning">
 //         <span>{live ? `${flaggedDays} alert${flaggedDays === 1 ? "" : "s"} triggered` : "100% uptime"}</span>
 //         <span>{live ? `${totalDowntime} min downtime` : "0 min downtime"}</span>
 //       </div>
-//       <div className="incident-graph">
+//       <div className="relative h-[90px] [&_rect]:transition-opacity [&_rect]:duration-100 [&>svg]:block [&>svg]:size-full">
 //         <svg viewBox="0 0 600 90" preserveAspectRatio="none" onMouseLeave={() => setHoverDay(null)}>
 //           <line x1="0" y1="82" x2="600" y2="82" stroke="#20262e" strokeWidth="1" />
 //           {history.map((h, i) => {
@@ -1960,19 +1965,19 @@ function MultiRowUptimeHistory({
 //           const mins = downtimeMinutes(h, hoverDay);
 //           const label = h === "ok" ? "No alerts" : h === "warn" ? "Degraded performance" : "Downtime alert";
 //           return (
-//             <div className="graph-tooltip" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
+//             <div className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand" style={{ left: `${(x / 600) * 100}%`, top: "6%" }}>
 //               Day {hoverDay + 1} · <b>{label}</b>
 //               {mins > 0 && <span style={{ color: "#9aa2ac" }}> · {mins} min</span>}
 //             </div>
 //           );
 //         })()}
 //         {!live && (
-//           <div className="graph-waiting graph-waiting-inset">
+//           <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974] items-start pt-2">
 //             <span>Metrics will appear once monitoring begins.</span>
 //           </div>
 //         )}
 //       </div>
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>30d ago</span><span>20d ago</span><span>10d ago</span><span>Today</span>
 //       </div>
 //     </div>

@@ -9,6 +9,7 @@ import {
   averageSeries,
 } from "../../utils/responseTimeGraph";
 
+import { cn } from "../../lib/utils";
 export interface ResponseTimeMonitor {
   id: string;
   name: string;
@@ -77,12 +78,12 @@ function SingleLineResponseTimeGraph({ live }: { live: boolean }) {
   };
 
   return (
-    <div className="panel">
-      <div className="panel-head">
-        <h4>Response time</h4>
-        <small>LAST 24 HOURS</small>
+    <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+      <div className="mb-3 flex items-center justify-between">
+        <h4 className="m-0 text-[11px] font-semibold">Response time</h4>
+        <small className="font-code text-[10px] leading-[normal] text-[#737c87]">LAST 24 HOURS</small>
       </div>
-      <div className="graph">
+      <div className="relative h-[135px] border-b border-[#27303a] [background:repeating-linear-gradient(to_bottom,transparent_0,transparent_33px,#20262e_34px)] [&>svg]:absolute [&>svg]:inset-0 [&>svg]:size-full">
         <svg
           ref={svgRef}
           viewBox="0 0 600 135"
@@ -139,7 +140,7 @@ function SingleLineResponseTimeGraph({ live }: { live: boolean }) {
         </svg>
         {live && hoverIndex !== null && (
           <div
-            className="graph-tooltip"
+            className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand"
             style={{
               left: `${(GRAPH_X[hoverIndex] / 600) * 100}%`,
               top: `${(GRAPH_Y[hoverIndex] / 135) * 100}%`,
@@ -150,12 +151,12 @@ function SingleLineResponseTimeGraph({ live }: { live: boolean }) {
           </div>
         )}
         {!live && (
-          <div className="graph-waiting">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974]">
             <span>Waiting for monitoring data…</span>
           </div>
         )}
       </div>
-      <div className="axis">
+      <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
         <span>00:00</span>
         <span>06:00</span>
         <span>12:00</span>
@@ -214,35 +215,41 @@ function SelectableResponseTimeGraph({
   };
 
   return (
-    <div className="panel">
-      <div className="panel-head">
-        <h4>Response time</h4>
-        <small>LAST 24 HOURS</small>
+    <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+      <div className="mb-3 flex items-center justify-between">
+        <h4 className="m-0 text-[11px] font-semibold">Response time</h4>
+        <small className="font-code text-[10px] leading-[normal] text-[#737c87]">LAST 24 HOURS</small>
       </div>
 
-      <div className="rt-legend">
+      <div className="mb-2.5 flex flex-wrap gap-2">
         <span
-          className={`rt-legend-item${selectedId === null ? " is-active" : ""}`}
+          className={cn(
+            "flex cursor-pointer items-center gap-1.5 rounded-[14px] border border-transparent px-[9px] py-1 font-code text-[10px] leading-[normal] text-[#9aa2ac] [transition:color_0.15s_ease,background_0.15s_ease,border-color_0.15s_ease] hover:bg-[#161b21]",
+            selectedId === null && "border-[#2c333c] bg-[#181f26] text-[#e7eaee]",
+          )}
           onClick={() => setSelectedId(null)}
         >
-          <i className="rt-legend-dot" style={{ background: "#50d890" }} />
+          <i className="inline-block size-2 shrink-0 rounded-full" style={{ background: "#50d890" }} />
           All monitors (avg)
         </span>
         {lines.map((line) => (
           <span
             key={line.id}
-            className={`rt-legend-item${selectedId === line.id ? " is-active" : ""}`}
+            className={cn(
+              "flex cursor-pointer items-center gap-1.5 rounded-[14px] border border-transparent px-[9px] py-1 font-code text-[10px] leading-[normal] text-[#9aa2ac] [transition:color_0.15s_ease,background_0.15s_ease,border-color_0.15s_ease] hover:bg-[#161b21]",
+              selectedId === line.id && "border-[#2c333c] bg-[#181f26] text-[#e7eaee]",
+            )}
             onClick={() =>
               setSelectedId(selectedId === line.id ? null : line.id)
             }
           >
-            <i className="rt-legend-dot" style={{ background: line.color }} />
+            <i className="inline-block size-2 shrink-0 rounded-full" style={{ background: line.color }} />
             {line.name}
           </span>
         ))}
       </div>
 
-      <div className="graph">
+      <div className="relative h-[135px] border-b border-[#27303a] [background:repeating-linear-gradient(to_bottom,transparent_0,transparent_33px,#20262e_34px)] [&>svg]:absolute [&>svg]:inset-0 [&>svg]:size-full">
         <svg
           ref={svgRef}
           viewBox="0 0 600 135"
@@ -293,7 +300,7 @@ function SelectableResponseTimeGraph({
         </svg>
         {live && hoverIndex !== null && (
           <div
-            className="graph-tooltip"
+            className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand"
             style={{
               left: `${(GRAPH_X[hoverIndex] / 600) * 100}%`,
               top: `${(activeSeries[hoverIndex] / 135) * 100}%`,
@@ -305,12 +312,12 @@ function SelectableResponseTimeGraph({
           </div>
         )}
         {!live && (
-          <div className="graph-waiting">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974]">
             <span>Waiting for monitoring data…</span>
           </div>
         )}
       </div>
-      <div className="axis">
+      <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
         <span>00:00</span>
         <span>06:00</span>
         <span>12:00</span>

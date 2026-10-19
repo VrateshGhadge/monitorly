@@ -25,6 +25,16 @@ function passwordStrength(password: string) {
   return score;
 }
 
+// Replaces the old dynamic `password-strength-fill strength-${n}` class lookup,
+// which relied on .strength-0 .. .strength-4 rules in app.css.
+const STRENGTH_META = [
+  { label: "Too weak", bar: "w-1/4 bg-danger" },
+  { label: "Weak", bar: "w-1/4 bg-danger" },
+  { label: "Fair", bar: "w-[55%] bg-warning" },
+  { label: "Good", bar: "w-4/5 bg-[#8bd190]" },
+  { label: "Strong", bar: "w-full bg-brand" },
+] as const;
+
 export default function SignUpPage() {
   const { signUp, signInWithGoogle } = useAuth();
   const { showToast } = useToast();
@@ -40,9 +50,7 @@ export default function SignUpPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const strength = passwordStrength(password);
-  const strengthLabel = ["Too weak", "Weak", "Fair", "Good", "Strong"][
-    strength
-  ];
+  const { label: strengthLabel, bar: strengthBar } = STRENGTH_META[strength];
 
   const validate = (): boolean => {
     const next: FormErrors = {};
@@ -102,12 +110,16 @@ export default function SignUpPage() {
 
   return (
     <AuthLayout>
-      <div className="auth-head">
-        <h1>Create your account</h1>
-        <p>Set up your first monitor in minutes.</p>
+      <div className="mb-[22px]">
+        <h1 className="mt-0 mb-1.5 text-[24px] tracking-[-0.9px] [@media(max-width:520px)]:text-[22px]">
+          Create your account
+        </h1>
+        <p className="m-0 text-[13.5px] text-muted">
+          Set up your first monitor in minutes.
+        </p>
       </div>
 
-      <form className="auth-form" onSubmit={handleSubmit} noValidate>
+      <form className="flex flex-col" onSubmit={handleSubmit} noValidate>
         <Input
           label="Full name"
           autoComplete="name"
@@ -137,11 +149,15 @@ export default function SignUpPage() {
         />
 
         {password && (
-          <div className="password-strength">
-            <div className="password-strength-track">
-              <span className={`password-strength-fill strength-${strength}`} />
+          <div className="-mt-1.5 mb-3.5 flex items-center gap-2.5">
+            <div className="h-1 flex-1 overflow-hidden rounded-full bg-[#1b2028]">
+              <span
+                className={`block h-full rounded-full transition-[width,background] duration-200 ease-[ease] ${strengthBar}`}
+              />
             </div>
-            <small>{strengthLabel}</small>
+            <small className="text-[11px] whitespace-nowrap text-muted">
+              {strengthLabel}
+            </small>
           </div>
         )}
 
@@ -158,7 +174,7 @@ export default function SignUpPage() {
           Create account
         </Button>
 
-        <p className="auth-terms">
+        <p className="mt-0.5 mb-0 text-[11px] leading-[1.5] text-[#6f7782]">
           By creating an account you agree to Monitorly's Terms of Service and
           Privacy Policy.
         </p>
@@ -171,8 +187,11 @@ export default function SignUpPage() {
         text="signup_with"
       />
 
-      <p className="auth-switch">
-        Already have an account? <Link to="/signin">Sign in</Link>
+      <p className="mt-[18px] mb-0 text-center text-[13px] text-muted">
+        Already have an account?{" "}
+        <Link className="font-semibold text-brand" to="/signin">
+          Sign in
+        </Link>
       </p>
     </AuthLayout>
   );

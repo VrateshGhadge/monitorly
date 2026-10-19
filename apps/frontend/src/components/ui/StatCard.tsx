@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { cn } from "../../lib/utils";
+
 interface StatCardProps {
   label: string;
   value: ReactNode;
@@ -18,17 +20,32 @@ export default function StatCard({
   icon,
 }: StatCardProps) {
   return (
-    <div className="stat-card">
-      <div className="stat-card-top">
-        <label>{label}</label>
-        {icon && <span className="stat-card-icon">{icon}</span>}
+    <div className="rounded-[9px] border border-line bg-panel p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <label className="text-[11px] text-[#818994]">{label}</label>
+        {icon && <span className="text-brand">{icon}</span>}
       </div>
-      <strong className={tone === "bad" ? "stat-bad" : ""}>
+      <strong
+        className={cn(
+          "block text-[23px] tracking-[-0.7px]",
+          tone === "bad" && "text-[#ff9d9d]",
+        )}
+      >
         {value}
-        {unit && <small>{unit}</small>}
+        {unit && (
+          <small className="ml-[3px] text-[12px] font-normal text-muted">
+            {unit}
+          </small>
+        )}
       </strong>
       {trend && (
-        <span className={`stat-trend stat-trend-${trend.direction}`}>
+        <span
+          className={cn(
+            "mt-2 block text-[11px] text-muted",
+            trend.direction === "up" && "text-brand",
+            trend.direction === "down" && "text-[#ff9d9d]",
+          )}
+        >
           {trend.direction === "up" && "↑"}
           {trend.direction === "down" && "↓"}
           {trend.direction === "flat" && "→"} {trend.label}

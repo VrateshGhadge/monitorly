@@ -72,16 +72,16 @@ export default function CheckHistoryPanel({
   const hiddenCount = sorted.length - visible.length;
 
   return (
-    <div className="panel">
-      <div className="panel-head">
-        <h4>History</h4>
+    <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+      <div className="mb-3 flex items-center justify-between">
+        <h4 className="m-0 text-[11px] font-semibold">History</h4>
         <small>LATEST CHECKS</small>
       </div>
 
       {checks === null ? (
         <div className="flex flex-col">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div className="row-line" key={i}>
+            <div className="flex items-center justify-between border-t border-[#222830] px-1 py-[11px] text-[12px] first:border-t-0" key={i}>
               <Skeleton width={170} height={12} />
               <Skeleton width={44} height={12} />
             </div>
@@ -99,15 +99,15 @@ export default function CheckHistoryPanel({
               const ok = check.status === "UP";
 
               return (
-                <div className="row-line" key={`${check.checkedAt}-${i}`}>
+                <div className="flex items-center justify-between border-t border-[#222830] px-1 py-[11px] text-[12px] first:border-t-0" key={`${check.checkedAt}-${i}`}>
                   <div className="flex items-center gap-2.5">
                     <i
-                      className="status-dot"
+                      className="mr-1 inline-block size-1.5 rounded-full bg-brand"
                       style={{ background: ok ? "var(--green)" : "var(--red)" }}
                     />
                     <div>
-                      <b>{ok ? "Check passed" : "Check failed"}</b>
-                      <div className="row-sub">
+                      <b className="font-semibold">{ok ? "Check passed" : "Check failed"}</b>
+                      <div className="mt-0.5 text-[10px] text-[#818994]">
                         {check.statusCode ? `HTTP ${check.statusCode} · ` : ""}
                         {formatLastChecked(check.checkedAt)}
                       </div>
@@ -115,7 +115,7 @@ export default function CheckHistoryPanel({
                   </div>
 
                   <span
-                    className="table-cell-url"
+                    className="overflow-hidden font-code text-[12px] leading-[normal] text-ellipsis whitespace-nowrap text-[#9aa2ac]"
                     style={{ fontSize: 11, flexShrink: 0 }}
                   >
                     {check.responseTime != null
@@ -129,7 +129,7 @@ export default function CheckHistoryPanel({
 
           {hiddenCount > 0 && (
             <div
-              className="uptime-rows-viewall"
+              className="mt-3.5 block cursor-pointer rounded-md border border-dashed border-[#262c34] p-2 text-center font-code text-[10px] leading-[normal] text-[#8b929d] [transition:color_0.15s_ease,border-color_0.15s_ease] hover:border-[#3a4048] hover:text-[#e7eaee]"
               onClick={() => setExpanded(true)}
             >
               Show {hiddenCount} more checks →

@@ -47,9 +47,9 @@ export default function AlertsPage() {
         description={`${alertsSentCount} active email alert${alertsSentCount === 1 ? "" : "s"} · sent to your notification email.`}
       />
 
-      <div className="table-card">
-        <div className="table-toolbar">
-          <div className="search-field">
+      <div className="overflow-hidden rounded-[10px] border border-line bg-panel">
+        <div className="flex flex-wrap items-center gap-3 border-b border-line px-4 py-3.5">
+          <div className="flex min-w-[200px] flex-1 items-center gap-[9px] rounded-[7px] border border-line bg-[#0d1014] px-[11px] py-2 text-[#7c828c] light:bg-white light:text-[#14161a] [&>input]:flex-1 [&>input]:border-0 [&>input]:bg-transparent [&>input]:text-[13px] [&>input]:text-ink [&>input]:outline-none [&>input::placeholder]:text-[#5b6169]">
             <SearchIcon size={15} />
             <input
               placeholder="Search by monitor or message…"
@@ -66,8 +66,8 @@ export default function AlertsPage() {
         </div>
 
         {isLoading ? (
-          <div className="table table-6col">
-            <div className="table-head">
+          <div className="w-full table-6col">
+            <div className="grid grid-cols-[0.8fr_1fr_1.8fr_1.2fr_0.9fr_0.8fr] gap-2.5 border-b border-line px-4 py-2.5 font-code text-[10px] leading-[normal] tracking-[0.06em] text-[#6f7782] uppercase [@media(max-width:720px)]:hidden">
               <span>Severity</span>
               <span>Monitor</span>
               <span>Message</span>
@@ -94,8 +94,8 @@ export default function AlertsPage() {
             }
           />
         ) : (
-          <div className="table table-6col">
-            <div className="table-head">
+          <div className="w-full table-6col">
+            <div className="grid grid-cols-[0.8fr_1fr_1.8fr_1.2fr_0.9fr_0.8fr] gap-2.5 border-b border-line px-4 py-2.5 font-code text-[10px] leading-[normal] tracking-[0.06em] text-[#6f7782] uppercase [@media(max-width:720px)]:hidden">
               <span>Severity</span>
               <span>Monitor</span>
               <span>Message</span>
@@ -104,29 +104,29 @@ export default function AlertsPage() {
               <span>Status</span>
             </div>
             {filtered.map((a) => (
-              <div className="table-row" key={a.id}>
-                <div className="table-cell" data-label="Severity">
+              <div className="grid grid-cols-[0.8fr_1fr_1.8fr_1.2fr_0.9fr_0.8fr] items-center gap-2.5 border-b border-[#1b2027] px-4 py-[13px] text-[13px] [transition:0.12s] last:border-b-0 hover:bg-[#141920] light:border-[#edeef1] light:hover:bg-[#f7f8f9] [@media(max-width:720px)]:relative [@media(min-width:561px)_and_(max-width:720px)]:grid-cols-2 [@media(max-width:720px)]:items-start [@media(max-width:720px)]:gap-x-3.5 [@media(max-width:720px)]:gap-y-2.5 [@media(max-width:720px)]:px-4 [@media(max-width:720px)]:py-3.5 [@media(max-width:560px)]:grid-cols-1" key={a.id}>
+                <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold" data-label="Severity">
                   <SeverityBadge severity={a.severity} />
                 </div>
-                <div className="table-cell" data-label="Monitor">
+                <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold" data-label="Monitor">
                   <b>{a.monitor}</b>
                 </div>
-                <div className="table-cell table-cell-muted" data-label="Message">
+                <div className="min-w-0 text-[12.5px] text-muted" data-label="Message">
                   {a.message}
                 </div>
                 <div
-                  className="table-cell table-cell-muted"
+                  className="min-w-0 text-[12.5px] text-muted"
                   data-label="Sent to"
                 >
                   {a.email}
                 </div>
-                {/* <div className="table-cell table-cell-muted">{a.time}</div> */}
-                <div className="table-cell table-cell-muted" data-label="Time">
+                {/* <div className="min-w-0 text-[12.5px] text-muted">{a.time}</div> */}
+                <div className="min-w-0 text-[12.5px] text-muted" data-label="Time">
                   {formatLastChecked(a.time)}
                 </div>
-                <div className="table-cell" data-label="Status">
+                <div className="min-w-0 text-[#c9cdd3] [&>b]:block [&>b]:text-[13px] [&>b]:font-semibold" data-label="Status">
                   <span
-                    className={`hb-status${a.status === "sent" ? " late" : ""}`}
+                    className={`rounded border px-[7px] py-[3px] font-code text-[9px] leading-[normal] ${a.status === "sent" ? "border-[#5c3d1a] text-warning" : "border-[#254d3a] text-brand"}`}
                   >
                     {a.status === "sent" ? "SENT" : "RESOLVED"}
                   </span>

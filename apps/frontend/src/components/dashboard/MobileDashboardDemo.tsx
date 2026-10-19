@@ -35,14 +35,14 @@ function MobileSummary({ monitors }: MobileSummaryProps) {
     {
       label: "Alerts",
       value: String(down).padStart(2, "0"),
-      tone: down > 0 ? "bad" : "",
+      tone: down > 0 ? "text-danger" : "",
     },
   ];
 
   return (
-    <div className="m-summary">
+    <div className="grid grid-cols-2 gap-2">
       {tiles.map((t) => (
-        <div className="m-summary-tile" key={t.label}>
+        <div className="rounded-[8px] border border-line bg-[#11151a] px-3 py-2.5 [&>span]:mb-1.5 [&>span]:block [&>span]:text-[9.5px] [&>span]:text-[#818994] [&>strong]:text-[18px] [&>strong]:tracking-[-0.5px]" key={t.label}>
           <span>{t.label}</span>
           <strong className={t.tone}>{t.value}</strong>
         </div>
@@ -67,8 +67,8 @@ function MobileSparkline({ monitors }: { monitors: Monitor[] }) {
     .join(" ");
 
   return (
-    <div className="m-spark">
-      <div className="m-spark-head">
+    <div className="mt-2 rounded-[8px] border border-line bg-[#11151a] p-3 [&_svg]:block [&_svg]:h-16 [&_svg]:w-full">
+      <div className="mb-2 flex items-center justify-between [&_span]:text-[11px] [&_span]:font-semibold [&_small]:font-code [&_small]:text-[9px] [&_small]:leading-[normal] [&_small]:text-[#737c87]">
         <span>Response time</span>
         <small>LAST 24 HOURS</small>
       </div>
@@ -80,7 +80,7 @@ function MobileSparkline({ monitors }: { monitors: Monitor[] }) {
         />
         <path d={path} fill="none" stroke={color} strokeWidth="2.5" />
       </svg>
-      <div className="m-spark-axis">
+      <div className="mt-1.5 flex justify-between font-code text-[8.5px] leading-[normal] text-[#68717d]">
         <span>00:00</span>
         <span>06:00</span>
         <span>12:00</span>
@@ -94,16 +94,16 @@ function MobileSparkline({ monitors }: { monitors: Monitor[] }) {
 function MobileMonitorRow({ monitor }: { monitor: Monitor }) {
   const ok = monitor.status === "up";
   return (
-    <div className="m-monitor">
+    <div className="flex items-center gap-[9px] border-t border-[#222830] py-[9px] text-[10.5px] first:border-t-0 [&>strong]:font-code [&>strong]:text-[10.5px] [&>strong]:leading-[normal]">
       <i
-        className="status-dot"
+        className="m-0 inline-block size-[7px] shrink-0 rounded-full bg-brand"
         style={{ background: ok ? "var(--green)" : "var(--red)" }}
       />
-      <div className="m-monitor-name">
+      <div className="min-w-0 flex-1 [&>b]:block [&>b]:overflow-hidden [&>b]:text-[11px] [&>b]:text-ellipsis [&>b]:whitespace-nowrap [&>span]:text-[9px] [&>span]:text-[#85909a]">
         <b>{monitor.name}</b>
         <span>{monitor.type}</span>
       </div>
-      <span className="m-monitor-up">{monitor.uptimePct}%</span>
+      <span className="font-code text-[9.5px] leading-[normal] text-[#85909a]">{monitor.uptimePct}%</span>
       <strong style={{ color: ok ? undefined : "var(--red)" }}>
         {ok ? `${monitor.latency}ms` : "DOWN"}
       </strong>
@@ -115,21 +115,21 @@ export default function MobileDashboardDemo() {
   const { monitors, monitorsTotal } = useDashboardState();
 
   return (
-    <div className="m-demo" aria-label="Monitorly dashboard preview (mobile)">
-      <div className="m-demo-head">
+    <div className="hidden [@media(max-width:599px)]:mx-auto [@media(max-width:599px)]:mt-[42px] [@media(max-width:599px)]:block [@media(max-width:599px)]:max-w-[440px] [@media(max-width:599px)]:overflow-hidden [@media(max-width:599px)]:rounded-[14px] [@media(max-width:599px)]:border [@media(max-width:599px)]:border-[#2b3038] [@media(max-width:599px)]:bg-[#0e1115] [@media(max-width:599px)]:px-4 [@media(max-width:599px)]:pt-[18px] [@media(max-width:599px)]:pb-4 [@media(max-width:599px)]:text-left [@media(max-width:599px)]:shadow-[0_20px_50px_rgba(0,0,0,0.32)]" aria-label="Monitorly dashboard preview (mobile)">
+      <div className="mb-3.5 flex items-center justify-between gap-2.5 [&>h3]:m-0 [&>h3]:text-[15px] [&>h3]:tracking-[-0.4px] [&_span]:mt-0.5 [&_span]:block [&_span]:text-[10.5px] [&_span]:text-muted">
         <div>
           <h3>Good morning, Helena</h3>
           <span>All systems are being watched</span>
         </div>
-        <span className="live">● LIVE</span>
+        <span className="shrink-0 rounded-[4px] border border-[#254d3a] px-[7px] py-[5px] font-code text-[10px] leading-[normal] text-brand">● LIVE</span>
       </div>
 
       <MobileSummary monitors={monitors} />
 
       <MobileSparkline monitors={monitors} />
 
-      <div className="m-monitors">
-        <div className="m-monitors-head">
+      <div className="mt-2 rounded-[8px] border border-line bg-[#11151a] p-3">
+        <div className="mb-1 flex items-center justify-between [&>h4]:m-0 [&>h4]:text-[11px] [&>h4]:font-semibold [&>small]:font-code [&>small]:text-[9px] [&>small]:leading-[normal] [&>small]:text-[#737c87]">
           <h4>Monitors</h4>
           <small>
             {monitorsTotal} TOTAL · {monitorsUpLabel(monitors)} UP

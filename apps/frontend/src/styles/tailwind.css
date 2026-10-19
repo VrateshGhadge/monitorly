@@ -1,7 +1,14 @@
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
 
+/* The app toggles `data-theme="light"` on <html> and scopes light styling to
+ * the dashboard shell. Exposing it as a variant lets a component carry its
+ * light value inline (`light:bg-white`) instead of needing a bespoke CSS
+ * variable for every surface. */
+@custom-variant light (&:where([data-theme="light"] .app-shell, [data-theme="light"] .app-shell *));
+
 @theme {
+  /* --- original palette (used by components already migrated) ------------- */
   --color-background: #0b0d10;
   --color-surface: #12161c;
   --color-surface-raised: #171b21;
@@ -10,7 +17,58 @@
   --color-muted-foreground: #8b929d;
   --color-brand: #50d890;
   --color-danger: #f06464;
+
+  /* Matches the CSS's `font: Npx "DM Mono", monospace` exactly — the fallback
+     list is part of the computed style, so keep it identical. */
+  --font-code: "DM Mono", monospace;
+
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  /* Only emitted because `animate-skeleton` is used; keeping the keyframes
+     here means the stylesheet no longer needs a standalone @keyframes block. */
+  --animate-skeleton: skeleton-wave 1.4s ease infinite;
+  --animate-popover: popover-in 0.16s ease;
+
+  @keyframes skeleton-wave {
+    0% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: 0 0;
+    }
+  }
+
+  @keyframes popover-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+/* Mirrors of the global.css custom properties.
+ *
+ * These are `@theme inline` on purpose. With a plain `@theme`, Tailwind emits
+ * `:root{--color-x:var(--y)}` and the utility reads `var(--color-x)`; the
+ * substitution happens once at :root, so the value is frozen to the dark
+ * palette and the light theme — which re-declares --line/--surface/--muted/
+ * --text on .app-shell — would have no effect. `inline` writes `var(--y)`
+ * straight into the utility, so it resolves against the element's own scope
+ * and follows the theme exactly like the CSS it replaces.
+ *
+ * Not `--font-mono`: that resolves to the system monospace stack and
+ * ui/Badge.tsx renders with it, so repointing it would change every badge. */
+@theme inline {
+  --color-line: var(--line);
+  --color-panel: var(--surface);
+  --color-panel-2: var(--surface2);
+  --color-ink: var(--text);
+  --color-muted: var(--muted);
+  --color-warning: var(--yellow);
 }
 
 @layer base {

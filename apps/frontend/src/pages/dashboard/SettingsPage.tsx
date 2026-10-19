@@ -114,15 +114,15 @@ export default function SettingsPage() {
         description="Manage your profile, notifications and workspace preferences."
       />
 
-      <div className="settings-stack">
-        <section className="settings-section">
-          <div className="settings-section-head">
+      <div className="flex max-w-[760px] flex-col gap-3.5">
+        <section className="rounded-[10px] border border-line bg-panel p-5 light:bg-white">
+          <div className="mb-4 [&>h3]:m-0 [&>h3]:mb-1 [&>h3]:text-[15px] [&>h3]:tracking-[-0.3px] [&>p]:m-0 [&>p]:text-[12.5px] [&>p]:text-muted">
             <h3>Profile</h3>
             <p>Your account details. Contact support to make changes.</p>
           </div>
 
           <div className="settings-form">
-            <div className="settings-form-row">
+            <div className="grid grid-cols-2 gap-3.5 [@media(max-width:860px)]:grid-cols-1">
               <Input
                 label="Full name"
                 value={user?.name || ""}
@@ -140,14 +140,14 @@ export default function SettingsPage() {
           </div>
         </section>
 
-        <section className="settings-section">
-          <div className="settings-section-head">
+        <section className="rounded-[10px] border border-line bg-panel p-5 light:bg-white">
+          <div className="mb-4 [&>h3]:m-0 [&>h3]:mb-1 [&>h3]:text-[15px] [&>h3]:tracking-[-0.3px] [&>p]:m-0 [&>p]:text-[12.5px] [&>p]:text-muted">
             <h3>Notification email</h3>
             <p>Where alert emails get sent when a monitor changes status.</p>
           </div>
 
           <form className="settings-form" onSubmit={handleNotificationSave}>
-            <div className="settings-form-row">
+            <div className="grid grid-cols-2 gap-3.5 [@media(max-width:860px)]:grid-cols-1">
               <Input
                 label="Notification email"
                 type="email"
@@ -158,7 +158,7 @@ export default function SettingsPage() {
               />
             </div>
 
-            <div className="settings-form-actions">
+            <div className="mt-0.5 flex justify-end">
               <Button type="submit" size="sm" disabled={isSendingEmail}>
                 {isSendingEmail ? "Sending..." : "Send notification email"}
               </Button>
@@ -166,16 +166,16 @@ export default function SettingsPage() {
           </form>
         </section>
 
-        <section className="settings-section settings-danger">
-          <div className="settings-section-head">
+        <section className="rounded-[10px] border border-[#3a2424] bg-[#151011] p-5 light:border-[#f3d6d6] light:bg-[#fdf4f4]">
+          <div className="mb-4 [&>h3]:m-0 [&>h3]:mb-1 [&>h3]:text-[15px] [&>h3]:tracking-[-0.3px] [&>p]:m-0 [&>p]:text-[12.5px] [&>p]:text-muted">
             <h3>Danger zone</h3>
             <p>This action is permanent and can't be undone.</p>
           </div>
 
-          <div className="row-line">
+          <div className="flex items-center justify-between border-t border-[#2a1c1c] px-1 py-[11px] text-[12px] first:border-t-0 light:border-t-[#f3d6d6]">
             <div>
-              <b>Delete account</b>
-              <div className="row-sub">
+              <b className="font-semibold">Delete account</b>
+              <div className="mt-0.5 text-[10px] text-[#818994]">
                 Permanently remove your account, monitors and alert history
               </div>
             </div>

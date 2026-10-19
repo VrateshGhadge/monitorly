@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
   const location = useLocation();
 
   if (isLoading) {
-    return <div className="route-loading" aria-hidden="true" />;
+    return <div className="min-h-screen bg-background" aria-hidden="true" />;
   }
 
   if (!isAuthenticated) {

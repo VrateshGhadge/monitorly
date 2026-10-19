@@ -11,9 +11,9 @@ export default function MonitorsPanel({
   onToggleMonitor,
 }: MonitorsPanelProps) {
   return (
-    <div className="panel full-panel" style={{ marginTop: "13px" }}>
-      <div className="panel-head">
-        <h4>All monitors</h4>
+    <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px] col-span-full" style={{ marginTop: "13px" }}>
+      <div className="mb-3 flex items-center justify-between">
+        <h4 className="m-0 text-[11px] font-semibold">All monitors</h4>
         <small>CLICK A ROW TO TOGGLE STATUS</small>
       </div>
       {monitors.map((m) => (

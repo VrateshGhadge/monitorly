@@ -26,7 +26,7 @@ export default function DashboardDemo() {
   return (
     <>
       <div
-        className="app"
+        className="mx-auto mt-[50px] grid h-[700px] max-w-[1090px] grid-cols-[192px_1fr] overflow-hidden rounded-[11px] border border-[#2b3038] bg-[#0e1115] text-left shadow-[0_20px_50px_rgba(0,0,0,0.32)] [@media(max-width:1080px)]:grid-cols-[178px_1fr] [@media(max-width:599px)]:hidden"
         aria-label="Monitorly dashboard preview (interactive demo)"
       >
       <Sidebar
@@ -35,13 +35,13 @@ export default function DashboardDemo() {
         monitorsTotal={monitorsTotal}
       />
 
-      <div className="dash">
-        <div className="dash-head">
+      <div className="h-full overflow-hidden px-7 py-6">
+        <div className="mb-[22px] flex items-center justify-between">
           <div>
-            <h3>Good morning, Helena</h3>
-            <span>Wednesday, May 22 · Acme Engineering</span>
+            <h3 className="m-0 text-[17px] tracking-[-0.5px]">Good morning, Helena</h3>
+            <span className="text-[11px] text-muted">Wednesday, May 22 · Acme Engineering</span>
           </div>
-          <span className="live">● LIVE</span>
+          <span className="rounded-[4px] border border-[#254d3a] px-[7px] py-[5px] font-code text-[10px] leading-[normal] text-brand">● LIVE</span>
         </div>
 
         <MetricsBar

@@ -1,6 +1,7 @@
 // src/components/dashboard/ResponseTimeGraph.tsx
 import { useMemo, useRef, useState } from "react";
 
+import { cn } from "../../lib/utils";
 // ---------- Constants ----------
 const GRAPH_WIDTH = 600;
 const GRAPH_HEIGHT = 135;
@@ -246,12 +247,12 @@ export default function ResponseTimeGraph({
 
 function WaitingGraph({ label }: { label: string }) {
   return (
-    <div className="panel">
-      <div className="panel-head">
-        <h4>Response time</h4>
-        <small>{label}</small>
+    <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+      <div className="mb-3 flex items-center justify-between">
+        <h4 className="m-0 text-[11px] font-semibold">Response time</h4>
+        <small className="font-code text-[10px] leading-[normal] text-[#737c87]">{label}</small>
       </div>
-      <div className="graph">
+      <div className="relative h-[135px] border-b border-[#27303a] [background:repeating-linear-gradient(to_bottom,transparent_0,transparent_33px,#20262e_34px)] [&>svg]:absolute [&>svg]:inset-0 [&>svg]:size-full">
         <svg
           viewBox={`0 0 ${GRAPH_WIDTH} ${GRAPH_HEIGHT}`}
           preserveAspectRatio="none"
@@ -276,11 +277,11 @@ function WaitingGraph({ label }: { label: string }) {
             </linearGradient>
           </defs>
         </svg>
-        <div className="graph-waiting">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974]">
           <span>Waiting for monitoring data…</span>
         </div>
       </div>
-      <div className="axis">
+      <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
         <span>00:00</span>
         <span>06:00</span>
         <span>12:00</span>
@@ -371,12 +372,12 @@ function SingleMonitorGraph({
       : 0;
 
   return (
-    <div className="panel">
-      <div className="panel-head">
-        <h4>Response time</h4>
-        <small>{label}</small>
+    <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+      <div className="mb-3 flex items-center justify-between">
+        <h4 className="m-0 text-[11px] font-semibold">Response time</h4>
+        <small className="font-code text-[10px] leading-[normal] text-[#737c87]">{label}</small>
       </div>
-      <div className="graph">
+      <div className="relative h-[135px] border-b border-[#27303a] [background:repeating-linear-gradient(to_bottom,transparent_0,transparent_33px,#20262e_34px)] [&>svg]:absolute [&>svg]:inset-0 [&>svg]:size-full">
         <svg
           ref={svgRef}
           viewBox={`0 0 ${GRAPH_WIDTH} ${GRAPH_HEIGHT}`}
@@ -435,7 +436,7 @@ function SingleMonitorGraph({
 
         {hasData && hoverPoint && hoverValue !== null && (
           <div
-            className="graph-tooltip"
+            className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand"
             style={{
               left: `${(hoverX / GRAPH_WIDTH) * 100}%`,
               top: `${(hoverY / GRAPH_HEIGHT) * 100}%`,
@@ -447,12 +448,12 @@ function SingleMonitorGraph({
         )}
 
         {!hasData && (
-          <div className="graph-waiting">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974]">
             <span>Waiting for monitoring data…</span>
           </div>
         )}
       </div>
-      <div className="axis">
+      <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
         {axisLabels.map((label, i) => (
           <span key={i}>{label}</span>
         ))}
@@ -562,28 +563,34 @@ function SelectableMonitorGraph({
       : 0;
 
   return (
-    <div className="panel">
-      <div className="panel-head">
-        <h4>Response time</h4>
-        <small>{label}</small>
+    <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+      <div className="mb-3 flex items-center justify-between">
+        <h4 className="m-0 text-[11px] font-semibold">Response time</h4>
+        <small className="font-code text-[10px] leading-[normal] text-[#737c87]">{label}</small>
       </div>
 
-      <div className="rt-legend">
+      <div className="mb-2.5 flex flex-wrap gap-2">
         <span
-          className={`rt-legend-item${selectedId === null ? " is-active" : ""}`}
+          className={cn(
+            "flex cursor-pointer items-center gap-1.5 rounded-[14px] border border-transparent px-[9px] py-1 font-code text-[10px] leading-[normal] text-[#9aa2ac] [transition:color_0.15s_ease,background_0.15s_ease,border-color_0.15s_ease] hover:bg-[#161b21]",
+            selectedId === null && "border-[#2c333c] bg-[#181f26] text-[#e7eaee]",
+          )}
           onClick={() => setSelectedId(null)}
         >
-          <i className="rt-legend-dot" style={{ background: "#50d890" }} />
+          <i className="inline-block size-2 shrink-0 rounded-full" style={{ background: "#50d890" }} />
           All monitors (avg)
         </span>
         {monitors.map((m) => (
           <span
             key={m.id}
-            className={`rt-legend-item${selectedId === m.id ? " is-active" : ""}`}
+            className={cn(
+              "flex cursor-pointer items-center gap-1.5 rounded-[14px] border border-transparent px-[9px] py-1 font-code text-[10px] leading-[normal] text-[#9aa2ac] [transition:color_0.15s_ease,background_0.15s_ease,border-color_0.15s_ease] hover:bg-[#161b21]",
+              selectedId === m.id && "border-[#2c333c] bg-[#181f26] text-[#e7eaee]",
+            )}
             onClick={() => setSelectedId(selectedId === m.id ? null : m.id)}
           >
             <i
-              className="rt-legend-dot"
+              className="inline-block size-2 shrink-0 rounded-full"
               style={{ background: colorMap[m.id] }}
             />
             {m.name}
@@ -591,7 +598,7 @@ function SelectableMonitorGraph({
         ))}
       </div>
 
-      <div className="graph">
+      <div className="relative h-[135px] border-b border-[#27303a] [background:repeating-linear-gradient(to_bottom,transparent_0,transparent_33px,#20262e_34px)] [&>svg]:absolute [&>svg]:inset-0 [&>svg]:size-full">
         <svg
           ref={svgRef}
           viewBox={`0 0 ${GRAPH_WIDTH} ${GRAPH_HEIGHT}`}
@@ -650,7 +657,7 @@ function SelectableMonitorGraph({
 
         {hasData && hoverPoint && hoverValue !== null && (
           <div
-            className="graph-tooltip"
+            className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand"
             style={{
               left: `${(hoverX / GRAPH_WIDTH) * 100}%`,
               top: `${(hoverY / GRAPH_HEIGHT) * 100}%`,
@@ -663,12 +670,12 @@ function SelectableMonitorGraph({
         )}
 
         {!hasData && (
-          <div className="graph-waiting">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974]">
             <span>Waiting for monitoring data…</span>
           </div>
         )}
       </div>
-      <div className="axis">
+      <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
         {axisLabels.map((label, i) => (
           <span key={i}>{label}</span>
         ))}
@@ -872,12 +879,12 @@ function SelectableMonitorGraph({
 
 // function WaitingGraph({ label }: { label: string }) {
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Response time</h4>
-//         <small>{label}</small>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Response time</h4>
+//         <small className="font-code text-[10px] leading-[normal] text-[#737c87]">{label}</small>
 //       </div>
-//       <div className="graph">
+//       <div className="relative h-[135px] border-b border-[#27303a] [background:repeating-linear-gradient(to_bottom,transparent_0,transparent_33px,#20262e_34px)] [&>svg]:absolute [&>svg]:inset-0 [&>svg]:size-full">
 //         <svg viewBox="0 0 600 135" preserveAspectRatio="none" style={{ cursor: "default" }}>
 //           <path
 //             d="M0,96 L600,96"
@@ -894,11 +901,11 @@ function SelectableMonitorGraph({
 //             </linearGradient>
 //           </defs>
 //         </svg>
-//         <div className="graph-waiting">
+//         <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974]">
 //           <span>Waiting for monitoring data…</span>
 //         </div>
 //       </div>
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>NOW</span>
 //       </div>
 //     </div>
@@ -976,12 +983,12 @@ function SelectableMonitorGraph({
 //     : 0;
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Response time</h4>
-//         <small>{label}</small>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Response time</h4>
+//         <small className="font-code text-[10px] leading-[normal] text-[#737c87]">{label}</small>
 //       </div>
-//       <div className="graph">
+//       <div className="relative h-[135px] border-b border-[#27303a] [background:repeating-linear-gradient(to_bottom,transparent_0,transparent_33px,#20262e_34px)] [&>svg]:absolute [&>svg]:inset-0 [&>svg]:size-full">
 //         <svg
 //           ref={svgRef}
 //           viewBox="0 0 600 135"
@@ -1023,7 +1030,7 @@ function SelectableMonitorGraph({
 
 //         {hasData && hoverPoint && hoverValue !== null && (
 //           <div
-//             className="graph-tooltip"
+//             className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand"
 //             style={{
 //               left: `${(hoverX / 600) * 100}%`,
 //               top: `${(hoverY / 135) * 100}%`,
@@ -1034,12 +1041,12 @@ function SelectableMonitorGraph({
 //         )}
 
 //         {!hasData && (
-//           <div className="graph-waiting">
+//           <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974]">
 //             <span>Waiting for monitoring data…</span>
 //           </div>
 //         )}
 //       </div>
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         {axisLabels.map((label, i) => (
 //           <span key={i}>{label}</span>
 //         ))}
@@ -1136,18 +1143,18 @@ function SelectableMonitorGraph({
 //     : 0;
 
 //   return (
-//     <div className="panel">
-//       <div className="panel-head">
-//         <h4>Response time</h4>
-//         <small>{label}</small>
+//     <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//       <div className="mb-3 flex items-center justify-between">
+//         <h4 className="m-0 text-[11px] font-semibold">Response time</h4>
+//         <small className="font-code text-[10px] leading-[normal] text-[#737c87]">{label}</small>
 //       </div>
 
-//       <div className="rt-legend">
+//       <div className="mb-2.5 flex flex-wrap gap-2">
 //         <span
 //           className={`rt-legend-item${selectedId === null ? " is-active" : ""}`}
 //           onClick={() => setSelectedId(null)}
 //         >
-//           <i className="rt-legend-dot" style={{ background: "#50d890" }} />
+//           <i className="inline-block size-2 shrink-0 rounded-full" style={{ background: "#50d890" }} />
 //           All monitors (avg)
 //         </span>
 //         {monitors.map((m) => (
@@ -1156,13 +1163,13 @@ function SelectableMonitorGraph({
 //             className={`rt-legend-item${selectedId === m.id ? " is-active" : ""}`}
 //             onClick={() => setSelectedId(selectedId === m.id ? null : m.id)}
 //           >
-//             <i className="rt-legend-dot" style={{ background: colorMap[m.id] }} />
+//             <i className="inline-block size-2 shrink-0 rounded-full" style={{ background: colorMap[m.id] }} />
 //             {m.name}
 //           </span>
 //         ))}
 //       </div>
 
-//       <div className="graph">
+//       <div className="relative h-[135px] border-b border-[#27303a] [background:repeating-linear-gradient(to_bottom,transparent_0,transparent_33px,#20262e_34px)] [&>svg]:absolute [&>svg]:inset-0 [&>svg]:size-full">
 //         <svg
 //           ref={svgRef}
 //           viewBox="0 0 600 135"
@@ -1204,7 +1211,7 @@ function SelectableMonitorGraph({
 
 //         {hasData && hoverPoint && hoverValue !== null && (
 //           <div
-//             className="graph-tooltip"
+//             className="pointer-events-none absolute z-[5] mt-[-10px] -translate-x-1/2 -translate-y-full rounded-md border border-line bg-[#1a1f26] px-[9px] py-1.5 font-code text-[10px] leading-[normal] whitespace-nowrap text-[#e7eaee] [box-shadow:0_8px_20px_rgba(0,0,0,0.4)] [&>b]:text-brand"
 //             style={{
 //               left: `${(hoverX / 600) * 100}%`,
 //               top: `${(hoverY / 135) * 100}%`,
@@ -1216,12 +1223,12 @@ function SelectableMonitorGraph({
 //         )}
 
 //         {!hasData && (
-//           <div className="graph-waiting">
+//           <div className="pointer-events-none absolute inset-0 flex items-center justify-center [&>span]:rounded-[20px] [&>span]:border [&>span]:border-line [&>span]:bg-[rgba(11,13,16,0.72)] [&>span]:px-[11px] [&>span]:py-[5px] [&>span]:font-code [&>span]:text-[11px] [&>span]:leading-[normal] [&>span]:text-[#616974]">
 //             <span>Waiting for monitoring data…</span>
 //           </div>
 //         )}
 //       </div>
-//       <div className="axis">
+//       <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //         {axisLabels.map((label, i) => (
 //           <span key={i}>{label}</span>
 //         ))}

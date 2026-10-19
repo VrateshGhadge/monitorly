@@ -169,13 +169,15 @@ export default function MonitorDetailsPage() {
   if (!monitor) {
     return (
       <div className="mx-auto max-w-md py-20 text-center">
-        <h1 className="page-title">Monitor not found</h1>
+        <h1 className="m-0 text-[26px] tracking-[-0.9px]">
+          Monitor not found
+        </h1>
         <p className="mt-2 text-[13.5px]" style={{ color: "var(--muted)" }}>
           This monitor may have been deleted, or the link is incorrect.
         </p>
         <Link
           to="/dashboard/monitors"
-          className="btn btn-outline mt-6 inline-flex"
+          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-[7px] border-0 px-4 py-2.5 text-[13px] font-bold whitespace-nowrap [transition:0.15s] disabled:cursor-not-allowed disabled:opacity-50 border border-line bg-panel-2 text-[#dce0e5] hover:border-[#3a4048] hover:text-white light:bg-[#f1f2f5] light:text-[#14161a] mt-6 inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md"
         >
           ← Back to Monitors
         </Link>
@@ -196,12 +198,14 @@ export default function MonitorDetailsPage() {
       {/* Header */}
       <div className="mb-6">
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="page-title">{monitor.name}</h1>
+          <h1 className="m-0 text-[26px] tracking-[-0.9px]">
+            {monitor.name}
+          </h1>
           <Badge tone={monitor.status === "up" ? "green" : "red"}>
             {monitor.status === "up" ? "Up" : "Down"}
           </Badge>
         </div>
-        <p className="table-cell-url mt-2">{monitor.url}</p>
+        <p className="min-w-0 overflow-hidden font-code text-[12px] leading-[normal] text-ellipsis whitespace-nowrap text-[#9aa2ac] mt-2">{monitor.url}</p>
       </div>
 
       {/* Stats */}
@@ -216,9 +220,9 @@ export default function MonitorDetailsPage() {
       </div>
 
       {/* Response Time Graph */}
-      <div className="panel mb-5">
-        <div className="panel-head">
-          <h4>Response times</h4>
+      <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px] mb-5">
+        <div className="mb-3 flex items-center justify-between">
+          <h4 className="m-0 text-[11px] font-semibold">Response times</h4>
           <div className="flex items-center gap-0.5 rounded-lg border border-[var(--line)] bg-[#0d1014] p-1">
             {(["hour", "day", "month"] as ResponseRange[]).map((r) => (
               <button
@@ -251,10 +255,10 @@ export default function MonitorDetailsPage() {
       </div>
 
       {/* Recent Incidents */}
-      <div className="panel">
-        <div className="panel-head">
-          <h4>Recent incidents</h4>
-          <small>LAST 30 DAYS</small>
+      <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+        <div className="mb-3 flex items-center justify-between">
+          <h4 className="m-0 text-[11px] font-semibold">Recent incidents</h4>
+          <small className="font-code text-[10px] leading-[normal] text-[#737c87]">LAST 30 DAYS</small>
         </div>
 
         {incidents.length === 0 ? (
@@ -265,10 +269,10 @@ export default function MonitorDetailsPage() {
         ) : (
           <div className="flex flex-col">
             {incidents.map((incident) => (
-              <div className="row-line" key={incident.id}>
+              <div className="flex items-center justify-between border-t border-[#222830] px-1 py-[11px] text-[12px] first:border-t-0" key={incident.id}>
                 <div>
-                  <b>{incident.title}</b>
-                  <div className="row-sub">{incident.detail}</div>
+                  <b className="font-semibold">{incident.title}</b>
+                  <div className="mt-0.5 text-[10px] text-[#818994]">{incident.detail}</div>
                 </div>
                 <Badge tone={incident.ongoing ? "red" : "green"}>
                   {incident.ongoing ? "Ongoing" : "Resolved"}
@@ -417,7 +421,7 @@ export default function MonitorDetailsPage() {
 //         </p>
 //         <Link
 //           to="/dashboard/monitors"
-//           className="btn btn-outline mt-6 inline-flex"
+//           className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-[7px] border-0 px-4 py-2.5 text-[13px] font-bold whitespace-nowrap [transition:0.15s] disabled:cursor-not-allowed disabled:opacity-50 border border-line bg-panel-2 text-[#dce0e5] hover:border-[#3a4048] hover:text-white light:bg-[#f1f2f5] light:text-[#14161a] mt-6 inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md"
 //         >
 //           ← Back to Monitors
 //         </Link>
@@ -444,7 +448,7 @@ export default function MonitorDetailsPage() {
 //             {monitor.status === "up" ? "Up" : "Down"}
 //           </Badge>
 //         </div>
-//         <p className="table-cell-url mt-2">{monitor.url}</p>
+//         <p className="min-w-0 overflow-hidden font-code text-[12px] leading-[normal] text-ellipsis whitespace-nowrap text-[#9aa2ac] mt-2">{monitor.url}</p>
 //       </div>
 
 //       {/* Stats */}
@@ -466,9 +470,9 @@ export default function MonitorDetailsPage() {
 //       </div>
 
 //       {/* Response Time Graph */}
-//       <div className="panel mb-5">
-//         <div className="panel-head">
-//           <h4>Response times</h4>
+//       <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px] mb-5">
+//         <div className="mb-3 flex items-center justify-between">
+//           <h4 className="m-0 text-[11px] font-semibold">Response times</h4>
 //           <div className="flex items-center gap-0.5 rounded-lg border border-[var(--line)] bg-[#0d1014] p-1">
 //             {(["hour", "day", "month"] as ResponseRange[]).map((r) => (
 //               <button
@@ -501,10 +505,10 @@ export default function MonitorDetailsPage() {
 //       </div>
 
 //       {/* Recent Incidents */}
-//       <div className="panel">
-//         <div className="panel-head">
-//           <h4>Recent incidents</h4>
-//           <small>LAST 30 DAYS</small>
+//       <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//         <div className="mb-3 flex items-center justify-between">
+//           <h4 className="m-0 text-[11px] font-semibold">Recent incidents</h4>
+//           <small className="font-code text-[10px] leading-[normal] text-[#737c87]">LAST 30 DAYS</small>
 //         </div>
 
 //         {incidents.length === 0 ? (
@@ -515,10 +519,10 @@ export default function MonitorDetailsPage() {
 //         ) : (
 //           <div className="flex flex-col">
 //             {incidents.map((incident, i) => (
-//               <div className="row-line" key={i}>
+//               <div className="flex items-center justify-between border-t border-[#222830] px-1 py-[11px] text-[12px] first:border-t-0" key={i}>
 //                 <div>
-//                   <b>{incident.title}</b>
-//                   <div className="row-sub">{incident.detail}</div>
+//                   <b className="font-semibold">{incident.title}</b>
+//                   <div className="mt-0.5 text-[10px] text-[#818994]">{incident.detail}</div>
 //                 </div>
 //                 <Badge tone="red">Ongoing</Badge>
 //               </div>
@@ -592,7 +596,7 @@ export default function MonitorDetailsPage() {
 //         <p className="mt-2 text-[13.5px]" style={{ color: "var(--muted)" }}>
 //           This monitor may have been deleted, or the link is incorrect.
 //         </p>
-//         <Link to="/dashboard/monitors" className="btn btn-outline mt-6 inline-flex">
+//         <Link to="/dashboard/monitors" className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-[7px] border-0 px-4 py-2.5 text-[13px] font-bold whitespace-nowrap [transition:0.15s] disabled:cursor-not-allowed disabled:opacity-50 border border-line bg-panel-2 text-[#dce0e5] hover:border-[#3a4048] hover:text-white light:bg-[#f1f2f5] light:text-[#14161a] mt-6 inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md">
 //           ← Back to Monitors
 //         </Link>
 //       </div>
@@ -616,7 +620,7 @@ export default function MonitorDetailsPage() {
 //             {monitor.status === "up" ? "Up" : "Down"}
 //           </Badge>
 //         </div>
-//         <p className="table-cell-url mt-2">{monitor.url}</p>
+//         <p className="min-w-0 overflow-hidden font-code text-[12px] leading-[normal] text-ellipsis whitespace-nowrap text-[#9aa2ac] mt-2">{monitor.url}</p>
 //       </div>
 
 //       {/* Stats */}
@@ -635,9 +639,9 @@ export default function MonitorDetailsPage() {
 //       </div>
 
 //       {/* Response Time */}
-//       <div className="panel mb-5">
-//         <div className="panel-head">
-//           <h4>Response times</h4>
+//       <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px] mb-5">
+//         <div className="mb-3 flex items-center justify-between">
+//           <h4 className="m-0 text-[11px] font-semibold">Response times</h4>
 //           <div className="flex items-center gap-0.5 rounded-lg border border-[var(--line)] bg-[#0d1014] p-1">
 //             {(["hour", "day", "month"] as ResponseRange[]).map((r) => (
 //               <button
@@ -670,10 +674,10 @@ export default function MonitorDetailsPage() {
 //       </div>
 
 //       {/* Recent Incidents */}
-//       <div className="panel">
-//         <div className="panel-head">
-//           <h4>Recent incidents</h4>
-//           <small>LAST 30 DAYS</small>
+//       <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//         <div className="mb-3 flex items-center justify-between">
+//           <h4 className="m-0 text-[11px] font-semibold">Recent incidents</h4>
+//           <small className="font-code text-[10px] leading-[normal] text-[#737c87]">LAST 30 DAYS</small>
 //         </div>
 
 //         {incidents.length === 0 ? (
@@ -684,10 +688,10 @@ export default function MonitorDetailsPage() {
 //         ) : (
 //           <div className="flex flex-col">
 //             {incidents.map((incident, i) => (
-//               <div className="row-line" key={i}>
+//               <div className="flex items-center justify-between border-t border-[#222830] px-1 py-[11px] text-[12px] first:border-t-0" key={i}>
 //                 <div>
-//                   <b>{incident.title}</b>
-//                   <div className="row-sub">{incident.detail}</div>
+//                   <b className="font-semibold">{incident.title}</b>
+//                   <div className="mt-0.5 text-[10px] text-[#818994]">{incident.detail}</div>
 //                 </div>
 //                 <Badge tone="red">Ongoing</Badge>
 //               </div>
@@ -752,7 +756,7 @@ export default function MonitorDetailsPage() {
 //         <p className="mt-2 text-[13.5px]" style={{ color: "var(--muted)" }}>
 //           This monitor may have been deleted, or the link is incorrect.
 //         </p>
-//         <Link to="/dashboard/monitors" className="btn btn-outline mt-6 inline-flex">
+//         <Link to="/dashboard/monitors" className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-[7px] border-0 px-4 py-2.5 text-[13px] font-bold whitespace-nowrap [transition:0.15s] disabled:cursor-not-allowed disabled:opacity-50 border border-line bg-panel-2 text-[#dce0e5] hover:border-[#3a4048] hover:text-white light:bg-[#f1f2f5] light:text-[#14161a] mt-6 inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md">
 //           ← Back to Monitors
 //         </Link>
 //       </div>
@@ -783,7 +787,7 @@ export default function MonitorDetailsPage() {
 //             {monitor.status === "up" ? "Up" : "Down"}
 //           </Badge>
 //         </div>
-//         <p className="table-cell-url mt-2">{monitor.url}</p>
+//         <p className="min-w-0 overflow-hidden font-code text-[12px] leading-[normal] text-ellipsis whitespace-nowrap text-[#9aa2ac] mt-2">{monitor.url}</p>
 //       </div>
 
 //       {/* Stats */}
@@ -798,9 +802,9 @@ export default function MonitorDetailsPage() {
 //       </div>
 
 //       {/* Response Time */}
-//       <div className="panel mb-5">
-//         <div className="panel-head">
-//           <h4>Response times</h4>
+//       <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px] mb-5">
+//         <div className="mb-3 flex items-center justify-between">
+//           <h4 className="m-0 text-[11px] font-semibold">Response times</h4>
 //           <div className="flex items-center gap-0.5 rounded-lg border border-[var(--line)] bg-[#0d1014] p-1">
 //             {(["hour", "day", "month"] as ResponseRange[]).map((r) => (
 //               <button
@@ -836,10 +840,10 @@ export default function MonitorDetailsPage() {
 //       </div>
 
 //       {/* Recent Incidents */}
-//       <div className="panel">
-//         <div className="panel-head">
-//           <h4>Recent incidents</h4>
-//           <small>LAST 30 DAYS</small>
+//       <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//         <div className="mb-3 flex items-center justify-between">
+//           <h4 className="m-0 text-[11px] font-semibold">Recent incidents</h4>
+//           <small className="font-code text-[10px] leading-[normal] text-[#737c87]">LAST 30 DAYS</small>
 //         </div>
 
 //         {incidents.length === 0 ? (
@@ -850,10 +854,10 @@ export default function MonitorDetailsPage() {
 //         ) : (
 //           <div className="flex flex-col">
 //             {incidents.map((incident, i) => (
-//               <div className="row-line" key={i}>
+//               <div className="flex items-center justify-between border-t border-[#222830] px-1 py-[11px] text-[12px] first:border-t-0" key={i}>
 //                 <div>
-//                   <b>{incident.title}</b>
-//                   <div className="row-sub">{incident.detail}</div>
+//                   <b className="font-semibold">{incident.title}</b>
+//                   <div className="mt-0.5 text-[10px] text-[#818994]">{incident.detail}</div>
 //                 </div>
 //                 <Badge tone="red">Ongoing</Badge>
 //               </div>
@@ -1047,7 +1051,7 @@ export default function MonitorDetailsPage() {
 //             This monitor may have been deleted, or the link is incorrect.
 //             </p>
 
-//             <Link to="/dashboard/monitors" className="btn btn-outline mt-6 inline-flex">
+//             <Link to="/dashboard/monitors" className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-[7px] border-0 px-4 py-2.5 text-[13px] font-bold whitespace-nowrap [transition:0.15s] disabled:cursor-not-allowed disabled:opacity-50 border border-line bg-panel-2 text-[#dce0e5] hover:border-[#3a4048] hover:text-white light:bg-[#f1f2f5] light:text-[#14161a] mt-6 inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md">
 //             ← Back to Monitors
 //             </Link>
 //         </div>
@@ -1073,7 +1077,7 @@ export default function MonitorDetailsPage() {
 //             </Badge>
 //             </div>
 
-//             <p className="table-cell-url mt-2">{monitor.url}</p>
+//             <p className="min-w-0 overflow-hidden font-code text-[12px] leading-[normal] text-ellipsis whitespace-nowrap text-[#9aa2ac] mt-2">{monitor.url}</p>
 //         </div>
 
 //         {/* Stats */}
@@ -1090,9 +1094,9 @@ export default function MonitorDetailsPage() {
 //         </div>
 
 //         {/* Response Time */}
-//         <div className="panel mb-5">
-//             <div className="panel-head">
-//             <h4>Response times</h4>
+//         <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px] mb-5">
+//             <div className="mb-3 flex items-center justify-between">
+//             <h4 className="m-0 text-[11px] font-semibold">Response times</h4>
 
 //             {/* <div className="range-switch">
 //                 {(["hour", "day", "month"] as ResponseRange[]).map((r) => (
@@ -1155,7 +1159,7 @@ export default function MonitorDetailsPage() {
 //             </ResponsiveContainer>
 //             </div>
 
-//             <div className="axis">
+//             <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //             {axisLabels.map((label, i) => (
 //                 <span key={i}>{label}</span>
 //             ))}
@@ -1173,10 +1177,10 @@ export default function MonitorDetailsPage() {
 //         </div>
 
 //         {/* Recent Incidents */}
-//         <div className="panel">
-//             <div className="panel-head">
-//             <h4>Recent incidents</h4>
-//             <small>LAST 30 DAYS</small>
+//         <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//             <div className="mb-3 flex items-center justify-between">
+//             <h4 className="m-0 text-[11px] font-semibold">Recent incidents</h4>
+//             <small className="font-code text-[10px] leading-[normal] text-[#737c87]">LAST 30 DAYS</small>
 //             </div>
 
 //             {incidents.length === 0 ? (
@@ -1187,10 +1191,10 @@ export default function MonitorDetailsPage() {
 //             ) : (
 //             <div className="flex flex-col">
 //                 {incidents.map((incident, i) => (
-//                 <div className="row-line" key={i}>
+//                 <div className="flex items-center justify-between border-t border-[#222830] px-1 py-[11px] text-[12px] first:border-t-0" key={i}>
 //                     <div>
-//                     <b>{incident.title}</b>
-//                     <div className="row-sub">{incident.detail}</div>
+//                     <b className="font-semibold">{incident.title}</b>
+//                     <div className="mt-0.5 text-[10px] text-[#818994]">{incident.detail}</div>
 //                     </div>
 
 //                     <Badge tone="red">Ongoing</Badge>
@@ -1331,7 +1335,7 @@ export default function MonitorDetailsPage() {
 //             This monitor may have been deleted, or the link is incorrect.
 //             </p>
 
-//             <Link to="/dashboard/monitors" className="btn btn-outline mt-6 inline-flex">
+//             <Link to="/dashboard/monitors" className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-[7px] border-0 px-4 py-2.5 text-[13px] font-bold whitespace-nowrap [transition:0.15s] disabled:cursor-not-allowed disabled:opacity-50 border border-line bg-panel-2 text-[#dce0e5] hover:border-[#3a4048] hover:text-white light:bg-[#f1f2f5] light:text-[#14161a] mt-6 inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md">
 //             ← Back to Monitors
 //             </Link>
 //         </div>
@@ -1357,7 +1361,7 @@ export default function MonitorDetailsPage() {
 //             </Badge>
 //             </div>
 
-//             <p className="table-cell-url mt-2">{monitor.url}</p>
+//             <p className="min-w-0 overflow-hidden font-code text-[12px] leading-[normal] text-ellipsis whitespace-nowrap text-[#9aa2ac] mt-2">{monitor.url}</p>
 //         </div>
 
 //         {/* Stats */}
@@ -1374,10 +1378,10 @@ export default function MonitorDetailsPage() {
 //         </div>
 
 //         {/* Response Time */}
-//         <div className="panel mb-5">
-//             <div className="panel-head">
-//             <h4>Response time</h4>
-//             <small>LAST 24 HOURS</small>
+//         <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px] mb-5">
+//             <div className="mb-3 flex items-center justify-between">
+//             <h4 className="m-0 text-[11px] font-semibold">Response time</h4>
+//             <small className="font-code text-[10px] leading-[normal] text-[#737c87]">LAST 24 HOURS</small>
 //             </div>
 
 //             <div style={{ height: 220 }}>
@@ -1411,7 +1415,7 @@ export default function MonitorDetailsPage() {
 //             </ResponsiveContainer>
 //             </div>
 
-//             <div className="axis">
+//             <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //             <span>00:00</span>
 //             <span>06:00</span>
 //             <span>12:00</span>
@@ -1431,10 +1435,10 @@ export default function MonitorDetailsPage() {
 //         </div>
 
 //         {/* Recent Incidents */}
-//         <div className="panel">
-//             <div className="panel-head">
-//             <h4>Recent incidents</h4>
-//             <small>LAST 30 DAYS</small>
+//         <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//             <div className="mb-3 flex items-center justify-between">
+//             <h4 className="m-0 text-[11px] font-semibold">Recent incidents</h4>
+//             <small className="font-code text-[10px] leading-[normal] text-[#737c87]">LAST 30 DAYS</small>
 //             </div>
 
 //             {incidents.length === 0 ? (
@@ -1445,10 +1449,10 @@ export default function MonitorDetailsPage() {
 //             ) : (
 //             <div className="flex flex-col">
 //                 {incidents.map((incident, i) => (
-//                 <div className="row-line" key={i}>
+//                 <div className="flex items-center justify-between border-t border-[#222830] px-1 py-[11px] text-[12px] first:border-t-0" key={i}>
 //                     <div>
-//                     <b>{incident.title}</b>
-//                     <div className="row-sub">{incident.detail}</div>
+//                     <b className="font-semibold">{incident.title}</b>
+//                     <div className="mt-0.5 text-[10px] text-[#818994]">{incident.detail}</div>
 //                     </div>
 
 //                     <Badge tone="red">Ongoing</Badge>
@@ -1589,7 +1593,7 @@ export default function MonitorDetailsPage() {
 //             This monitor may have been deleted, or the link is incorrect.
 //             </p>
 
-//             <Link to="/dashboard/monitors" className="btn btn-outline mt-6 inline-flex">
+//             <Link to="/dashboard/monitors" className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-[7px] border-0 px-4 py-2.5 text-[13px] font-bold whitespace-nowrap [transition:0.15s] disabled:cursor-not-allowed disabled:opacity-50 border border-line bg-panel-2 text-[#dce0e5] hover:border-[#3a4048] hover:text-white light:bg-[#f1f2f5] light:text-[#14161a] mt-6 inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand focus-visible:rounded-md">
 //             ← Back to Monitors
 //             </Link>
 //         </div>
@@ -1615,7 +1619,7 @@ export default function MonitorDetailsPage() {
 //             </Badge>
 //             </div>
 
-//             <p className="table-cell-url mt-2">{monitor.url}</p>
+//             <p className="min-w-0 overflow-hidden font-code text-[12px] leading-[normal] text-ellipsis whitespace-nowrap text-[#9aa2ac] mt-2">{monitor.url}</p>
 //         </div>
 
 //         {/* Stats */}
@@ -1632,10 +1636,10 @@ export default function MonitorDetailsPage() {
 //         </div>
 
 //         {/* Response Time */}
-//         <div className="panel mb-5">
-//             <div className="panel-head">
-//             <h4>Response time</h4>
-//             <small>LAST 24 HOURS</small>
+//         <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px] mb-5">
+//             <div className="mb-3 flex items-center justify-between">
+//             <h4 className="m-0 text-[11px] font-semibold">Response time</h4>
+//             <small className="font-code text-[10px] leading-[normal] text-[#737c87]">LAST 24 HOURS</small>
 //             </div>
 
 //             <div style={{ height: 220 }}>
@@ -1669,7 +1673,7 @@ export default function MonitorDetailsPage() {
 //             </ResponsiveContainer>
 //             </div>
 
-//             <div className="axis">
+//             <div className="mt-[7px] flex justify-between font-code text-[9px] leading-[normal] text-[#68717d]">
 //             <span>00:00</span>
 //             <span>06:00</span>
 //             <span>12:00</span>
@@ -1684,10 +1688,10 @@ export default function MonitorDetailsPage() {
 //         </div>
 
 //         {/* Recent Incidents */}
-//         <div className="panel">
-//             <div className="panel-head">
-//             <h4>Recent incidents</h4>
-//             <small>LAST 30 DAYS</small>
+//         <div className="rounded-[7px] border border-line bg-[#11151a] p-[15px]">
+//             <div className="mb-3 flex items-center justify-between">
+//             <h4 className="m-0 text-[11px] font-semibold">Recent incidents</h4>
+//             <small className="font-code text-[10px] leading-[normal] text-[#737c87]">LAST 30 DAYS</small>
 //             </div>
 
 //             {incidents.length === 0 ? (
@@ -1698,10 +1702,10 @@ export default function MonitorDetailsPage() {
 //             ) : (
 //             <div className="flex flex-col">
 //                 {incidents.map((incident, i) => (
-//                 <div className="row-line" key={i}>
+//                 <div className="flex items-center justify-between border-t border-[#222830] px-1 py-[11px] text-[12px] first:border-t-0" key={i}>
 //                     <div>
-//                     <b>{incident.title}</b>
-//                     <div className="row-sub">{incident.detail}</div>
+//                     <b className="font-semibold">{incident.title}</b>
+//                     <div className="mt-0.5 text-[10px] text-[#818994]">{incident.detail}</div>
 //                     </div>
 
 //                     <Badge tone="red">Ongoing</Badge>
