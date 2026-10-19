@@ -11,10 +11,13 @@ import AlertsPage from "./pages/dashboard/AlertsPage";
 import SettingsPage from "./pages/dashboard/SettingsPage";
 import ProtectedRoute from "./components/app/ProtectedRoute";
 import SessionExpiredModal from "./components/app/SessionExpiredModal";
+import SeoManager from "./components/app/SeoManager";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export default function App() {
   return (
     <>
+      <SeoManager />
       <SessionExpiredModal />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -42,6 +45,11 @@ export default function App() {
           <Route path="alerts" element={<AlertsPage />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>
+
+        {/* Catch-all: unknown paths get a real 404 page instead of a blank
+            screen. SPA fallback (wrangler.jsonc) stays enabled so hard
+            refreshes on /dashboard still work. */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );

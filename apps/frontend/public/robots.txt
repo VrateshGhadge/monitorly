@@ -1,0 +1,9 @@
+# Monitorly — https://monitorly.live
+User-agent: *
+Allow: /
+
+# Private / authenticated areas. Never index these.
+# A prefix match on /dashboard also covers /dashboard/monitors, /dashboard/alerts, etc.
+Disallow: /dashboard
+
+Sitemap: https://monitorly.live/sitemap.xml

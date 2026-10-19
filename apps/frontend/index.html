@@ -4,11 +4,51 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Monitorly — Know before your users do.</title>
+
+    <!-- Primary SEO. Canonical is the production apex origin; per-route values
+         are managed at runtime by SeoManager (src/components/app/SeoManager.tsx). -->
+    <title>Monitorly — Website &amp; API Monitoring with Instant Alerts</title>
     <meta
       name="description"
-      content="Fast, reliable website and API monitoring with instant email alerts for teams that take production seriously."
+      content="Monitorly checks your websites and APIs every five minutes and emails you the moment something breaks. Reliable uptime monitoring with instant alerts."
     />
+    <link rel="canonical" href="https://monitorly.live/" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0b0d10" />
+
+    <!-- Open Graph (Facebook, LinkedIn, Slack, Discord…) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Monitorly" />
+    <meta property="og:url" content="https://monitorly.live/" />
+    <meta
+      property="og:title"
+      content="Monitorly — Website &amp; API Monitoring with Instant Alerts"
+    />
+    <meta
+      property="og:description"
+      content="Monitorly checks your websites and APIs every five minutes and emails you the moment something breaks. Reliable uptime monitoring with instant alerts."
+    />
+    <meta property="og:image" content="https://monitorly.live/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Monitorly — website and API monitoring with instant alerts"
+    />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Monitorly — Website &amp; API Monitoring with Instant Alerts"
+    />
+    <meta
+      name="twitter:description"
+      content="Monitorly checks your websites and APIs every five minutes and emails you the moment something breaks. Reliable uptime monitoring with instant alerts."
+    />
+    <meta name="twitter:image" content="https://monitorly.live/og-image.png" />
+
     <!-- Warm the connection to Google Identity Services during HTML parse. The
          sign-in button is a cross-origin iframe, so DNS + TLS to
          accounts.google.com sit directly on its critical path. -->
