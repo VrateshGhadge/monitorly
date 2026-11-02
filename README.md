@@ -16,8 +16,12 @@ Monitorly is a website and API uptime monitoring platform. It checks HTTP/HTTPS 
 
 Watch Monitorly in action.
 
-<!-- Replace the URL below with your demo video. GitHub renders uploaded video attachments inline. -->
-https://github.com/user-attachments/assets/REPLACE_WITH_VIDEO_ID
+
+
+https://github.com/user-attachments/assets/9251de7b-b8f0-4c4b-a848-eaebfdf36d10
+
+
+
 
 ---
 
