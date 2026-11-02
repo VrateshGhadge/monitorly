@@ -7,7 +7,6 @@ Monitorly is a website and API uptime monitoring platform. It checks HTTP/HTTPS 
 > Monitorly is currently free while the product is being built. The free plan includes up to **10 monitors**, **5-minute checks**, and **30 days of history**.
 
 - **Live app:** https://monitorly.live
-- **API base:** https://api.monitorly.live
 - **Health check:** https://api.monitorly.live/health
 
 ---
