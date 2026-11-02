@@ -9,8 +9,8 @@ export async function sendTestEmail(
 ) {
   const resend = new Resend(env.RESEND_API_KEY);
 
-  const result = await resend.emails.send({
-    from: "Monitorly <onboarding@resend.dev>",
+  const { data, error } = await resend.emails.send({
+    from: "Monitorly <alerts@updates.monitorly.live>",
     to: userEmail,
     subject: "Monitorly Test Email",
     // html: `<h1>Monitorly</h1><p>Your email integration is working!</p>`,
@@ -19,7 +19,11 @@ export async function sendTestEmail(
     }),
   });
 
-  return result;
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
 }
 
 export async function sendMonitorDownEmail(
@@ -30,8 +34,8 @@ export async function sendMonitorDownEmail(
 ) {
   const resend = new Resend(env.RESEND_API_KEY);
 
-  const result = await resend.emails.send({
-    from: "Monitorly <onboarding@resend.dev>",
+  const { data, error } = await resend.emails.send({
+    from: "Monitorly <alerts@updates.monitorly.live>",
     to: userEmail,
     subject: `${monitorName} is DOWN`,
     // html: `
@@ -47,7 +51,11 @@ export async function sendMonitorDownEmail(
     }),
   });
 
-  return result;
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
 }
 
 export async function sendMonitorRecoveryEmail(
@@ -58,8 +66,8 @@ export async function sendMonitorRecoveryEmail(
 ) {
   const resend = new Resend(env.RESEND_API_KEY);
 
-  const result = await resend.emails.send({
-    from: "Monitorly <onboarding@resend.dev>",
+  const { data, error } = await resend.emails.send({
+    from: "Monitorly <alerts@updates.monitorly.live>",
     to: userEmail,
     // subject: `${monitorName} is RECOVERED`,
     subject: `${monitorName} is back up`,
@@ -76,5 +84,9 @@ export async function sendMonitorRecoveryEmail(
     }),
   });
 
-  return result;
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
 }

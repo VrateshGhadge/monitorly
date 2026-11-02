@@ -237,9 +237,12 @@ monitorRouter.get("/test-email", async (c) => {
     return c.json(
       {
         success: false,
-        message: "Failed to send test email",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to send test email",
       },
-      500,
+      502,
     );
   }
 });

@@ -42,7 +42,10 @@ export default function SettingsPage() {
       showToast("Test notification email sent");
     } catch (error) {
       console.error(error);
-      showToast("Failed to send notification email");
+      showToast(
+        getErrorMessage(error, "Failed to send notification email"),
+        "error",
+      );
     } finally {
       setIsSendingEmail(false);
     }

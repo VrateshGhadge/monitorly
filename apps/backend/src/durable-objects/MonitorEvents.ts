@@ -13,7 +13,7 @@ type AlertUpdate = {
   monitor: string;
   type: "DOWN" | "RECOVERY";
   message: string;
-  status: "SENT" | "RESOLVED";
+  status: "SENT" | "RESOLVED" | "FAILED";
   email: string;
   createdAt: string;
 };

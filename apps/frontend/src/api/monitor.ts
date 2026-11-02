@@ -73,7 +73,7 @@ export interface MonitorDetail extends Monitor {
     id: string;
     type: "DOWN" | "RECOVERY";
     message: string;
-    status: "SENT" | "RESOLVED";
+    status: "SENT" | "RESOLVED" | "FAILED";
     createdAt: string;
   }[];
 }
@@ -93,7 +93,7 @@ export interface Alert {
   monitorId: string;
   type: "DOWN" | "RECOVERY";
   message: string;
-  status: "SENT" | "RESOLVED";
+  status: "SENT" | "RESOLVED" | "FAILED";
   createdAt: string;
 
   monitor: {

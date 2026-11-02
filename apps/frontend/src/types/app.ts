@@ -62,7 +62,7 @@ export interface AppMonitor {
 }
 
 export type AlertSeverity = "critical" | "warning" | "resolved";
-export type AlertStatus = "sent" | "resolved";
+export type AlertStatus = "sent" | "resolved" | "failed";
 
 export interface AppAlert {
   id: string;
@@ -118,7 +118,7 @@ export interface ActivityItem {
 // // }
 
 // export type AlertSeverity = "critical" | "warning" | "resolved";
-// export type AlertStatus = "sent" | "resolved";
+// export type AlertStatus = "sent" | "resolved" | "failed";
 
 // export interface AppAlert {
 //   id: string;

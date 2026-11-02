@@ -87,19 +87,24 @@ export async function runMonitorCheck(
     try {
       let alertType: AlertType;
       let message: string;
-      let alertStatus: "SENT" | "RESOLVED";
+      let alertStatus: "SENT" | "RESOLVED" | "FAILED";
 
       if (oldStatus === MonitorStatus.UP && newStatus === MonitorStatus.DOWN) {
         alertType = AlertType.DOWN;
         message = `${monitor.name} is down`;
         alertStatus = "SENT";
 
-        await sendMonitorDownEmail(
-          env,
-          monitor.user.email,
-          monitor.name,
-          monitor.url,
-        );
+        try {
+          await sendMonitorDownEmail(
+            env,
+            monitor.user.email,
+            monitor.name,
+            monitor.url,
+          );
+        } catch (err) {
+          console.error("Failed to send monitor down email:", err);
+          alertStatus = "FAILED";
+        }
       } else if (
         oldStatus === MonitorStatus.DOWN &&
         newStatus === MonitorStatus.UP
@@ -108,12 +113,17 @@ export async function runMonitorCheck(
         message = `${monitor.name} recovered`;
         alertStatus = "RESOLVED";
 
-        await sendMonitorRecoveryEmail(
-          env,
-          monitor.user.email,
-          monitor.name,
-          monitor.url,
-        );
+        try {
+          await sendMonitorRecoveryEmail(
+            env,
+            monitor.user.email,
+            monitor.name,
+            monitor.url,
+          );
+        } catch (err) {
+          console.error("Failed to send monitor recovery email:", err);
+          alertStatus = "FAILED";
+        }
       } else {
         // Should never happen, but just in case
         return;

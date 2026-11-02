@@ -227,9 +227,19 @@ export default function OverviewPage() {
                     </div>
                   </div>
                   <span
-                    className={`rounded border px-[7px] py-[3px] font-code text-[9px] leading-[normal] ${a.status === "sent" ? "border-[#5c3d1a] text-warning" : "border-[#254d3a] text-brand"}`}
+                    className={`rounded border px-[7px] py-[3px] font-code text-[9px] leading-[normal] ${
+                      a.status === "sent"
+                        ? "border-[#5c3d1a] text-warning"
+                        : a.status === "failed"
+                          ? "border-[#5a2626] text-danger"
+                          : "border-[#254d3a] text-brand"
+                    }`}
                   >
-                    {a.status === "sent" ? "SENT" : "RESOLVED"}
+                    {a.status === "sent"
+                      ? "SENT"
+                      : a.status === "failed"
+                        ? "FAILED"
+                        : "RESOLVED"}
                   </span>
                 </div>
               ))

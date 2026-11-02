@@ -72,7 +72,12 @@ export function useAppData(isNewAccount: boolean) {
         id: alert.id,
         monitor: alert.monitor.name,
         severity: alert.type === "DOWN" ? "critical" : "resolved",
-        status: alert.status === "SENT" ? "sent" : "resolved",
+        status:
+          alert.status === "SENT"
+            ? "sent"
+            : alert.status === "FAILED"
+              ? "failed"
+              : "resolved",
         email: alert.user.email,
         time: alert.createdAt,
         message: alert.message,
@@ -160,7 +165,12 @@ export function useAppData(isNewAccount: boolean) {
                   id: update.id,
                   monitor: update.monitor,
                   severity: update.type === "DOWN" ? "critical" : "resolved",
-                  status: update.status === "SENT" ? "sent" : "resolved",
+                  status:
+                    update.status === "SENT"
+                      ? "sent"
+                      : update.status === "FAILED"
+                        ? "failed"
+                        : "resolved",
                   email: update.email ?? "",
                   time: update.createdAt,
                   message: update.message,
