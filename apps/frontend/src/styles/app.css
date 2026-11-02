@@ -45,7 +45,10 @@
 .auth-google-slot {
   position: relative;
   width: 100%;
-  min-height: 40px;
+  height: 40px;
+  /* GSI briefly renders its parent-DOM button and iframe stacked; without a
+     hard cap the slot doubles to 80px and the centered auth column jumps. */
+  overflow: hidden;
 }
 .auth-google {
   display: flex;
